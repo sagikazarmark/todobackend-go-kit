@@ -25,6 +25,7 @@ endif
 # Dependency versions
 GOTESTSUM_VERSION = 0.4.2
 GOLANGCI_VERSION = 1.27.0
+MGA_VERSION = 0.2.0
 
 GOLANG_VERSION = 1.14
 
@@ -107,6 +108,18 @@ lint: bin/golangci-lint ## Run linter
 .PHONY: fix
 fix: bin/golangci-lint ## Fix lint violations
 	bin/golangci-lint run --fix
+
+bin/mga: bin/mga-${MGA_VERSION}
+	@ln -sf mga-${MGA_VERSION} bin/mga
+bin/mga-${MGA_VERSION}:
+	@mkdir -p bin
+	curl -sfL https://git.io/mgatool | bash -s v${MGA_VERSION}
+	@mv bin/mga $@
+
+.PHONY: generate
+generate: bin/mga ## Generate code
+	go generate -x ./...
+	mga generate kit endpoint ./...
 
 .PHONY: list
 list: ## List all make targets
