@@ -26,6 +26,55 @@ endif
 GOTESTSUM_VERSION = 0.4.2
 GOLANGCI_VERSION = 1.27.0
 
+GOLANG_VERSION = 1.14
+
+.PHONY: clear
+clear: ## Clear the working area and the project
+	rm -rf bin/
+
+.PHONY: run-%
+run-%: build-%
+	${BUILD_DIR}/$*
+
+.PHONY: run
+run: $(patsubst cmd/%,run-%,$(wildcard cmd/*)) ## Build and execute a binary
+
+.PHONY: clean
+clean: ## Clean builds
+	rm -rf ${BUILD_DIR}/
+	rm -rf cmd/*/pkged.go
+
+.PHONY: goversion
+goversion:
+ifneq (${IGNORE_GOLANG_VERSION_REQ}, 1)
+	@printf "${GOLANG_VERSION}\n$$(go version | awk '{sub(/^go/, "", $$3);print $$3}')" | sort -t '.' -k 1,1 -k 2,2 -k 3,3 -g | head -1 | grep -q -E "^${GOLANG_VERSION}$$" || (printf "Required Go version is ${GOLANG_VERSION}\nInstalled: `go version`" && exit 1)
+endif
+
+.PHONY: build-%
+build-%: goversion
+ifeq (${VERBOSE}, 1)
+	go env
+endif
+
+	go build ${GOARGS} -tags "${GOTAGS}" -ldflags "${LDFLAGS}" -o ${BUILD_DIR}/$* ./cmd/$*
+
+.PHONY: build
+build: goversion ## Build all binaries
+ifeq (${VERBOSE}, 1)
+	go env
+endif
+
+	@mkdir -p ${BUILD_DIR}
+	go build ${GOARGS} -tags "${GOTAGS}" -ldflags "${LDFLAGS}" -o ${BUILD_DIR}/ ./cmd/...
+
+.PHONY: build-release
+build-release: ## Build all binaries without debug information
+	@${MAKE} LDFLAGS="-w ${LDFLAGS}" GOARGS="${GOARGS} -trimpath" BUILD_DIR="${BUILD_DIR}/release" build
+
+.PHONY: build-debug
+build-debug: ## Build all binaries with remote debugging capabilities
+	@${MAKE} GOARGS="${GOARGS} -gcflags \"all=-N -l\"" BUILD_DIR="${BUILD_DIR}/debug" build
+
 .PHONY: check
 check: test lint ## Run tests and linters
 
