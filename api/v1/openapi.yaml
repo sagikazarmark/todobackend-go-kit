@@ -1,0 +1,224 @@
+openapi: 3.0.0
+
+info:
+    title: Todo API
+    description: |
+        The Todo API manages a list of todo items as described by the TodoMVC backend project: http://todobackend.com
+    version: 1.0.0
+
+servers:
+    -   url: https://todo.api/todos
+    -   url: http://todo.api/todos
+    -   url: http://localhost:8000/todos
+
+tags:
+    -   name: TodoList
+        description: Manage a todo list
+
+paths:
+    /todos:
+        post:
+            summary: Add a new item to the list
+            operationId: addItem
+            tags: [TodoList]
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/AddTodoItemRequest"
+                required: true
+            responses:
+                "201":
+                    description: "Item was created successfully"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/TodoItem"
+                "400":
+                    $ref: "#/components/responses/InvalidRequest"
+                "422":
+                    $ref: "#/components/responses/ValidationError"
+                default:
+                    $ref: "#/components/responses/Error"
+
+        get:
+            summary: List items
+            operationId: listItems
+            tags: [TodoList]
+            responses:
+                "200":
+                    description: "A list of items"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/TodoItems"
+                default:
+                    $ref: "#/components/responses/Error"
+
+        delete:
+            summary: Delete all items
+            operationId: deleteItems
+            tags: [TodoList]
+            responses:
+                "204":
+                    description: "Items were deleted successfully"
+                default:
+                    $ref: "#/components/responses/Error"
+
+    "/todos/{id}":
+        parameters:
+            -   in: path
+                name: id
+                required: true
+                description: Item ID
+                schema:
+                    type: string
+
+        get:
+            summary: Get an item
+            operationId: getItem
+            tags: [TodoList]
+            responses:
+                "200":
+                    description: "An item"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/TodoItem"
+                "404":
+                    $ref: "#/components/responses/NotFound"
+                default:
+                    $ref: "#/components/responses/Error"
+
+        patch:
+            summary: Update an existing item
+            operationId: updateItem
+            tags: [TodoList]
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/UpdateTodoItemRequest"
+                required: true
+            responses:
+                "200":
+                    description: "Item was successfully updated"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/TodoItem"
+                "404":
+                    $ref: "#/components/responses/NotFound"
+                default:
+                    $ref: "#/components/responses/Error"
+
+        delete:
+            summary: Delete an item
+            operationId: deleteItem
+            tags: [TodoList]
+            responses:
+                "204":
+                    description: "Item was successfully deleted"
+                default:
+                    $ref: "#/components/responses/Error"
+
+components:
+    responses:
+        Error:
+            description: "Unexpected error"
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/Error"
+
+        InvalidRequest:
+            description: "Invalid request"
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/Error"
+
+        ValidationError:
+            description: "The request did not pass the business validation rules"
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/Error"
+
+        NotFound:
+            description: "The resource cannot be found"
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/Error"
+
+    schemas:
+        Error:
+            type: object
+            properties:
+                type:
+                    type: string
+                title:
+                    type: string
+                status:
+                    type: integer
+                detail:
+                    type: string
+                instance:
+                    type: string
+            required:
+                - type
+            example:
+                type: about:blank
+                title: Not Found
+                status: 404
+
+        AddTodoItemRequest:
+            type: object
+            properties:
+                title:
+                    type: string
+                order:
+                    type: integer
+            required:
+                - title
+                - order
+
+        TodoItem:
+            type: object
+            properties:
+                id:
+                    type: string
+                title:
+                    type: string
+                completed:
+                    type: boolean
+                order:
+                    type: integer
+                url:
+                    type: string
+                    format: uri
+            required:
+                - id
+                - title
+                - completed
+                - order
+                - url
+
+        TodoItems:
+            type: array
+            items:
+                $ref: "#/components/schemas/TodoItem"
+
+        UpdateTodoItemRequest:
+            type: object
+            properties:
+                title:
+                    type: string
+                    nullable: true
+                completed:
+                    type: boolean
+                    nullable: true
+                order:
+                    type: integer
+                    nullable: true

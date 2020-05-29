@@ -26,6 +26,7 @@ endif
 GOTESTSUM_VERSION = 0.4.2
 GOLANGCI_VERSION = 1.27.0
 MGA_VERSION = 0.2.0
+OPENAPI_GENERATOR_VERSION = 4.3.1
 
 GOLANG_VERSION = 1.14
 
@@ -120,6 +121,28 @@ bin/mga-${MGA_VERSION}:
 generate: bin/mga ## Generate code
 	go generate -x ./...
 	mga generate kit endpoint ./...
+
+.PHONY: openapi
+openapi: ## Generate client and server stubs from the OpenAPI definition
+	rm -rf .gen/openapi/v1
+	docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli:v${OPENAPI_GENERATOR_VERSION} generate \
+	--additional-properties packageName=api \
+	--additional-properties withGoCodegenComment=true \
+	-i /local/api/v1/openapi.yaml \
+	-g go-server \
+	-o /local/.gen/openapi/v1
+	rm -rf .gen/openapi/v1/{Dockerfile,go.*,README.md,main.go,go/api*.go,go/logger.go,go/routers.go}
+
+	rm -rf api/v1/client
+	docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli:v${OPENAPI_GENERATOR_VERSION} generate \
+	--additional-properties packageName=todov1 \
+	--additional-properties withGoCodegenComment=true \
+	-i /local/api/v1/openapi.yaml \
+	-g go \
+	-o /local/api/v1/client
+	sed 's#jsonCheck = .*#jsonCheck = regexp.MustCompile(`(?i:(?:application|text)/(?:(?:vnd\\.[^;]+\\+)|(?:problem\\+))?json)`)#' api/v1/client/client.go > api/v1/client/client.go.new
+	mv api/v1/client/client.go.new api/v1/client/client.go
+	rm api/v1/client/{.travis.yml,git_push.sh,go.*}
 
 .PHONY: list
 list: ## List all make targets

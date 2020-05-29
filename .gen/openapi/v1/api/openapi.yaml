@@ -1,0 +1,284 @@
+openapi: 3.0.0
+info:
+  description: |
+    The Todo API manages a list of todo items as described by the TodoMVC backend project: http://todobackend.com
+  title: Todo API
+  version: 1.0.0
+servers:
+- url: https://todo.api/todos
+- url: http://todo.api/todos
+- url: http://localhost:8000/todos
+tags:
+- description: Manage a todo list
+  name: TodoList
+paths:
+  /todos:
+    delete:
+      operationId: deleteItems
+      responses:
+        "204":
+          description: Items were deleted successfully
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      summary: Delete all items
+      tags:
+      - TodoList
+    get:
+      operationId: listItems
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TodoItems'
+          description: A list of items
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      summary: List items
+      tags:
+      - TodoList
+    post:
+      operationId: addItem
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddTodoItemRequest'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TodoItem'
+          description: Item was created successfully
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Invalid request
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request did not pass the business validation rules
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      summary: Add a new item to the list
+      tags:
+      - TodoList
+  /todos/{id}:
+    delete:
+      operationId: deleteItem
+      parameters:
+      - description: Item ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Item was successfully deleted
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      summary: Delete an item
+      tags:
+      - TodoList
+    get:
+      operationId: getItem
+      parameters:
+      - description: Item ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TodoItem'
+          description: An item
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The resource cannot be found
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      summary: Get an item
+      tags:
+      - TodoList
+    patch:
+      operationId: updateItem
+      parameters:
+      - description: Item ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTodoItemRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TodoItem'
+          description: Item was successfully updated
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The resource cannot be found
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      summary: Update an existing item
+      tags:
+      - TodoList
+components:
+  responses:
+    Error:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Unexpected error
+    InvalidRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Invalid request
+    ValidationError:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: The request did not pass the business validation rules
+    NotFound:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: The resource cannot be found
+  schemas:
+    Error:
+      example:
+        type: about:blank
+        title: Not Found
+        status: 404
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        instance:
+          type: string
+      required:
+      - type
+      type: object
+    AddTodoItemRequest:
+      example:
+        title: title
+        order: 0
+      properties:
+        title:
+          type: string
+        order:
+          type: integer
+      required:
+      - order
+      - title
+      type: object
+    TodoItem:
+      example:
+        id: id
+        completed: true
+        title: title
+        url: https://openapi-generator.tech
+        order: 0
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        completed:
+          type: boolean
+        order:
+          type: integer
+        url:
+          format: uri
+          type: string
+      required:
+      - completed
+      - id
+      - order
+      - title
+      - url
+      type: object
+    TodoItems:
+      items:
+        $ref: '#/components/schemas/TodoItem'
+      type: array
+    UpdateTodoItemRequest:
+      example:
+        completed: true
+        title: title
+        order: 0
+      properties:
+        title:
+          nullable: true
+          type: string
+        completed:
+          nullable: true
+          type: boolean
+        order:
+          nullable: true
+          type: integer
+      type: object
