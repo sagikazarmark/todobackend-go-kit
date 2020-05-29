@@ -6,6 +6,8 @@
 
 A simple [Todo-Backend](http://todobackend.com/) application written using [Go kit](https://gokit.io/).
 
+*Code extracted from [Modern Go Application](https://github.com/sagikazarmark/modern-go-application/tree/558c8cf1844fd76399f1e086b4df1385bf6ea439).*
+
 In addition to the [Todo-Backend](http://todobackend.com/) implementation, this project comes with: TODO
 
 
