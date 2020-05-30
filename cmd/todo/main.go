@@ -2,14 +2,17 @@ package main
 
 import (
 	"context"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
+	"strings"
 
 	kithttp "github.com/go-kit/kit/transport/http"
 	"github.com/goph/idgen/ulidgen"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	"github.com/markbates/pkger"
 	"github.com/spf13/pflag"
 
 	"github.com/sagikazarmark/todobackend-go-kit/todo"
@@ -25,6 +28,27 @@ func main() {
 	_ = flags.Parse(os.Args[1:])
 
 	router := mux.NewRouter()
+
+	{
+		file, err := pkger.Open("/static/index.html")
+		if err != nil {
+			panic(err)
+		}
+
+		body, err := ioutil.ReadAll(file)
+		if err != nil {
+			panic(err)
+		}
+
+		body = []byte(strings.Replace(string(body), "PUBLIC_URL", *publicURL+"/todos", -1))
+
+		router.Methods(http.MethodGet).Path("/").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("Content-Type", "text/html")
+			w.WriteHeader(http.StatusOK)
+
+			_, _ = w.Write(body)
+		})
+	}
 
 	{
 		store := todo.NewInMemoryStore()

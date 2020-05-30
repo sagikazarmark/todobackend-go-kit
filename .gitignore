@@ -1,5 +1,6 @@
 /bin/
 /build/
+pkged.go
 /vendor/
 
 # IDE integration
