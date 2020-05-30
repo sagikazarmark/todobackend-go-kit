@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -19,6 +20,14 @@ import (
 	"github.com/sagikazarmark/todobackend-go-kit/todo/tododriver"
 )
 
+// Provisioned by ldflags
+// nolint: gochecknoglobals
+var (
+	version    string
+	commitHash string
+	buildDate  string
+)
+
 func main() {
 	flags := pflag.NewFlagSet("Go kit TodoBackend", pflag.ExitOnError)
 
@@ -26,6 +35,10 @@ func main() {
 	publicURL := flags.String("public-url", "http://localhost:8000", "Publicly available base URL")
 
 	_ = flags.Parse(os.Args[1:])
+
+	log.Println("starting application version", version, fmt.Sprintf("(%s)", commitHash), "built on", buildDate)
+
+	todoURL := *publicURL + "/todos"
 
 	router := mux.NewRouter()
 
@@ -40,7 +53,9 @@ func main() {
 			panic(err)
 		}
 
-		body = []byte(strings.Replace(string(body), "PUBLIC_URL", *publicURL+"/todos", -1))
+		r := strings.NewReplacer("PUBLIC_URL", todoURL, "VERSION", version)
+
+		body = []byte(r.Replace(string(body)))
 
 		router.Methods(http.MethodGet).Path("/").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Content-Type", "text/html")
@@ -59,7 +74,7 @@ func main() {
 			endpoints,
 			router.PathPrefix("/todos").Subrouter(),
 			kithttp.ServerBefore(func(ctx context.Context, request *http.Request) context.Context {
-				return context.WithValue(ctx, tododriver.ContextKeyBaseURL, *publicURL+"/todos")
+				return context.WithValue(ctx, tododriver.ContextKeyBaseURL, todoURL)
 			}),
 		)
 	}
@@ -75,7 +90,7 @@ func main() {
 		Handler: cors(router),
 	}
 
-	log.Println("starting application at", *httpAddr)
+	log.Println("listening on", *httpAddr)
 
 	err := server.ListenAndServe()
 	if err != nil {
