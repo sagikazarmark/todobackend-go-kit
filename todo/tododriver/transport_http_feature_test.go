@@ -153,7 +153,7 @@ func itemMarkedAsComplete(t gobdd.StepTest, ctx gobdd.Context) {
 
 	completed := true
 
-	_, _, err := client.TodoListApi.UpdateItem(context.Background(), id, todov1.UpdateTodoItemRequest{Completed: &completed})
+	_, _, err := client.TodoListApi.UpdateItem(context.Background(), id, todov1.UpdateTodoItemRequest{Completed: &completed}) // nolint: lll
 	if err != nil {
 		t.Fatal(err)
 	}

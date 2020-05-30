@@ -16,6 +16,12 @@ import (
 	"github.com/sagikazarmark/todobackend-go-kit/todo"
 )
 
+type contextKey int
+
+const (
+	ContextKeyBaseURL contextKey = iota
+)
+
 // RegisterHTTPHandlers mounts all of the service endpoints into a router.
 func RegisterHTTPHandlers(endpoints Endpoints, router *mux.Router, options ...kithttp.ServerOption) {
 	errorEncoder := kitxhttp.NewJSONProblemErrorResponseEncoder(appkithttp.NewDefaultProblemConverter())
@@ -168,14 +174,14 @@ func decodeDeleteItemHTTPRequest(_ context.Context, r *http.Request) (interface{
 }
 
 func marshalItemHTTP(ctx context.Context, item todo.Item) api.TodoItem {
-	host, _ := ctx.Value(kithttp.ContextKeyRequestHost).(string)
+	baseURL, _ := ctx.Value(ContextKeyBaseURL).(string)
 
 	return api.TodoItem{
 		Id:        item.ID,
 		Title:     item.Title,
 		Completed: item.Completed,
 		Order:     int32(item.Order),
-		Url:       fmt.Sprintf("http://%s/todos/%s", host, item.ID),
+		Url:       fmt.Sprintf("%s/%s", baseURL, item.ID),
 	}
 }
 
