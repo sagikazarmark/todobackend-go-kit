@@ -1,1 +1,1 @@
-package todobackend_go_kit
+package todobackendgokit
