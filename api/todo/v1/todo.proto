@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package todo.v1;
+
+option csharp_namespace = "Todo.V1";
+option go_package = "github.com/sagikazarmark/todobackend-go-kit/api/todo/v1;todo";
+option java_multiple_files = true;
+option java_outer_classname = "TodoProto";
+option java_package = "com.todo.v1";
+option objc_class_prefix = "TXX";
+option php_namespace = "Todo\\V1";
+
+// TodoItem is a note describing a task to be done.
+message TodoItem {
+  string id = 1;
+  string title = 2;
+  bool completed = 3;
+  int32 order = 4;
+}
