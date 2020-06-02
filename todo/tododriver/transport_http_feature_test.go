@@ -10,7 +10,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/stretchr/testify/assert"
 
-	todov1 "github.com/sagikazarmark/todobackend-go-kit/api/v1/client"
+	todov1 "github.com/sagikazarmark/todobackend-go-kit/api/todo/v1/client/rest"
 	"github.com/sagikazarmark/todobackend-go-kit/todo"
 	"github.com/sagikazarmark/todobackend-go-kit/todo/tododriver"
 )

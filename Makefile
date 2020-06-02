@@ -131,25 +131,25 @@ generate: bin/mga ## Generate code
 
 .PHONY: openapi
 openapi: ## Generate client and server stubs from the OpenAPI definition
-	rm -rf .gen/openapi/v1
+	rm -rf internal/.generated/api/v1/rest
 	docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli:v${OPENAPI_GENERATOR_VERSION} generate \
 	--additional-properties packageName=api \
 	--additional-properties withGoCodegenComment=true \
-	-i /local/api/v1/openapi.yaml \
+	-i /local/api/todo/v1/openapi.yaml \
 	-g go-server \
-	-o /local/.gen/openapi/v1
-	rm -rf .gen/openapi/v1/{Dockerfile,go.*,README.md,main.go,go/api*.go,go/logger.go,go/routers.go}
+	-o /local/internal/.generated/api/v1/rest
+	rm -rf internal/.generated/api/v1/rest/{Dockerfile,go.*,README.md,main.go,go/api*.go,go/logger.go,go/routers.go}
 
-	rm -rf api/v1/client
+	rm -rf api/todo/v1/client/rest
 	docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli:v${OPENAPI_GENERATOR_VERSION} generate \
 	--additional-properties packageName=todov1 \
 	--additional-properties withGoCodegenComment=true \
-	-i /local/api/v1/openapi.yaml \
+	-i /local/api/todo/v1/openapi.yaml \
 	-g go \
-	-o /local/api/v1/client
-	sed 's#jsonCheck = .*#jsonCheck = regexp.MustCompile(`(?i:(?:application|text)/(?:(?:vnd\\.[^;]+\\+)|(?:problem\\+))?json)`)#' api/v1/client/client.go > api/v1/client/client.go.new
-	mv api/v1/client/client.go.new api/v1/client/client.go
-	rm api/v1/client/{.travis.yml,git_push.sh,go.*}
+	-o /local/api/todo/v1/client/rest
+	sed 's#jsonCheck = .*#jsonCheck = regexp.MustCompile(`(?i:(?:application|text)/(?:(?:vnd\\.[^;]+\\+)|(?:problem\\+))?json)`)#' api/todo/v1/client/rest/client.go > api/todo/v1/client/rest/client.go.new
+	mv api/todo/v1/client/rest/client.go.new api/todo/v1/client/rest/client.go
+	rm api/todo/v1/client/rest/{.travis.yml,git_push.sh,go.*}
 
 .PHONY: list
 list: ## List all make targets
