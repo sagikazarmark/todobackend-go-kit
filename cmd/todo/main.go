@@ -5,17 +5,22 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"strings"
+	"syscall"
 
 	kithttp "github.com/go-kit/kit/transport/http"
 	"github.com/goph/idgen/ulidgen"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/markbates/pkger"
+	"github.com/oklog/run"
 	"github.com/spf13/pflag"
+	"google.golang.org/grpc"
 
+	todov1 "github.com/sagikazarmark/todobackend-go-kit/api/todo/v1"
 	"github.com/sagikazarmark/todobackend-go-kit/todo"
 	"github.com/sagikazarmark/todobackend-go-kit/todo/tododriver"
 )
@@ -32,6 +37,7 @@ func main() {
 	flags := pflag.NewFlagSet("Go kit TodoBackend", pflag.ExitOnError)
 
 	httpAddr := flags.String("http-addr", ":8000", "HTTP Server address")
+	grpcAddr := flags.String("grpc-addr", ":8001", "gRPC Server address")
 	publicURL := flags.String("public-url", "http://localhost:8000", "Publicly available base URL")
 
 	_ = flags.Parse(os.Args[1:])
@@ -41,6 +47,9 @@ func main() {
 	todoURL := *publicURL + "/todos"
 
 	router := mux.NewRouter()
+
+	grpcServer := grpc.NewServer()
+	defer grpcServer.Stop()
 
 	{
 		file, err := pkger.Open("/static/index.html")
@@ -77,6 +86,7 @@ func main() {
 				return context.WithValue(ctx, tododriver.ContextKeyBaseURL, todoURL)
 			}),
 		)
+		todov1.RegisterTodoListServiceServer(grpcServer, tododriver.MakeGRPCServer(endpoints))
 	}
 
 	cors := handlers.CORS(
@@ -85,15 +95,49 @@ func main() {
 		handlers.AllowedHeaders([]string{"content-type"}),
 	)
 
-	server := &http.Server{
+	httpServer := &http.Server{
 		Addr:    *httpAddr,
 		Handler: cors(router),
 	}
+	defer httpServer.Close()
 
 	log.Println("listening on", *httpAddr)
 
-	err := server.ListenAndServe()
+	httpLn, err := net.Listen("tcp", *httpAddr)
 	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Println("listening on", *grpcAddr)
+
+	grpcLn, err := net.Listen("tcp", *grpcAddr)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var group run.Group
+
+	group.Add(
+		func() error { return httpServer.Serve(httpLn) },
+		func(err error) { _ = httpServer.Shutdown(context.Background()) },
+	)
+
+	group.Add(
+		func() error { return grpcServer.Serve(grpcLn) },
+		func(err error) { grpcServer.GracefulStop() },
+	)
+
+	// Setup signal handler
+	group.Add(run.SignalHandler(context.Background(), syscall.SIGINT, syscall.SIGTERM))
+
+	err = group.Run()
+	if err != nil {
+		if _, ok := err.(run.SignalError); ok {
+			log.Println(err)
+
+			return
+		}
+
 		log.Fatal(err)
 	}
 }

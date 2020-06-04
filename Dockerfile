@@ -45,5 +45,5 @@ RUN if [[ "${BUILD_TARGET}" == "debug" ]]; then apk add --update --no-cache libc
 
 COPY --from=builder /build/* /usr/local/bin/
 
-EXPOSE 8000
+EXPOSE 8000 8001
 CMD todo --http-addr :${PORT:-8000} --public-url ${PUBLIC_URL}

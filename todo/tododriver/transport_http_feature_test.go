@@ -15,7 +15,7 @@ import (
 	"github.com/sagikazarmark/todobackend-go-kit/todo/tododriver"
 )
 
-func TestHTTP(t *testing.T) {
+func TestRest(t *testing.T) {
 	suite := gobdd.NewSuite(
 		t,
 		gobdd.WithFeaturesPath("../features/*.feature"),
@@ -29,20 +29,20 @@ func TestHTTP(t *testing.T) {
 		}),
 	)
 
-	suite.AddStep(`an empty todo list`, givenAnEmptyTodoList)
-	suite.AddStep(`(?:(?:I|the user)(?: also)? adds? )?(?:a new|an) item for "(.*)"`, addAnItem)
-	suite.AddStep(`it should be (?:the only item )?on the list`, shouldBeOnTheList)
-	suite.AddStep(`both items should be on the list`, allShouldBeOnTheList)
-	suite.AddStep(`the list should be empty`, theListShouldBeEmpty)
-	suite.AddStep(`it is marked as complete`, itemMarkedAsComplete)
-	suite.AddStep(`it should be complete`, itemShouldBeComplete)
-	suite.AddStep(`it is deleted`, deleteAnItem)
-	suite.AddStep(`all items are deleted`, clearList)
+	suite.AddStep(`an empty todo list`, givenAnEmptyTodoListRest)
+	suite.AddStep(`(?:(?:I|the user)(?: also)? adds? )?(?:a new|an) item for "(.*)"`, addAnItemRest)
+	suite.AddStep(`it should be (?:the only item )?on the list`, shouldBeOnTheRest)
+	suite.AddStep(`both items should be on the list`, allShouldBeOnTheListRest)
+	suite.AddStep(`the list should be empty`, theListShouldBeEmptyRest)
+	suite.AddStep(`it is marked as complete`, itemMarkedAsCompleteRest)
+	suite.AddStep(`it should be complete`, itemShouldBeCompleteRest)
+	suite.AddStep(`it is deleted`, deleteAnItemRest)
+	suite.AddStep(`all items are deleted`, clearListRest)
 
 	suite.Run()
 }
 
-func getClient(t gobdd.StepTest, ctx gobdd.Context) *todov1.APIClient {
+func getRestClient(t gobdd.StepTest, ctx gobdd.Context) *todov1.APIClient {
 	v, err := ctx.Get("client")
 	if err != nil {
 		t.Fatal(err)
@@ -51,7 +51,7 @@ func getClient(t gobdd.StepTest, ctx gobdd.Context) *todov1.APIClient {
 	return v.(*todov1.APIClient)
 }
 
-func givenAnEmptyTodoList(_ gobdd.StepTest, ctx gobdd.Context) {
+func givenAnEmptyTodoListRest(_ gobdd.StepTest, ctx gobdd.Context) {
 	store := todo.NewInMemoryStore()
 	service := todo.NewService(ulidgen.NewGenerator(), store)
 	endpoints := tododriver.MakeEndpoints(service)
@@ -71,8 +71,8 @@ func givenAnEmptyTodoList(_ gobdd.StepTest, ctx gobdd.Context) {
 	ctx.Set("client", todov1.NewAPIClient(config))
 }
 
-func addAnItem(t gobdd.StepTest, ctx gobdd.Context, title string) {
-	client := getClient(t, ctx)
+func addAnItemRest(t gobdd.StepTest, ctx gobdd.Context, title string) {
+	client := getRestClient(t, ctx)
 
 	item, _, err := client.TodoListApi.AddItem(context.Background(), todov1.AddTodoItemRequest{Title: title})
 	if err != nil {
@@ -89,12 +89,12 @@ func addAnItem(t gobdd.StepTest, ctx gobdd.Context, title string) {
 	ctx.Set("titles", append(titles.([]string), title))
 }
 
-func shouldBeOnTheList(t gobdd.StepTest, ctx gobdd.Context) {
+func shouldBeOnTheRest(t gobdd.StepTest, ctx gobdd.Context) {
 	if err, _ := ctx.GetError("error", nil); err != nil {
 		t.Fatal(err)
 	}
 
-	client := getClient(t, ctx)
+	client := getRestClient(t, ctx)
 
 	items, _, err := client.TodoListApi.ListItems(context.Background())
 	if err != nil {
@@ -107,12 +107,12 @@ func shouldBeOnTheList(t gobdd.StepTest, ctx gobdd.Context) {
 	assert.Equal(t, items[0].Title, title, "the item on the list should match the added item")
 }
 
-func allShouldBeOnTheList(t gobdd.StepTest, ctx gobdd.Context) {
+func allShouldBeOnTheListRest(t gobdd.StepTest, ctx gobdd.Context) {
 	if err, _ := ctx.GetError("error", nil); err != nil {
 		t.Fatal(err)
 	}
 
-	client := getClient(t, ctx)
+	client := getRestClient(t, ctx)
 
 	items, _, err := client.TodoListApi.ListItems(context.Background())
 	if err != nil {
@@ -135,8 +135,8 @@ func allShouldBeOnTheList(t gobdd.StepTest, ctx gobdd.Context) {
 	}
 }
 
-func theListShouldBeEmpty(t gobdd.StepTest, ctx gobdd.Context) {
-	client := getClient(t, ctx)
+func theListShouldBeEmptyRest(t gobdd.StepTest, ctx gobdd.Context) {
+	client := getRestClient(t, ctx)
 
 	items, _, err := client.TodoListApi.ListItems(context.Background())
 	if err != nil {
@@ -146,10 +146,10 @@ func theListShouldBeEmpty(t gobdd.StepTest, ctx gobdd.Context) {
 	assert.Len(t, items, 0, "the list should be empty")
 }
 
-func itemMarkedAsComplete(t gobdd.StepTest, ctx gobdd.Context) {
+func itemMarkedAsCompleteRest(t gobdd.StepTest, ctx gobdd.Context) {
 	id, _ := ctx.GetString("id")
 
-	client := getClient(t, ctx)
+	client := getRestClient(t, ctx)
 
 	completed := true
 
@@ -159,10 +159,10 @@ func itemMarkedAsComplete(t gobdd.StepTest, ctx gobdd.Context) {
 	}
 }
 
-func itemShouldBeComplete(t gobdd.StepTest, ctx gobdd.Context) {
+func itemShouldBeCompleteRest(t gobdd.StepTest, ctx gobdd.Context) {
 	id, _ := ctx.GetString("id")
 
-	client := getClient(t, ctx)
+	client := getRestClient(t, ctx)
 
 	item, _, err := client.TodoListApi.GetItem(context.Background(), id)
 	if err != nil {
@@ -172,10 +172,10 @@ func itemShouldBeComplete(t gobdd.StepTest, ctx gobdd.Context) {
 	assert.True(t, item.Completed, "item should be complete")
 }
 
-func deleteAnItem(t gobdd.StepTest, ctx gobdd.Context) {
+func deleteAnItemRest(t gobdd.StepTest, ctx gobdd.Context) {
 	id, _ := ctx.GetString("id")
 
-	client := getClient(t, ctx)
+	client := getRestClient(t, ctx)
 
 	_, err := client.TodoListApi.DeleteItem(context.Background(), id)
 	if err != nil {
@@ -183,8 +183,8 @@ func deleteAnItem(t gobdd.StepTest, ctx gobdd.Context) {
 	}
 }
 
-func clearList(t gobdd.StepTest, ctx gobdd.Context) {
-	client := getClient(t, ctx)
+func clearListRest(t gobdd.StepTest, ctx gobdd.Context) {
+	client := getRestClient(t, ctx)
 
 	_, err := client.TodoListApi.DeleteItems(context.Background())
 	if err != nil {

@@ -27,6 +27,9 @@ GOTESTSUM_VERSION = 0.4.2
 GOLANGCI_VERSION = 1.27.0
 MGA_VERSION = 0.2.0
 OPENAPI_GENERATOR_VERSION = 4.3.1
+PROTOC_VERSION = 3.12.2
+BUF_VERSION = 0.15.0
+PROTOC_GEN_KIT_VERSION = 0.2.0
 
 GOLANG_VERSION = 1.14
 
@@ -150,6 +153,48 @@ openapi: ## Generate client and server stubs from the OpenAPI definition
 	sed 's#jsonCheck = .*#jsonCheck = regexp.MustCompile(`(?i:(?:application|text)/(?:(?:vnd\\.[^;]+\\+)|(?:problem\\+))?json)`)#' api/todo/v1/client/rest/client.go > api/todo/v1/client/rest/client.go.new
 	mv api/todo/v1/client/rest/client.go.new api/todo/v1/client/rest/client.go
 	rm api/todo/v1/client/rest/{.travis.yml,git_push.sh,go.*}
+
+bin/protoc: bin/protoc-${PROTOC_VERSION}
+	@ln -sf protoc-${PROTOC_VERSION}/bin/protoc bin/protoc
+bin/protoc-${PROTOC_VERSION}:
+	@mkdir -p bin/protoc-${PROTOC_VERSION}
+ifeq (${OS}, darwin)
+	curl -L https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC_VERSION}/protoc-${PROTOC_VERSION}-osx-x86_64.zip > bin/protoc.zip
+endif
+ifeq (${OS}, linux)
+	curl -L https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC_VERSION}/protoc-${PROTOC_VERSION}-linux-x86_64.zip > bin/protoc.zip
+endif
+	unzip bin/protoc.zip -d bin/protoc-${PROTOC_VERSION}
+	rm bin/protoc.zip
+
+bin/protoc-gen-go: go.mod
+	@mkdir -p bin
+	go build -o bin/protoc-gen-go google.golang.org/protobuf/cmd/protoc-gen-go
+
+bin/protoc-gen-go-grpc: gotools.mod
+	@mkdir -p bin
+	go build -modfile gotools.mod -o bin/protoc-gen-go-grpc google.golang.org/grpc/cmd/protoc-gen-go-grpc
+
+bin/protoc-gen-kit: bin/protoc-gen-kit-${PROTOC_GEN_KIT_VERSION}
+	@ln -sf protoc-gen-kit-${PROTOC_GEN_KIT_VERSION} bin/protoc-gen-kit
+bin/protoc-gen-kit-${PROTOC_GEN_KIT_VERSION}:
+	@mkdir -p bin
+	curl -L https://github.com/sagikazarmark/protoc-gen-kit/releases/download/v${PROTOC_GEN_KIT_VERSION}/protoc-gen-kit_${OS}_amd64.tar.gz | tar -zOxf - protoc-gen-kit > ./bin/protoc-gen-kit-${PROTOC_GEN_KIT_VERSION} && chmod +x ./bin/protoc-gen-kit-${PROTOC_GEN_KIT_VERSION}
+
+bin/buf: bin/buf-${BUF_VERSION}
+	@ln -sf buf-${BUF_VERSION} bin/buf
+bin/buf-${BUF_VERSION}:
+	@mkdir -p bin
+	curl -L https://github.com/bufbuild/buf/releases/download/v${BUF_VERSION}/buf-${OS}-x86_64 -o ./bin/buf-${BUF_VERSION} && chmod +x ./bin/buf-${BUF_VERSION}
+
+.PHONY: buf
+buf: bin/buf ## Generate client and server stubs from the protobuf definition
+	buf image build -o /dev/null
+	buf check lint
+
+.PHONY: proto
+proto: bin/protoc bin/protoc-gen-go bin/protoc-gen-go-grpc bin/protoc-gen-kit buf ## Generate client and server stubs from the protobuf definition
+	buf image build -o - | protoc --descriptor_set_in=/dev/stdin --go_out=paths=source_relative:api --go-grpc_out=paths=source_relative:api --kit_out=paths=source_relative:api $(shell buf image build -o - | buf ls-files --input - | grep -v google)
 
 .PHONY: list
 list: ## List all make targets
