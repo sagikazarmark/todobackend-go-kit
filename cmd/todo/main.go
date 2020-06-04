@@ -5,15 +5,18 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"strings"
+	"syscall"
 
 	kithttp "github.com/go-kit/kit/transport/http"
 	"github.com/goph/idgen/ulidgen"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/markbates/pkger"
+	"github.com/oklog/run"
 	"github.com/spf13/pflag"
 
 	"github.com/sagikazarmark/todobackend-go-kit/todo"
@@ -85,15 +88,37 @@ func main() {
 		handlers.AllowedHeaders([]string{"content-type"}),
 	)
 
-	server := &http.Server{
+	httpServer := &http.Server{
 		Addr:    *httpAddr,
 		Handler: cors(router),
 	}
+	defer httpServer.Close()
 
 	log.Println("listening on", *httpAddr)
 
-	err := server.ListenAndServe()
+	httpLn, err := net.Listen("tcp", *httpAddr)
 	if err != nil {
+		log.Fatal(err)
+	}
+
+	var group run.Group
+
+	group.Add(
+		func() error { return httpServer.Serve(httpLn) },
+		func(err error) { _ = httpServer.Shutdown(context.Background()) },
+	)
+
+	// Setup signal handler
+	group.Add(run.SignalHandler(context.Background(), syscall.SIGINT, syscall.SIGTERM))
+
+	err = group.Run()
+	if err != nil {
+		if _, ok := err.(run.SignalError); ok {
+			log.Println(err)
+
+			return
+		}
+
 		log.Fatal(err)
 	}
 }
