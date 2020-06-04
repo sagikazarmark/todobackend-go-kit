@@ -18,7 +18,9 @@ import (
 	"github.com/markbates/pkger"
 	"github.com/oklog/run"
 	"github.com/spf13/pflag"
+	"google.golang.org/grpc"
 
+	todov1 "github.com/sagikazarmark/todobackend-go-kit/api/todo/v1"
 	"github.com/sagikazarmark/todobackend-go-kit/todo"
 	"github.com/sagikazarmark/todobackend-go-kit/todo/tododriver"
 )
@@ -35,6 +37,7 @@ func main() {
 	flags := pflag.NewFlagSet("Go kit TodoBackend", pflag.ExitOnError)
 
 	httpAddr := flags.String("http-addr", ":8000", "HTTP Server address")
+	grpcAddr := flags.String("grpc-addr", ":8001", "gRPC Server address")
 	publicURL := flags.String("public-url", "http://localhost:8000", "Publicly available base URL")
 
 	_ = flags.Parse(os.Args[1:])
@@ -44,6 +47,9 @@ func main() {
 	todoURL := *publicURL + "/todos"
 
 	router := mux.NewRouter()
+
+	grpcServer := grpc.NewServer()
+	defer grpcServer.Stop()
 
 	{
 		file, err := pkger.Open("/static/index.html")
@@ -80,6 +86,7 @@ func main() {
 				return context.WithValue(ctx, tododriver.ContextKeyBaseURL, todoURL)
 			}),
 		)
+		todov1.RegisterTodoListServiceServer(grpcServer, tododriver.MakeGRPCServer(endpoints))
 	}
 
 	cors := handlers.CORS(
@@ -101,11 +108,23 @@ func main() {
 		log.Fatal(err)
 	}
 
+	log.Println("listening on", *grpcAddr)
+
+	grpcLn, err := net.Listen("tcp", *grpcAddr)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	var group run.Group
 
 	group.Add(
 		func() error { return httpServer.Serve(httpLn) },
 		func(err error) { _ = httpServer.Shutdown(context.Background()) },
+	)
+
+	group.Add(
+		func() error { return grpcServer.Serve(grpcLn) },
+		func(err error) { grpcServer.GracefulStop() },
 	)
 
 	// Setup signal handler
