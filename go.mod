@@ -4,7 +4,7 @@ go 1.14
 
 require (
 	emperror.dev/errors v0.7.0
-	github.com/go-bdd/gobdd v1.0.1
+	github.com/go-bdd/gobdd v1.0.2-0.20200601143550-b30291a8ec6c
 	github.com/go-kit/kit v0.10.0
 	github.com/golang/protobuf v1.4.1
 	github.com/goph/idgen v0.4.0

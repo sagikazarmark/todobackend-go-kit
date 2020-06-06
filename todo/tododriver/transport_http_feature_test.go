@@ -9,6 +9,7 @@ import (
 	"github.com/goph/idgen/ulidgen"
 	"github.com/gorilla/mux"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	todov1 "github.com/sagikazarmark/todobackend-go-kit/api/todo/v1/client/rest"
 	"github.com/sagikazarmark/todobackend-go-kit/todo"
@@ -30,7 +31,7 @@ func TestRest(t *testing.T) {
 	)
 
 	suite.AddStep(`an empty todo list`, givenAnEmptyTodoListRest)
-	suite.AddStep(`(?:(?:I|the user)(?: also)? adds? )?(?:a new|an) item for "(.*)"`, addAnItemRest)
+	suite.AddStep(`(?:(?:I|the user)(?: also)? adds? )?(?:a new|an) item for {text}`, addAnItemRest)
 	suite.AddStep(`it should be (?:the only item )?on the list`, shouldBeOnTheRest)
 	suite.AddStep(`both items should be on the list`, allShouldBeOnTheListRest)
 	suite.AddStep(`the list should be empty`, theListShouldBeEmptyRest)
@@ -44,9 +45,7 @@ func TestRest(t *testing.T) {
 
 func getRestClient(t gobdd.StepTest, ctx gobdd.Context) *todov1.APIClient {
 	v, err := ctx.Get("client")
-	if err != nil {
-		t.Fatal(err)
-	}
+	require.NoError(t, err)
 
 	return v.(*todov1.APIClient)
 }
@@ -75,9 +74,7 @@ func addAnItemRest(t gobdd.StepTest, ctx gobdd.Context, title string) {
 	client := getRestClient(t, ctx)
 
 	item, _, err := client.TodoListApi.AddItem(context.Background(), todov1.AddTodoItemRequest{Title: title})
-	if err != nil {
-		t.Fatal(err)
-	}
+	require.NoError(t, err)
 
 	ctx.Set("id", item.Id)
 	ctx.Set("title", title)
@@ -97,9 +94,7 @@ func shouldBeOnTheRest(t gobdd.StepTest, ctx gobdd.Context) {
 	client := getRestClient(t, ctx)
 
 	items, _, err := client.TodoListApi.ListItems(context.Background())
-	if err != nil {
-		t.Fatal(err)
-	}
+	require.NoError(t, err)
 
 	title, _ := ctx.GetString("title", "")
 
@@ -115,9 +110,7 @@ func allShouldBeOnTheListRest(t gobdd.StepTest, ctx gobdd.Context) {
 	client := getRestClient(t, ctx)
 
 	items, _, err := client.TodoListApi.ListItems(context.Background())
-	if err != nil {
-		t.Fatal(err)
-	}
+	require.NoError(t, err)
 
 	ids, _ := ctx.Get("ids", []string{})
 	titles, _ := ctx.Get("titles", []string{})
@@ -139,9 +132,7 @@ func theListShouldBeEmptyRest(t gobdd.StepTest, ctx gobdd.Context) {
 	client := getRestClient(t, ctx)
 
 	items, _, err := client.TodoListApi.ListItems(context.Background())
-	if err != nil {
-		t.Fatal(err)
-	}
+	require.NoError(t, err)
 
 	assert.Len(t, items, 0, "the list should be empty")
 }
@@ -154,9 +145,7 @@ func itemMarkedAsCompleteRest(t gobdd.StepTest, ctx gobdd.Context) {
 	completed := true
 
 	_, _, err := client.TodoListApi.UpdateItem(context.Background(), id, todov1.UpdateTodoItemRequest{Completed: &completed}) // nolint: lll
-	if err != nil {
-		t.Fatal(err)
-	}
+	require.NoError(t, err)
 }
 
 func itemShouldBeCompleteRest(t gobdd.StepTest, ctx gobdd.Context) {
@@ -165,9 +154,7 @@ func itemShouldBeCompleteRest(t gobdd.StepTest, ctx gobdd.Context) {
 	client := getRestClient(t, ctx)
 
 	item, _, err := client.TodoListApi.GetItem(context.Background(), id)
-	if err != nil {
-		t.Fatal(err)
-	}
+	require.NoError(t, err)
 
 	assert.True(t, item.Completed, "item should be complete")
 }
@@ -178,16 +165,12 @@ func deleteAnItemRest(t gobdd.StepTest, ctx gobdd.Context) {
 	client := getRestClient(t, ctx)
 
 	_, err := client.TodoListApi.DeleteItem(context.Background(), id)
-	if err != nil {
-		t.Fatal(err)
-	}
+	require.NoError(t, err)
 }
 
 func clearListRest(t gobdd.StepTest, ctx gobdd.Context) {
 	client := getRestClient(t, ctx)
 
 	_, err := client.TodoListApi.DeleteItems(context.Background())
-	if err != nil {
-		t.Fatal(err)
-	}
+	require.NoError(t, err)
 }

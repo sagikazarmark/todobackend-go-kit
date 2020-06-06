@@ -67,8 +67,8 @@ github.com/fsnotify/fsnotify v1.4.7/go.mod h1:jwhsz4b93w/PPRr/qN1Yymfu8t87LnFCMo
 github.com/ghodss/yaml v1.0.0/go.mod h1:4dBDuWmgqj2HViK6kFavaiC9ZROes6MMH2rRYeMEF04=
 github.com/go-bdd/assert v0.0.0-20190820124234-20d47a68475d h1:zQazu3kApPoajWmXj9zFpCNE+UDefwwFRijKjzvHNCM=
 github.com/go-bdd/assert v0.0.0-20190820124234-20d47a68475d/go.mod h1:dOoqt7g2I/fpR7/Pyz0P19J3xjDj5lsHn3v9EaFLRjM=
-github.com/go-bdd/gobdd v1.0.1 h1:j4mLdKzG7s+Cia7HTZnu9YUxq4jiQ4arIBRQ2V2T2BQ=
-github.com/go-bdd/gobdd v1.0.1/go.mod h1:Q3mXpW/Qm9GJCPLxFCTXdTtRBdHzcTfrbeLlaqAPtXM=
+github.com/go-bdd/gobdd v1.0.2-0.20200601143550-b30291a8ec6c h1:xN2sjRpMDHXTBB7nKgBxwj9VUB8SP4niPoywxuLb/Q4=
+github.com/go-bdd/gobdd v1.0.2-0.20200601143550-b30291a8ec6c/go.mod h1:Q3mXpW/Qm9GJCPLxFCTXdTtRBdHzcTfrbeLlaqAPtXM=
 github.com/go-kit/kit v0.8.0/go.mod h1:xBxKIO96dXMWWy0MnWVtmwkA9/13aqxPnvrjFYMA2as=
 github.com/go-kit/kit v0.9.0/go.mod h1:xBxKIO96dXMWWy0MnWVtmwkA9/13aqxPnvrjFYMA2as=
 github.com/go-kit/kit v0.10.0 h1:dXFJfIHVvUcpSgDOV+Ne6t7jXri8Tfv2uOLHUZ2XNuo=

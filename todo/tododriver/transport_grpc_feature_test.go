@@ -10,6 +10,7 @@ import (
 	"github.com/golang/protobuf/ptypes/wrappers"
 	"github.com/goph/idgen/ulidgen"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc"
 
 	todov1 "github.com/sagikazarmark/todobackend-go-kit/api/todo/v1"
@@ -35,7 +36,7 @@ func TestGRPC(t *testing.T) {
 	)
 
 	suite.AddStep(`an empty todo list`, givenAnEmptyTodoListGRPC)
-	suite.AddStep(`(?:(?:I|the user)(?: also)? adds? )?(?:a new|an) item for "(.*)"`, addAnItemGRPC)
+	suite.AddStep(`(?:(?:I|the user)(?: also)? adds? )?(?:a new|an) item for {text}`, addAnItemGRPC)
 	suite.AddStep(`it should be (?:the only item )?on the list`, shouldBeOnTheGRPC)
 	suite.AddStep(`both items should be on the list`, allShouldBeOnTheListGRPC)
 	suite.AddStep(`the list should be empty`, theListShouldBeEmptyGRPC)
@@ -69,9 +70,7 @@ func newLocalListener() (net.Listener, error) {
 
 func givenAnEmptyTodoListGRPC(t gobdd.StepTest, ctx gobdd.Context) {
 	l, err := newLocalListener()
-	if err != nil {
-		t.Fatal(err)
-	}
+	require.NoError(t, err)
 
 	store := todo.NewInMemoryStore()
 	service := todo.NewService(ulidgen.NewGenerator(), store)
@@ -105,9 +104,7 @@ func addAnItemGRPC(t gobdd.StepTest, ctx gobdd.Context, title string) {
 	client := getGRPCClient(t, ctx)
 
 	resp, err := client.AddItem(context.Background(), &todov1.AddItemRequest{Title: title})
-	if err != nil {
-		t.Fatal(err)
-	}
+	require.NoError(t, err)
 
 	ctx.Set("id", resp.GetItem().GetId())
 	ctx.Set("title", title)
@@ -127,9 +124,7 @@ func shouldBeOnTheGRPC(t gobdd.StepTest, ctx gobdd.Context) {
 	client := getGRPCClient(t, ctx)
 
 	resp, err := client.ListItems(context.Background(), new(todov1.ListItemsRequest))
-	if err != nil {
-		t.Fatal(err)
-	}
+	require.NoError(t, err)
 
 	title, _ := ctx.GetString("title", "")
 
@@ -145,9 +140,7 @@ func allShouldBeOnTheListGRPC(t gobdd.StepTest, ctx gobdd.Context) {
 	client := getGRPCClient(t, ctx)
 
 	resp, err := client.ListItems(context.Background(), new(todov1.ListItemsRequest))
-	if err != nil {
-		t.Fatal(err)
-	}
+	require.NoError(t, err)
 
 	ids, _ := ctx.Get("ids", []string{})
 	titles, _ := ctx.Get("titles", []string{})
@@ -169,9 +162,7 @@ func theListShouldBeEmptyGRPC(t gobdd.StepTest, ctx gobdd.Context) {
 	client := getGRPCClient(t, ctx)
 
 	resp, err := client.ListItems(context.Background(), new(todov1.ListItemsRequest))
-	if err != nil {
-		t.Fatal(err)
-	}
+	require.NoError(t, err)
 
 	assert.Len(t, resp.GetItems(), 0, "the list should be empty")
 }
@@ -182,9 +173,7 @@ func itemMarkedAsCompleteGRPC(t gobdd.StepTest, ctx gobdd.Context) {
 	client := getGRPCClient(t, ctx)
 
 	_, err := client.UpdateItem(context.Background(), &todov1.UpdateItemRequest{Id: id, Completed: &wrappers.BoolValue{Value: true}}) // nolint: lll
-	if err != nil {
-		t.Fatal(err)
-	}
+	require.NoError(t, err)
 }
 
 func itemShouldBeCompleteGRPC(t gobdd.StepTest, ctx gobdd.Context) {
@@ -193,9 +182,7 @@ func itemShouldBeCompleteGRPC(t gobdd.StepTest, ctx gobdd.Context) {
 	client := getGRPCClient(t, ctx)
 
 	resp, err := client.GetItem(context.Background(), &todov1.GetItemRequest{Id: id})
-	if err != nil {
-		t.Fatal(err)
-	}
+	require.NoError(t, err)
 
 	assert.True(t, resp.GetItem().GetCompleted(), "item should be complete")
 }
@@ -206,16 +193,12 @@ func deleteAnItemGRPC(t gobdd.StepTest, ctx gobdd.Context) {
 	client := getGRPCClient(t, ctx)
 
 	_, err := client.DeleteItem(context.Background(), &todov1.DeleteItemRequest{Id: id})
-	if err != nil {
-		t.Fatal(err)
-	}
+	require.NoError(t, err)
 }
 
 func clearListGRPC(t gobdd.StepTest, ctx gobdd.Context) {
 	client := getGRPCClient(t, ctx)
 
 	_, err := client.DeleteItems(context.Background(), new(todov1.DeleteItemsRequest))
-	if err != nil {
-		t.Fatal(err)
-	}
+	require.NoError(t, err)
 }

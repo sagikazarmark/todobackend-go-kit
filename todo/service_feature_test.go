@@ -8,6 +8,7 @@ import (
 	"github.com/go-bdd/gobdd"
 	"github.com/goph/idgen/ulidgen"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/sagikazarmark/todobackend-go-kit/todo"
 )
@@ -16,7 +17,7 @@ func TestService(t *testing.T) {
 	suite := gobdd.NewSuite(t)
 
 	suite.AddStep(`an empty todo list`, givenAnEmptyTodoList)
-	suite.AddStep(`(?:(?:I|the user)(?: also)? adds? )?(?:a new|an) item for "(.*)"`, addAnItem)
+	suite.AddStep(`(?:(?:I|the user)(?: also)? adds? )?(?:a new|an) item for {text}`, addAnItem)
 	suite.AddStep(`it should be (?:the only item )?on the list`, shouldBeOnTheList)
 	suite.AddStep(`both items should be on the list`, allShouldBeOnTheList)
 	suite.AddStep(`the list should be empty`, theListShouldBeEmpty)
@@ -30,9 +31,7 @@ func TestService(t *testing.T) {
 
 func getService(t gobdd.StepTest, ctx gobdd.Context) todo.Service {
 	v, err := ctx.Get("service")
-	if err != nil {
-		t.Fatal(err)
-	}
+	require.NoError(t, err)
 
 	return v.(todo.Service)
 }
@@ -78,9 +77,7 @@ func shouldBeOnTheList(t gobdd.StepTest, ctx gobdd.Context) {
 	service := getService(t, ctx)
 
 	items, err := service.ListItems(context.Background())
-	if err != nil {
-		t.Fatal(err)
-	}
+	require.NoError(t, err)
 
 	title, _ := ctx.GetString("title", "")
 
@@ -96,9 +93,7 @@ func allShouldBeOnTheList(t gobdd.StepTest, ctx gobdd.Context) {
 	service := getService(t, ctx)
 
 	items, err := service.ListItems(context.Background())
-	if err != nil {
-		t.Fatal(err)
-	}
+	require.NoError(t, err)
 
 	ids, _ := ctx.Get("ids", []string{})
 	titles, _ := ctx.Get("titles", []string{})
@@ -120,9 +115,7 @@ func theListShouldBeEmpty(t gobdd.StepTest, ctx gobdd.Context) {
 	service := getService(t, ctx)
 
 	items, err := service.ListItems(context.Background())
-	if err != nil {
-		t.Fatal(err)
-	}
+	require.NoError(t, err)
 
 	assert.Len(t, items, 0, "the list should be empty")
 }
@@ -135,9 +128,7 @@ func itemMarkedAsComplete(t gobdd.StepTest, ctx gobdd.Context) {
 	completed := true
 
 	_, err := service.UpdateItem(context.Background(), id, todo.ItemUpdate{Completed: &completed})
-	if err != nil {
-		t.Fatal(err)
-	}
+	require.NoError(t, err)
 }
 
 func itemShouldBeComplete(t gobdd.StepTest, ctx gobdd.Context) {
@@ -146,9 +137,7 @@ func itemShouldBeComplete(t gobdd.StepTest, ctx gobdd.Context) {
 	service := getService(t, ctx)
 
 	item, err := service.GetItem(context.Background(), id)
-	if err != nil {
-		t.Fatal(err)
-	}
+	require.NoError(t, err)
 
 	assert.True(t, item.Completed, "item should be complete")
 }
@@ -159,16 +148,12 @@ func deleteAnItem(t gobdd.StepTest, ctx gobdd.Context) {
 	service := getService(t, ctx)
 
 	err := service.DeleteItem(context.Background(), id)
-	if err != nil {
-		t.Fatal(err)
-	}
+	require.NoError(t, err)
 }
 
 func clearList(t gobdd.StepTest, ctx gobdd.Context) {
 	service := getService(t, ctx)
 
 	err := service.DeleteItems(context.Background())
-	if err != nil {
-		t.Fatal(err)
-	}
+	require.NoError(t, err)
 }

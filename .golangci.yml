@@ -1,9 +1,11 @@
 run:
     skip-dirs:
         - .gen
+        - .generated
 
     skip-files:
         - ".*_gen\\.go$"
+        - "^zz_generated\\..*\\.go$"
 
 linters-settings:
     golint:
@@ -35,7 +37,6 @@ linters:
         - gosimple
         - govet
         - ineffassign
-        - interfacer
         - lll
         - misspell
         - nakedret
@@ -63,6 +64,7 @@ linters:
         # - godox
         # - goerr113
         # - gomnd
+        # - interfacer
         # - maligned
         # - nestif
         # - testpackage
