@@ -15,6 +15,7 @@ In addition to the [Todo-Backend](http://todobackend.com/) implementation, this 
 
 - BDD style tests using [GoBDD](https://go-bdd.github.io/gobdd/) *(Specifications are created based on [this](https://paulhammant.com/2017/05/14/todomvc-and-given-when-then-scenarios/) article.)*
 - [Modern Go Application](https://github.com/sagikazarmark/modern-go-application) practices
+- Separate [API SDK](api/) module
 
 
 ## Development
