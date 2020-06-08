@@ -1,0 +1,27 @@
+type TodoItem {
+    id: ID!
+    title: String!
+    completed: Boolean!
+    order: Int!
+}
+
+type Query {
+    todoItems: [TodoItem!]!
+}
+
+input NewTodoItem {
+    title: String!
+    order: Int
+}
+
+input TodoItemUpdate {
+    id: ID!
+    title: String
+    completed: Boolean
+    order: Int
+}
+
+type Mutation {
+    addTodoItem(input: NewTodoItem!): TodoItem!
+    updateTodoItem(input: TodoItemUpdate!): TodoItem!
+}

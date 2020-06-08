@@ -11,6 +11,7 @@ import (
 	"strings"
 	"syscall"
 
+	"github.com/99designs/gqlgen/graphql/handler"
 	kithttp "github.com/go-kit/kit/transport/http"
 	"github.com/goph/idgen/ulidgen"
 	"github.com/gorilla/handlers"
@@ -21,6 +22,7 @@ import (
 	"google.golang.org/grpc"
 
 	todov1 "github.com/sagikazarmark/todobackend-go-kit/api/todo/v1"
+	"github.com/sagikazarmark/todobackend-go-kit/internal/.generated/api/v1/graphql"
 	"github.com/sagikazarmark/todobackend-go-kit/todo"
 	"github.com/sagikazarmark/todobackend-go-kit/todo/tododriver"
 )
@@ -87,6 +89,11 @@ func main() {
 			}),
 		)
 		todov1.RegisterTodoListServiceServer(grpcServer, tododriver.MakeGRPCServer(endpoints))
+		router.PathPrefix("/graphql").Handler(handler.NewDefaultServer(
+			graphql.NewExecutableSchema(graphql.Config{
+				Resolvers: tododriver.MakeGraphQLResolver(endpoints),
+			}),
+		))
 	}
 
 	cors := handlers.CORS(

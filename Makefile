@@ -196,6 +196,14 @@ buf: bin/buf ## Generate client and server stubs from the protobuf definition
 proto: bin/protoc bin/protoc-gen-go bin/protoc-gen-go-grpc bin/protoc-gen-kit buf ## Generate client and server stubs from the protobuf definition
 	buf image build -o - | protoc --descriptor_set_in=/dev/stdin --go_out=paths=source_relative:api --go-grpc_out=paths=source_relative:api --kit_out=paths=source_relative:api $(shell buf image build -o - | buf ls-files --input - | grep -v google)
 
+bin/gqlgen: go.mod
+	@mkdir -p bin
+	go build -o bin/gqlgen github.com/99designs/gqlgen
+
+.PHONY: graphql
+graphql: bin/gqlgen ## Generate GraphQL code
+	bin/gqlgen
+
 .PHONY: list
 list: ## List all make targets
 	@${MAKE} -pRrn : -f $(MAKEFILE_LIST) 2>/dev/null | awk -v RS= -F: '/^# File/,/^# Finished Make data base/ {if ($$1 !~ "^[#.]") {print $$1}}' | egrep -v -e '^[^[:alnum:]]' -e '^$@$$' | sort
