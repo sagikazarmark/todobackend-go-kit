@@ -1,0 +1,16 @@
+# Variables:
+#{
+#    "title": "My Todo",
+#    "order": 10
+#}
+mutation($title: String!, $order: Int = 0) {
+    addTodoItem(input: {
+        title: $title,
+        order: $order
+    }) {
+        id
+        title
+        completed
+        order
+    }
+}

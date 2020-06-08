@@ -1,0 +1,20 @@
+schema:
+    - "api/todo/v1/todo.graphql"
+
+exec:
+    filename: internal/.generated/api/v1/graphql/exec.go
+    package: graphql
+
+model:
+    filename: internal/.generated/api/v1/graphql/generated.go
+    package: graphql
+
+struct_tag: json
+
+omit_slice_element_pointers: true
+
+models:
+    TodoItem:
+        model: github.com/sagikazarmark/todobackend-go-kit/todo.Item
+    NewTodoItem:
+        model: github.com/sagikazarmark/todobackend-go-kit/todo.NewItem
