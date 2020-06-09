@@ -293,8 +293,8 @@ github.com/russross/blackfriday/v2 v2.0.1/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQD
 github.com/ryanuber/columnize v0.0.0-20160712163229-9b3edd62028f/go.mod h1:sm1tb6uqfes/u+d4ooFouqFdy9/2g9QGwK3SQygK0Ts=
 github.com/sagikazarmark/appkit v0.10.0 h1:Okuwz1r6OoF+oWQHYVo4fLujCt0PPRZgvs3PiKwqQ8c=
 github.com/sagikazarmark/appkit v0.10.0/go.mod h1:E2mpDbMIdq0IfZPYGLhmwDEIPD0l/tqT19/wk/8YODU=
-github.com/sagikazarmark/kitx v0.13.0 h1:ak/WB1kWbaIWp7omD2T2HCj9mIVd9risJyBQFTbiwlg=
-github.com/sagikazarmark/kitx v0.13.0/go.mod h1:5Zwwe0EDgMSK/feKQUy3Fz6/oM9AE0tjMAnYGXhFNUY=
+github.com/sagikazarmark/kitx v0.14.0 h1:5oDiMJDxRwYDsqr6SeHQ7Yf+ICPcJzR1/1th7wMiMDw=
+github.com/sagikazarmark/kitx v0.14.0/go.mod h1:5Zwwe0EDgMSK/feKQUy3Fz6/oM9AE0tjMAnYGXhFNUY=
 github.com/samuel/go-zookeeper v0.0.0-20190923202752-2cc03de413da/go.mod h1:gi+0XIa01GRL2eRQVjQkKGqKF3SF9vZR/HnPullcV2E=
 github.com/sean-/seed v0.0.0-20170313163322-e2103e2c3529/go.mod h1:DxrIzT+xaE7yg65j358z/aeFdxmN0P9QXhEzd20vsDc=
 github.com/sergi/go-diff v1.1.0 h1:we8PVUC3FE2uYfodKH/nBHMSetSfHDR6scGdBi+erh0=
