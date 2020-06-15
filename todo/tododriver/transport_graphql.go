@@ -3,11 +3,19 @@ package tododriver
 import (
 	"context"
 
+	graphql2 "github.com/99designs/gqlgen/graphql"
 	kitxgraphql "github.com/sagikazarmark/kitx/transport/graphql"
 
 	"github.com/sagikazarmark/todobackend-go-kit/internal/.generated/api/v1/graphql"
 	"github.com/sagikazarmark/todobackend-go-kit/todo"
 )
+
+// MakeGraphQLSchema mounts all of the service endpoints into a GraphQL executable schema.
+func MakeGraphQLSchema(endpoints Endpoints, options ...kitxgraphql.ServerOption) graphql2.ExecutableSchema {
+	return graphql.NewExecutableSchema(graphql.Config{
+		Resolvers: MakeGraphQLResolver(endpoints, options...),
+	})
+}
 
 // MakeGraphQLResolver mounts all of the service endpoints into a GraphQL resolver.
 func MakeGraphQLResolver(endpoints Endpoints, options ...kitxgraphql.ServerOption) graphql.ResolverRoot {
