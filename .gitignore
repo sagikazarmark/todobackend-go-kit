@@ -18,3 +18,7 @@ pkged.go
 !/.idea/runConfigurations/
 !/.idea/scopes/
 !/.idea/sqldialects.xml
+
+# Please output directory
+plz-out
+.plzconfig.local
