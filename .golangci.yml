@@ -2,6 +2,7 @@ run:
     skip-dirs:
         - .gen
         - .generated
+        - (^|/)plz-out($|/)
 
     skip-files:
         - ".*_gen\\.go$"
