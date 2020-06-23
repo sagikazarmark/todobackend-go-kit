@@ -13,3 +13,10 @@ sh_cmd(
         '$(out_location ///please-go//tools/mga) generate kit endpoint ./...'
     ]
 )
+
+subinclude('//build_defs/go')
+
+go_test2(
+    name = 'test',
+    build_in_tree = True,
+)

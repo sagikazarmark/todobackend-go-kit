@@ -1,0 +1,123 @@
+def go_test2(name:str, srcs:list=[], deps:list=[], visibility:list=None,
+             test_only:bool&testonly=False, definitions:str|list|dict=None, stamp:bool=False,
+             tags:list=[], trimpath:bool=False, pass_env:list=[], build_in_tree:bool=False):
+    """Compiles a go binary.
+
+    Args:
+      name (str): Name of the rule.
+      srcs (list): Go source files, one of which contains the main function.
+      deps (list): Dependencies
+      visibility (list): Visibility of the rule.
+      test_only (bool): If True, is only visible to test rules.
+      definitions (str | list | dict): If set to a string, defines importpath.name=value
+                     when calling the Go linker.  If set to a list, pass each value as a
+                     definition to the linker.  If set to a dict, each key/value pair is
+                     used to contruct the list of definitions passed to the linker.
+      stamp (bool): Allows this rule to gain access to information about SCM revision etc
+                    via env vars. These can be useful to pass into `definitions`.
+      tags (list): List of Go build tags passed to the build command.
+      trimpath (bool): Remove all file system paths from the resulting executable.
+      build_in_tree (bool): Change directory to the project root during build.
+    """
+    srcs = srcs if len(srcs) > 0 else glob(['*.go'])
+
+    cmds, tools = _go_build_cmds(definitions, tags, trimpath, build_in_tree)
+
+    return build_rule(
+        name = name,
+        srcs = srcs,
+        deps = deps,
+        #outs = [name],
+        #cmd = cmds,
+        test_cmd = 'cd $(pwd | sed "s/plz-out\/.*//") && go test -v ./... 2>&1 | tee $RESULTS_FILE',
+        tools = tools,
+        pass_env = ['GOCACHE', 'GOPATH', 'GOFLAGS'] + pass_env,
+        building_description = 'Compiling...',
+        needs_transitive_deps=True,
+        binary=True,
+        test=True,
+        output_is_complete=True,
+        test_only=test_only,
+        visibility=visibility,
+        requires=['go', 'test'],
+        stamp = stamp,
+    )
+
+def go_build(name:str, srcs:list=[], out:str=None, deps:list=[], visibility:list=None,
+             test_only:bool&testonly=False, definitions:str|list|dict=None, stamp:bool=False,
+             tags:list=[], trimpath:bool=False, pass_env:list=[], build_in_tree:bool=False):
+    """Compiles a go binary.
+
+    Args:
+      name (str): Name of the rule.
+      srcs (list): Go source files, one of which contains the main function.
+      out (str): Name of the output file to create. Defaults to the same as `name`.
+      deps (list): Dependencies
+      visibility (list): Visibility of the rule.
+      test_only (bool): If True, is only visible to test rules.
+      definitions (str | list | dict): If set to a string, defines importpath.name=value
+                     when calling the Go linker.  If set to a list, pass each value as a
+                     definition to the linker.  If set to a dict, each key/value pair is
+                     used to contruct the list of definitions passed to the linker.
+      stamp (bool): Allows this rule to gain access to information about SCM revision etc
+                    via env vars. These can be useful to pass into `definitions`.
+      tags (list): List of Go build tags passed to the build command.
+      trimpath (bool): Remove all file system paths from the resulting executable.
+      build_in_tree (bool): Change directory to the project root during build.
+    """
+    srcs = srcs if len(srcs) > 0 else glob(['*.go'])
+
+    cmds, tools = _go_build_cmds(definitions, tags, trimpath, build_in_tree)
+
+    return build_rule(
+        name = name,
+        srcs = srcs,
+        deps = deps,
+        outs = [out or name],
+        cmd = cmds,
+        tools = tools,
+        pass_env = ['GOCACHE', 'GOPATH', 'GOFLAGS'] + pass_env,
+        building_description = 'Compiling...',
+        needs_transitive_deps=True,
+        binary=True,
+        output_is_complete=True,
+        test_only=test_only,
+        visibility=visibility,
+        requires=['go'],
+        stamp = stamp,
+    )
+
+def _go_build_cmds(definitions:str|list|dict=None, tags:list=[], trimpath:bool, build_in_tree:bool=False):
+    """Returns the commands to run for compiling a Go binary."""
+
+    prefix = 'cd $(pwd | sed "s/plz-out\/.*//") &&' if build_in_tree else ''
+
+    flags = 'build'
+
+    if trimpath:
+        flags += ' -trimpath'
+
+    if len(tags) > 0:
+        _tags = ','.join(tags)
+        flags += f' -tags "{_tags}"'
+
+    linkerdefs = []
+    if definitions is None:
+        pass
+    elif isinstance(definitions, str):
+        linkerdefs += [f'{definitions}']
+    elif isinstance(definitions, list):
+        linkerdefs += [f'{linkerdef}' for linkerdef in definitions]
+    elif isinstance(definitions, dict):
+        linkerdefs = [k if v is None else f'{k}={v}' for k, v in sorted(definitions.items())]
+
+    defs = ' '.join([f'-X "{linkerdef}"' for linkerdef in linkerdefs])
+
+    cmds = {
+        'dbg': f'{prefix} $TOOLS_GO {flags} -ldflags "{defs}" -o $OUT ./$PKG_DIR',
+        'opt': f'{prefix} $TOOLS_GO {flags} -ldflags "-s -w {defs}" -o $OUT ./$PKG_DIR',
+    }
+
+    return cmds, {
+        'go': [CONFIG.GO_TOOL],
+    }
