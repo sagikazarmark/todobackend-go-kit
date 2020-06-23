@@ -1,8 +1,8 @@
-package(default_visibility=['PUBLIC'])
+package(default_visibility = ["PUBLIC"])
 
 filegroup(
-    name = 'go',
+    name = "go",
     srcs = [
-        'go.build_defs',
+        "go.build_defs",
     ],
 )

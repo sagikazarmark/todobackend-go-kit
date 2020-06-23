@@ -1,5 +1,5 @@
 filegroup(
-    name = 'index',
-    srcs = ['index.html'],
-    visibility = ['PUBLIC'],
+    name = "index",
+    srcs = ["index.html"],
+    visibility = ["PUBLIC"],
 )
