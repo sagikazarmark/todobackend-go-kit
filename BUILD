@@ -1,4 +1,4 @@
-package(default_visibility=['PUBLIC'])
+package(default_visibility = ["PUBLIC"])
 
 github_repo(
     name = "please-go",
@@ -7,17 +7,17 @@ github_repo(
 )
 
 sh_cmd(
-    name = 'generate',
-    srcs = ['///please-go//tools/mga'],
+    name = "generate",
+    srcs = ["///please-go//tools/mga"],
     cmd = [
-        '$(out_location ///please-go//tools/mga) generate kit endpoint ./...'
-    ]
+        "$(out_location ///please-go//tools/mga) generate kit endpoint ./...",
+    ],
 )
 
 sh_cmd(
-    name = 'test',
-    srcs = ['///please-go//tools/gotestsum'],
+    name = "test",
+    srcs = ["///please-go//tools/gotestsum"],
     cmd = [
-        '$(out_location ///please-go//tools/gotestsum) --no-summary=skipped --format short -- -race -covermode=atomic ./...'
-    ]
+        "$(out_location ///please-go//tools/gotestsum) --no-summary=skipped --format short -- -race -covermode=atomic ./...",
+    ],
 )
