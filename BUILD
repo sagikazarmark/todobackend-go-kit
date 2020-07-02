@@ -14,24 +14,10 @@ sh_cmd(
     ]
 )
 
-subinclude('//build_defs/go')
-
-go_test2(
+sh_cmd(
     name = 'test',
-    build_in_tree = True,
-)
-
-build_rule(
-    name = "wollemi",
-    binary = True,
-    srcs = [remote_file(
-        name = "wollemi",
-        _tag = "download",
-        url = f"https://github.com/tcncloud/wollemi/releases/download/v0.0.3/wollemi-v0.0.3-{CONFIG.HOSTOS}-{CONFIG.HOSTARCH}.tar.gz"
-    )],
-    cmd = " && ".join([
-        "tar xf $SRCS",
-    ]),
-    outs = ["wollemi"],
-    visibility = ["PUBLIC"],
+    srcs = ['///please-go//tools/gotestsum'],
+    cmd = [
+        '$(out_location ///please-go//tools/gotestsum) --no-summary=skipped --format short -- -race -covermode=atomic ./...'
+    ]
 )
