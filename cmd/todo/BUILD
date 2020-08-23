@@ -1,27 +1,16 @@
 subinclude("///pleasings2//go")
 
+timestamp = git_show("%ct")
+date_fmt = "+%FT%T%z"
+
 go_build(
     name = "todo",
     definitions = {
         "main.version": "${VERSION:-" + git_branch() + "}",
         "main.commitHash": git_commit()[0:8],
-        "main.buildDate": '$($(echo $TMP_DIR | sed "s/plz-out\/.*//")/$(out_location :builddate))',
+        "main.buildDate": f'$(date -u -d "@{timestamp}" "{date_fmt}" 2>/dev/null || date -u -r "{timestamp}" "{date_fmt}" 2>/dev/null || date -u "{date_fmt}")',
     },
-    pass_env = ["VERSION", "SOURCE_DATE_EPOCH"],
-    deps = [":builddate"],
+    pass_env = ["VERSION"],
     stamp = True,
     trimpath = True,
-)
-
-sh_cmd(
-    name = "builddate",
-    cmd = '\n'.join([
-        'DATE_FMT="+%FT%T%z"',
-        '',
-        'if [[ "\\\$SOURCE_DATE_EPOCH" != "" ]]; then',
-        '    date -u -d "@\\\${SOURCE_DATE_EPOCH}" "\\\${DATE_FMT}" 2>/dev/null || date -u -r "\\\${SOURCE_DATE_EPOCH}" "\\\${DATE_FMT}" 2>/dev/null || date -u "\\\${DATE_FMT}"',
-        'else',
-        '    date "\\\${DATE_FMT}"',
-        'fi',
-    ]),
 )
