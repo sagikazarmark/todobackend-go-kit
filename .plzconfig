@@ -2,8 +2,12 @@
 golangci-lint-version = 1.27.0
 
 [alias "lint"]
-desc = Runs the linters for this repo
-cmd = run ///please-go//tools/golangci-lint --
+desc = Runs linters for this repo
+cmd = run ///pleasings2//tools/go:golangci-lint -- run
+
+[alias "test2"]
+desc = Runs tests for this repo
+cmd = run ///pleasings2//tools/go:gotestsum -- --no-summary=skipped --format short -- -race -covermode=atomic ./...
 
 [alias "generate"]
 desc = Generate code

@@ -1,8 +1,7 @@
-subinclude("///please-go//rules")
+subinclude("///pleasings2//go")
 
 go_build(
     name = "todo",
-    build_in_tree = True,
     definitions = {
         "main.version": "${VERSION:-" + git_branch() + "}",
         "main.commitHash": git_commit()[0:8],
