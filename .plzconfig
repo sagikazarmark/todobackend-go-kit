@@ -1,4 +1,10 @@
+[go]
+importpath = github.com/sagikazarmark/todobackend-go-kit
+gopath = ""
+
 [buildconfig]
+go-home = "$(eval echo ~$(whoami))"
+
 golangci-lint-version = 1.27.0
 openapi-generator-version = v4.3.1
 

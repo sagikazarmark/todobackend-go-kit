@@ -3,7 +3,7 @@ package(default_visibility = ["PUBLIC"])
 github_repo(
     name = "pleasings2",
     repo = "sagikazarmark/mypleasings",
-    revision = "2248c153a30eb86e76ac1f55e7c4562425f6f145",
+    revision = "fa8f66a0e9f22323769661865e0a5ececa12e050",
 )
 
 sh_cmd(
