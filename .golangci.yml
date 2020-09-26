@@ -2,17 +2,19 @@ run:
     skip-dirs:
         - .gen
         - .generated
-        - (^|/)plz-out($|/)
+        - plz-out
 
     skip-files:
         - ".*_gen\\.go$"
         - "^zz_generated\\..*\\.go$"
 
 linters-settings:
-    golint:
-        min-confidence: 0.1
+    gci:
+        local-prefixes: github.com/sagikazarmark/todobackend-go-kit
     goimports:
         local-prefixes: github.com/sagikazarmark/todobackend-go-kit
+    golint:
+        min-confidence: 0
 
 linters:
     disable-all: true
@@ -22,7 +24,9 @@ linters:
         - dogsled
         - dupl
         - errcheck
-        # - exportloopref
+        - exhaustive
+        - exportloopref
+        - gci
         - gochecknoglobals
         - gochecknoinits
         - gocognit
@@ -31,6 +35,7 @@ linters:
         - gocyclo
         - godot
         - gofmt
+        - gofumpt
         - goimports
         - golint
         - goprintffuncname
@@ -41,10 +46,13 @@ linters:
         - lll
         - misspell
         - nakedret
+        - nlreturn
+        - noctx
         - nolintlint
         - prealloc
         - rowserrcheck
         - scopelint
+        - sqlclosecheck
         - staticcheck
         - structcheck
         - stylecheck
@@ -57,6 +65,7 @@ linters:
 
         # unused
         # - depguard
+        # - goheader
         # - gomodguard
 
         # don't enable:

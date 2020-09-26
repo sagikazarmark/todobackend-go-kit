@@ -13,4 +13,5 @@ go_build(
     pass_env = ["VERSION"],
     stamp = True,
     trimpath = True,
+    labels = ["binary"],
 )

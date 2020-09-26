@@ -1,11 +1,12 @@
+[please]
+version = 15.5.0
+
 [go]
 importpath = github.com/sagikazarmark/todobackend-go-kit
-gopath = ""
 
 [buildconfig]
-go-home = "$(eval echo ~$(whoami))"
-
-golangci-lint-version = 1.27.0
+golangci-lint-version = 1.31.0
+gotestsum-version = 0.5.3
 openapi-generator-version = v4.3.1
 
 [alias "make"]
@@ -16,9 +17,9 @@ cmd = export outputs -o .
 desc = Runs linters for this repo
 cmd = run ///pleasings2//tools/go:golangci-lint -- run
 
-[alias "test2"]
+[alias "gotest"]
 desc = Runs tests for this repo
-cmd = run ///pleasings2//tools/go:gotestsum -- --no-summary=skipped --format short -- -race -covermode=atomic ./...
+cmd = run ///pleasings2//tools/go:gotestsum -- --no-summary=skipped --format short -- -race -covermode=atomic -coverprofile=plz-out/log/coverage.txt ./...
 
 [alias "generate"]
 desc = Generate code
