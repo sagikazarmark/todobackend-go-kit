@@ -17,13 +17,18 @@ COPY go.mod go.sum ./
 COPY api/go.mod api/go.sum ./api/
 RUN go mod download
 
-COPY . .
-
 ARG PLZ_BUILD_CONFIG
 ARG PLZ_OVERRIDES
 ARG PLZ_CONFIG_PROFILE
 
-RUN ./pleasew -p -o "build.path:${PATH}" export outputs -o /build //cmd/...
+ENV PLZ_ARGS="-p -o \"build.path:${PATH}\""
+
+COPY .plzconfig* pleasew ./
+RUN ./pleasew update
+
+COPY . .
+
+RUN ./pleasew export outputs -o /build //cmd/...
 
 
 # Final image
