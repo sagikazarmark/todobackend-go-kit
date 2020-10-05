@@ -11,7 +11,7 @@ import (
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = grpc.SupportPackageIsVersion6
+const _ = grpc.SupportPackageIsVersion7
 
 // TodoListServiceClient is the client API for TodoListService service.
 //
@@ -94,6 +94,8 @@ func (c *todoListServiceClient) DeleteItem(ctx context.Context, in *DeleteItemRe
 }
 
 // TodoListServiceServer is the server API for TodoListService service.
+// All implementations must embed UnimplementedTodoListServiceServer
+// for forward compatibility
 type TodoListServiceServer interface {
 	// AddItem adds a new item to the list.
 	AddItem(context.Context, *AddItemRequest) (*AddItemResponse, error)
@@ -107,29 +109,38 @@ type TodoListServiceServer interface {
 	UpdateItem(context.Context, *UpdateItemRequest) (*UpdateItemResponse, error)
 	// DeleteItem deletes an item from the list.
 	DeleteItem(context.Context, *DeleteItemRequest) (*DeleteItemResponse, error)
+	mustEmbedUnimplementedTodoListServiceServer()
 }
 
-// UnimplementedTodoListServiceServer can be embedded to have forward compatible implementations.
+// UnimplementedTodoListServiceServer must be embedded to have forward compatible implementations.
 type UnimplementedTodoListServiceServer struct {
 }
 
-func (*UnimplementedTodoListServiceServer) AddItem(context.Context, *AddItemRequest) (*AddItemResponse, error) {
+func (UnimplementedTodoListServiceServer) AddItem(context.Context, *AddItemRequest) (*AddItemResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddItem not implemented")
 }
-func (*UnimplementedTodoListServiceServer) ListItems(context.Context, *ListItemsRequest) (*ListItemsResponse, error) {
+func (UnimplementedTodoListServiceServer) ListItems(context.Context, *ListItemsRequest) (*ListItemsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListItems not implemented")
 }
-func (*UnimplementedTodoListServiceServer) DeleteItems(context.Context, *DeleteItemsRequest) (*DeleteItemsResponse, error) {
+func (UnimplementedTodoListServiceServer) DeleteItems(context.Context, *DeleteItemsRequest) (*DeleteItemsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteItems not implemented")
 }
-func (*UnimplementedTodoListServiceServer) GetItem(context.Context, *GetItemRequest) (*GetItemResponse, error) {
+func (UnimplementedTodoListServiceServer) GetItem(context.Context, *GetItemRequest) (*GetItemResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetItem not implemented")
 }
-func (*UnimplementedTodoListServiceServer) UpdateItem(context.Context, *UpdateItemRequest) (*UpdateItemResponse, error) {
+func (UnimplementedTodoListServiceServer) UpdateItem(context.Context, *UpdateItemRequest) (*UpdateItemResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateItem not implemented")
 }
-func (*UnimplementedTodoListServiceServer) DeleteItem(context.Context, *DeleteItemRequest) (*DeleteItemResponse, error) {
+func (UnimplementedTodoListServiceServer) DeleteItem(context.Context, *DeleteItemRequest) (*DeleteItemResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteItem not implemented")
+}
+func (UnimplementedTodoListServiceServer) mustEmbedUnimplementedTodoListServiceServer() {}
+
+// UnsafeTodoListServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to TodoListServiceServer will
+// result in compilation errors.
+type UnsafeTodoListServiceServer interface {
+	mustEmbedUnimplementedTodoListServiceServer()
 }
 
 func RegisterTodoListServiceServer(s *grpc.Server, srv TodoListServiceServer) {

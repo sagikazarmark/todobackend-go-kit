@@ -10,8 +10,9 @@ include main.mk
 # Dependency versions
 MGA_VERSION = 0.2.0
 OPENAPI_GENERATOR_VERSION = 4.3.1
-PROTOC_VERSION = 3.12.2
-BUF_VERSION = 0.15.0
+PROTOC_VERSION = 3.13.0
+BUF_VERSION = 0.24.0
+PROTOC_GEN_GO_VERSION = 1.25.0
 PROTOC_GEN_KIT_VERSION = 0.2.0
 
 bin/pkger: go.mod
@@ -72,9 +73,11 @@ endif
 	unzip bin/protoc.zip -d bin/protoc-${PROTOC_VERSION}
 	rm bin/protoc.zip
 
-bin/protoc-gen-go: go.mod
+bin/protoc-gen-go: bin/protoc-gen-go-${PROTOC_GEN_GO_VERSION}
+	@ln -sf protoc-gen-go-${PROTOC_GEN_GO_VERSION} bin/protoc-gen-go
+bin/protoc-gen-go-${PROTOC_GEN_GO_VERSION}:
 	@mkdir -p bin
-	go build -o bin/protoc-gen-go google.golang.org/protobuf/cmd/protoc-gen-go
+	curl -L https://github.com/protocolbuffers/protobuf-go/releases/download/v${PROTOC_GEN_GO_VERSION}/protoc-gen-go.v${PROTOC_GEN_GO_VERSION}.${OS}.amd64.tar.gz | tar -zOxf - protoc-gen-go > ./bin/protoc-gen-go-${PROTOC_GEN_GO_VERSION} && chmod +x ./bin/protoc-gen-go-${PROTOC_GEN_GO_VERSION}
 
 bin/protoc-gen-go-grpc: gotools.mod
 	@mkdir -p bin
