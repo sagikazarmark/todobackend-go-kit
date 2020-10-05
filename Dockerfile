@@ -23,9 +23,7 @@ ARG PLZ_BUILD_CONFIG
 ARG PLZ_OVERRIDES
 ARG PLZ_CONFIG_PROFILE
 
-RUN echo -e "[build]\npath = ${PATH}" > .plzconfig.local
-
-RUN ./pleasew -p export outputs -o /build //cmd/...
+RUN ./pleasew -p -o "build.path:${PATH}" export outputs -o /build //cmd/...
 
 
 # Final image
