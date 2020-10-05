@@ -1,3 +1,5 @@
 .github/
 bin/
-build/
+plz-out/
+.plzconfig.local
+tmp/

@@ -93,6 +93,7 @@ type resolver struct {
 func (r *resolver) Mutation() graphql.MutationResolver {
 	return &mutationResolver{r}
 }
+
 func (r *resolver) Query() graphql.QueryResolver {
 	return &queryResolver{r}
 }

@@ -7,62 +7,47 @@ on:
   pull_request:
 
 jobs:
-  build:
-    name: Build
+  test:
+    name: Test
     runs-on: ubuntu-latest
     env:
-      VERBOSE: 1
       GOFLAGS: -mod=readonly
 
     steps:
       - name: Set up Go
         uses: actions/setup-go@v2
         with:
-          go-version: 1.14
+          go-version: 1.15
 
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Build
-        run: make build
+      - name: Set up Please
+        uses: sagikazarmark/setup-please-action@v0
+
+      - name: Test
+        run: plz test //...
 
   lint:
     name: Lint
     runs-on: ubuntu-latest
     env:
-      VERBOSE: 1
       GOFLAGS: -mod=readonly
 
     steps:
       - name: Set up Go
         uses: actions/setup-go@v2
         with:
-          go-version: 1.14
+          go-version: 1.15
 
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Run linter
-        run: make lint
+      - name: Set up Please
+        uses: sagikazarmark/setup-please-action@v0
 
-  test:
-    name: Test
-    runs-on: ubuntu-latest
-    env:
-      VERBOSE: 1
-      GOFLAGS: -mod=readonly
-
-    steps:
-      - name: Set up Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: 1.14
-
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Run tests
-        run: make test
+      - name: Lint
+        run: plz lint
 
   docker:
     name: Docker

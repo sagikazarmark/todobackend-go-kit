@@ -51,7 +51,6 @@ func main() {
 	router := mux.NewRouter()
 
 	grpcServer := grpc.NewServer()
-	defer grpcServer.Stop()
 
 	{
 		file, err := pkger.Open("/static/index.html")
@@ -106,7 +105,6 @@ func main() {
 		Addr:    *httpAddr,
 		Handler: cors(router),
 	}
-	defer httpServer.Close()
 
 	log.Println("listening on", *httpAddr)
 
@@ -128,11 +126,13 @@ func main() {
 		func() error { return httpServer.Serve(httpLn) },
 		func(err error) { _ = httpServer.Shutdown(context.Background()) },
 	)
+	defer httpServer.Close()
 
 	group.Add(
 		func() error { return grpcServer.Serve(grpcLn) },
 		func(err error) { grpcServer.GracefulStop() },
 	)
+	defer grpcServer.Stop()
 
 	// Setup signal handler
 	group.Add(run.SignalHandler(context.Background(), syscall.SIGINT, syscall.SIGTERM))
@@ -145,6 +145,8 @@ func main() {
 			return
 		}
 
-		log.Fatal(err)
+		// Fatal error
+		// We don't use fatal, so deferred functions can do their jobs.
+		log.Println(err)
 	}
 }

@@ -1,6 +1,6 @@
 /bin/
-/build/
 pkged.go
+/tmp/
 /vendor/
 
 # IDE integration
@@ -18,3 +18,7 @@ pkged.go
 !/.idea/runConfigurations/
 !/.idea/scopes/
 !/.idea/sqldialects.xml
+
+# Please output directory and local configuration
+plz-out
+.plzconfig.local

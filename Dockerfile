@@ -1,52 +1,43 @@
 # Build image
-FROM golang:1.14-alpine3.11 AS builder
+FROM golang:1.15-alpine AS builder
 
 ENV GOFLAGS="-mod=readonly"
+ENV CGO_ENABLED=0
 
-RUN apk add --update --no-cache ca-certificates make git curl mercurial bzr
+RUN apk add --update --no-cache bash ca-certificates curl git mercurial
+
+RUN cd /tmp; GOBIN=/build go get github.com/go-delve/delve/cmd/dlv
 
 RUN mkdir -p /workspace
 WORKDIR /workspace
 
 ARG GOPROXY
 
-COPY go.* ./
-COPY api/go.* ./api/
+COPY go.mod go.sum ./
+COPY api/go.mod api/go.sum ./api/
 RUN go mod download
-
-ARG BUILD_TARGET
-
-COPY Makefile *.mk ./
-
-RUN if [[ "${BUILD_TARGET}" == "debug" ]]; then make build-debug-deps; else make build-release-deps; fi
 
 COPY . .
 
-RUN set -xe && \
-    if [[ "${BUILD_TARGET}" == "debug" ]]; then \
-        cd /tmp; GOBIN=/workspace/build/debug go get github.com/go-delve/delve/cmd/dlv; cd -; \
-        make build-debug; \
-        mv build/debug /build; \
-    else \
-        make build-release; \
-        mv build/release /build; \
-    fi
+ARG PLZ_BUILD_CONFIG
+ARG PLZ_OVERRIDES
+ARG PLZ_CONFIG_PROFILE
+
+RUN echo -e "[build]\npath = ${PATH}" > .plzconfig.local
+
+RUN ./pleasew -p export outputs -o /build //cmd/...
 
 
 # Final image
 FROM alpine:3.12
 
-RUN apk add --update --no-cache ca-certificates tzdata bash curl
+RUN apk add --update --no-cache ca-certificates tzdata bash curl libc6-compat
 
 SHELL ["/bin/bash", "-c"]
 
 # set up nsswitch.conf for Go's "netgo" implementation
 # https://github.com/gliderlabs/docker-alpine/issues/367#issuecomment-424546457
 RUN test ! -e /etc/nsswitch.conf && echo 'hosts: files dns' > /etc/nsswitch.conf
-
-ARG BUILD_TARGET
-
-RUN if [[ "${BUILD_TARGET}" == "debug" ]]; then apk add --update --no-cache libc6-compat; fi
 
 COPY --from=builder /build/* /usr/local/bin/
 
