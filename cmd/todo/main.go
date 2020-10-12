@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net"
 	"net/http"
@@ -16,7 +15,6 @@ import (
 	"github.com/goph/idgen/ulidgen"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
-	"github.com/markbates/pkger"
 	"github.com/oklog/run"
 	"github.com/spf13/pflag"
 	"google.golang.org/grpc"
@@ -53,19 +51,11 @@ func main() {
 	grpcServer := grpc.NewServer()
 
 	{
-		file, err := pkger.Open("/static/index.html")
-		if err != nil {
-			panic(err)
-		}
-
-		body, err := ioutil.ReadAll(file)
-		if err != nil {
-			panic(err)
-		}
+		index := MustAssetString("static/index.html")
 
 		r := strings.NewReplacer("PUBLIC_URL", todoURL, "VERSION", version)
 
-		body = []byte(r.Replace(string(body)))
+		body := []byte(r.Replace(index))
 
 		router.Methods(http.MethodGet).Path("/").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Content-Type", "text/html")

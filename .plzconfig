@@ -8,6 +8,7 @@ importpath = github.com/sagikazarmark/todobackend-go-kit
 golangci-lint-version = 1.31.0
 gotestsum-version = 0.5.3
 openapi-generator-version = v4.3.1
+go-bindata-version = 3.21.0
 
 [alias "make"]
 desc = Build and export the outputs of targets

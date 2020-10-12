@@ -11,7 +11,6 @@ require (
 	github.com/goph/idgen v0.4.0
 	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.0
-	github.com/markbates/pkger v0.17.1
 	github.com/oklog/run v1.1.0
 	github.com/sagikazarmark/appkit v0.10.0
 	github.com/sagikazarmark/kitx v0.14.0

@@ -1,5 +1,5 @@
 filegroup(
-    name = "index",
+    name = "static",
     srcs = ["index.html"],
     visibility = ["PUBLIC"],
 )
