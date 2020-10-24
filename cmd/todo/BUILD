@@ -20,4 +20,5 @@ go_build(
 go_bindata(
     name = "bindata",
     srcs = ["//static"],
+    labels = ["generated"],
 )
