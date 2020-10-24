@@ -120,6 +120,7 @@ jobs:
         with:
           push: ${{ github.event_name == 'push' }}
           tags: ${{ steps.tags.outputs.tags }}
+          context: .
           build-args: |
             VERSION=${{ steps.tags.outputs.version }}
             COMMIT_HASH=${{ steps.tags.outputs.commit_hash }}
