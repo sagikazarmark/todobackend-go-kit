@@ -31,7 +31,7 @@ jobs:
 
       - name: Test
         run: |
-          plz build --include generated
+          plz build --include generated //...
           plz test //...
           plz gotest
 
@@ -54,7 +54,7 @@ jobs:
         uses: sagikazarmark/setup-please-action@v0
 
       - name: Generate code
-        run: plz build --include generated
+        run: plz build --include generated //...
 
       - name: Lint
         run: plz lint
