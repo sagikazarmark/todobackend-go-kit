@@ -143,7 +143,7 @@ type UnsafeTodoListServiceServer interface {
 	mustEmbedUnimplementedTodoListServiceServer()
 }
 
-func RegisterTodoListServiceServer(s *grpc.Server, srv TodoListServiceServer) {
+func RegisterTodoListServiceServer(s grpc.ServiceRegistrar, srv TodoListServiceServer) {
 	s.RegisterService(&_TodoListService_serviceDesc, srv)
 }
 
