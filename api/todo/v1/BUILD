@@ -15,7 +15,7 @@ genrule(
     )],
     outs = ["api/todo/v1/client/rest"],
     cmd = [
-        "sed 's#jsonCheck = .*#jsonCheck = regexp.MustCompile(`(?i:(?:application|text)/(?:(?:vnd\\\.[^;]+\\\+)|(?:problem\\\+))?json)`)#' api/todo/v1/api/todo/v1/client/rest.internal/client.go > api/todo/v1/api/todo/v1/client/rest.internal/client.go.new",
+        "sed 's#jsonCheck = .*#jsonCheck = regexp.MustCompile(`(?i:(?:application|text)/(?:(?:vnd\\\\.[^;]+\\\\+)|(?:problem\\\\+))?json)`)#' api/todo/v1/api/todo/v1/client/rest.internal/client.go > api/todo/v1/api/todo/v1/client/rest.internal/client.go.new",
         "mv api/todo/v1/api/todo/v1/client/rest.internal/client.go.new api/todo/v1/api/todo/v1/client/rest.internal/client.go",
         "mv api/todo/v1/api/todo/v1/client/rest.internal/ $OUT",
     ],
