@@ -22,7 +22,7 @@ In addition to the [Todo-Backend](http://todobackend.com/) implementation, this 
 ## Development
 
 1. Clone the repository
-1. `make run-todo`
+1. `./pleasew run cmd/todo`
 
 [Try the client](http://todobackend.com/client/index.html?http://localhost:8000/todos) or
 [run the tests](http://todobackend.com/specs/index.html?http://localhost:8000/todos) locally.
