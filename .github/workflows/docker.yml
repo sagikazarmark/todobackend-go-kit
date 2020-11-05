@@ -22,18 +22,12 @@ jobs:
         env:
           DOCKER_IMAGES: "ghcr.io/sagikazarmark/todobackend-go-kit sagikazarmark/todobackend-go-kit"
         run: |
-          VERSION=noop
-
-          if [[ "${{ github.event_name }}" == "schedule" ]]; then
-            VERSION=nightly
-          else
-            case $GITHUB_REF in
-              refs/tags/*)  VERSION=${GITHUB_REF#refs/tags/};;
-              refs/heads/*) VERSION=$(echo ${GITHUB_REF#refs/heads/} | sed -r 's#/+#-#g');;
-              refs/pull/*)  VERSION=pr-${{ github.event.number }};;
-              *)            VERSION=sha-${GITHUB_SHA::8};;
-            esac
-          fi
+          case $GITHUB_REF in
+            refs/tags/*)  VERSION=${GITHUB_REF#refs/tags/};;
+            refs/heads/*) VERSION=$(echo ${GITHUB_REF#refs/heads/} | sed -r 's#/+#-#g');;
+            refs/pull/*)  VERSION=pr-${{ github.event.number }};;
+            *)            VERSION=sha-${GITHUB_SHA::8};;
+          esac
 
           TAGS=()
           for image in $DOCKER_IMAGES; do
