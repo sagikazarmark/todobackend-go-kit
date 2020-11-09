@@ -16,11 +16,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          # Required for correctly populating ldflags
+          fetch-depth: 0
 
       - name: Calculate Docker image tags
         id: tags
         env:
-          DOCKER_IMAGES: "ghcr.io/sagikazarmark/todobackend-go-kit sagikazarmark/todobackend-go-kit"
+          DOCKER_IMAGES: "ghcr.io/${{ github.repository }} docker.io/${{ github.repository }}"
         run: |
           case $GITHUB_REF in
             refs/tags/*)  VERSION=${GITHUB_REF#refs/tags/};;
