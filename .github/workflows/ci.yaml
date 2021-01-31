@@ -26,10 +26,7 @@ jobs:
         uses: sagikazarmark/setup-please-action@v0
 
       - name: Test
-        run: |
-          plz build //...
-          plz test //...
-          plz gotest
+        run: plz cover //...
 
   lint:
     name: Lint
