@@ -16,10 +16,17 @@ go_build(
     pass_env = ["VERSION"],
     stamp = True,
     trimpath = True,
+    visibility = ["PUBLIC"],
 )
 
 go_bindata(
     name = "bindata",
     srcs = ["//static"],
     labels = ["generated"],
+)
+
+gotestsum_test(
+    name = "todo_test",
+    deps = [":todo"],
+    race = True,
 )
