@@ -12,7 +12,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
-	"github.com/sagikazarmark/todobackend-go-kit/todo"
+	"github.com/sagikazarmark/todobackend-go-kit/pkg/todo"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -247,7 +247,7 @@ func (ec *executionContext) field_Mutation_addTodoItem_args(ctx context.Context,
 	var arg0 todo.NewItem
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNNewTodoItem2githubᚗcomᚋsagikazarmarkᚋtodobackendᚑgoᚑkitᚋtodoᚐNewItem(ctx, tmp)
+		arg0, err = ec.unmarshalNNewTodoItem2githubᚗcomᚋsagikazarmarkᚋtodobackendᚑgoᚑkitᚋpkgᚋtodoᚐNewItem(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -363,7 +363,7 @@ func (ec *executionContext) _Mutation_addTodoItem(ctx context.Context, field gra
 	}
 	res := resTmp.(*todo.Item)
 	fc.Result = res
-	return ec.marshalNTodoItem2ᚖgithubᚗcomᚋsagikazarmarkᚋtodobackendᚑgoᚑkitᚋtodoᚐItem(ctx, field.Selections, res)
+	return ec.marshalNTodoItem2ᚖgithubᚗcomᚋsagikazarmarkᚋtodobackendᚑgoᚑkitᚋpkgᚋtodoᚐItem(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_updateTodoItem(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -405,7 +405,7 @@ func (ec *executionContext) _Mutation_updateTodoItem(ctx context.Context, field 
 	}
 	res := resTmp.(*todo.Item)
 	fc.Result = res
-	return ec.marshalNTodoItem2ᚖgithubᚗcomᚋsagikazarmarkᚋtodobackendᚑgoᚑkitᚋtodoᚐItem(ctx, field.Selections, res)
+	return ec.marshalNTodoItem2ᚖgithubᚗcomᚋsagikazarmarkᚋtodobackendᚑgoᚑkitᚋpkgᚋtodoᚐItem(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_todoItems(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -440,7 +440,7 @@ func (ec *executionContext) _Query_todoItems(ctx context.Context, field graphql.
 	}
 	res := resTmp.([]todo.Item)
 	fc.Result = res
-	return ec.marshalNTodoItem2ᚕgithubᚗcomᚋsagikazarmarkᚋtodobackendᚑgoᚑkitᚋtodoᚐItemᚄ(ctx, field.Selections, res)
+	return ec.marshalNTodoItem2ᚕgithubᚗcomᚋsagikazarmarkᚋtodobackendᚑgoᚑkitᚋpkgᚋtodoᚐItemᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -2233,7 +2233,7 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 	return res
 }
 
-func (ec *executionContext) unmarshalNNewTodoItem2githubᚗcomᚋsagikazarmarkᚋtodobackendᚑgoᚑkitᚋtodoᚐNewItem(ctx context.Context, v interface{}) (todo.NewItem, error) {
+func (ec *executionContext) unmarshalNNewTodoItem2githubᚗcomᚋsagikazarmarkᚋtodobackendᚑgoᚑkitᚋpkgᚋtodoᚐNewItem(ctx context.Context, v interface{}) (todo.NewItem, error) {
 	res, err := ec.unmarshalInputNewTodoItem(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
@@ -2253,11 +2253,11 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 	return res
 }
 
-func (ec *executionContext) marshalNTodoItem2githubᚗcomᚋsagikazarmarkᚋtodobackendᚑgoᚑkitᚋtodoᚐItem(ctx context.Context, sel ast.SelectionSet, v todo.Item) graphql.Marshaler {
+func (ec *executionContext) marshalNTodoItem2githubᚗcomᚋsagikazarmarkᚋtodobackendᚑgoᚑkitᚋpkgᚋtodoᚐItem(ctx context.Context, sel ast.SelectionSet, v todo.Item) graphql.Marshaler {
 	return ec._TodoItem(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNTodoItem2ᚕgithubᚗcomᚋsagikazarmarkᚋtodobackendᚑgoᚑkitᚋtodoᚐItemᚄ(ctx context.Context, sel ast.SelectionSet, v []todo.Item) graphql.Marshaler {
+func (ec *executionContext) marshalNTodoItem2ᚕgithubᚗcomᚋsagikazarmarkᚋtodobackendᚑgoᚑkitᚋpkgᚋtodoᚐItemᚄ(ctx context.Context, sel ast.SelectionSet, v []todo.Item) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -2281,7 +2281,7 @@ func (ec *executionContext) marshalNTodoItem2ᚕgithubᚗcomᚋsagikazarmarkᚋt
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNTodoItem2githubᚗcomᚋsagikazarmarkᚋtodobackendᚑgoᚑkitᚋtodoᚐItem(ctx, sel, v[i])
+			ret[i] = ec.marshalNTodoItem2githubᚗcomᚋsagikazarmarkᚋtodobackendᚑgoᚑkitᚋpkgᚋtodoᚐItem(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -2294,7 +2294,7 @@ func (ec *executionContext) marshalNTodoItem2ᚕgithubᚗcomᚋsagikazarmarkᚋt
 	return ret
 }
 
-func (ec *executionContext) marshalNTodoItem2ᚖgithubᚗcomᚋsagikazarmarkᚋtodobackendᚑgoᚑkitᚋtodoᚐItem(ctx context.Context, sel ast.SelectionSet, v *todo.Item) graphql.Marshaler {
+func (ec *executionContext) marshalNTodoItem2ᚖgithubᚗcomᚋsagikazarmarkᚋtodobackendᚑgoᚑkitᚋpkgᚋtodoᚐItem(ctx context.Context, sel ast.SelectionSet, v *todo.Item) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")

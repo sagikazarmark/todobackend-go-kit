@@ -12,8 +12,8 @@ import (
 	"github.com/stretchr/testify/require"
 
 	todov1 "github.com/sagikazarmark/todobackend-go-kit/api/todo/v1/client/rest"
-	"github.com/sagikazarmark/todobackend-go-kit/todo"
-	"github.com/sagikazarmark/todobackend-go-kit/todo/tododriver"
+	"github.com/sagikazarmark/todobackend-go-kit/pkg/todo"
+	"github.com/sagikazarmark/todobackend-go-kit/pkg/todo/tododriver"
 )
 
 func TestRest(t *testing.T) {

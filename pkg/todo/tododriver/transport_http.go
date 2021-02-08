@@ -13,7 +13,7 @@ import (
 	kitxhttp "github.com/sagikazarmark/kitx/transport/http"
 
 	api "github.com/sagikazarmark/todobackend-go-kit/internal/.generated/api/v1/rest/go"
-	"github.com/sagikazarmark/todobackend-go-kit/todo"
+	"github.com/sagikazarmark/todobackend-go-kit/pkg/todo"
 )
 
 type contextKey int

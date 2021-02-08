@@ -15,6 +15,6 @@ omit_slice_element_pointers: true
 
 models:
     TodoItem:
-        model: github.com/sagikazarmark/todobackend-go-kit/todo.Item
+        model: github.com/sagikazarmark/todobackend-go-kit/pkg/todo.Item
     NewTodoItem:
-        model: github.com/sagikazarmark/todobackend-go-kit/todo.NewItem
+        model: github.com/sagikazarmark/todobackend-go-kit/pkg/todo.NewItem

@@ -1,0 +1,32 @@
+subinclude("///pleasings2//go")
+
+go_library(
+    name = "todo",
+    srcs = glob(["*.go"], exclude = ["*_test.go"]),
+    visibility = ["PUBLIC"],
+    deps = ["//third_party/go:emperror.dev__errors"],
+)
+
+go_test(
+    name = "test",
+    srcs = glob(["*_test.go"], exclude = ["service_feature_test.go"]),
+    deps = [
+        ":todo",
+        "//third_party/go:github.com__stretchr__testify__assert",
+        "//third_party/go:github.com__stretchr__testify__require",
+    ],
+)
+
+go_test(
+    name = "external_test",
+    srcs = ["service_feature_test.go"],
+    external = True,
+    deps = [
+        ":todo",
+        "//third_party/go:emperror.dev__errors",
+        "//third_party/go:github.com__go-bdd__gobdd",
+        "//third_party/go:github.com__goph__idgen__ulidgen",
+        "//third_party/go:github.com__stretchr__testify__assert",
+        "//third_party/go:github.com__stretchr__testify__require",
+    ],
+)

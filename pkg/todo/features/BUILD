@@ -1,5 +1,5 @@
 filegroup(
     name = "features",
     srcs = glob(["*.feature"]),
-    visibility = ["//todo/..."],
+    visibility = ["//pkg/todo/..."],
 )

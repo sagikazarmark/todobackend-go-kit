@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/sagikazarmark/todobackend-go-kit/todo"
+	"github.com/sagikazarmark/todobackend-go-kit/pkg/todo"
 )
 
 func TestService(t *testing.T) {

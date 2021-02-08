@@ -1,7 +1,12 @@
 github_repo(
     name = "pleasings2",
     repo = "sagikazarmark/mypleasings",
-    revision = "f6b0609fe9b4b406906e76a2e5c140017b2e3628",
+    revision = "27b6451ea99d160aec03f242be5261978770b4e1",
+)
+
+http_archive(
+    name = "pleasegomod",
+    urls = [f"https://github.com/sagikazarmark/please-go-modules/releases/download/v0.0.16/godeps_{CONFIG.HOSTOS}_{CONFIG.HOSTARCH}.tar.gz"],
 )
 
 sh_cmd(
@@ -23,5 +28,24 @@ sh_cmd(
         "///pleasings2//tools/proto:protoc-gen-go",
         "///pleasings2//tools/proto:protoc-gen-go-grpc",
         "///pleasings2//tools/proto:protoc-gen-kit",
+    ],
+)
+
+go_library(
+    name = "todobackend-go-kit",
+    srcs = glob(["*.go"], exclude = ["*_test.go"]),
+    deps = [],
+)
+
+sh_cmd(
+    name = "genbuild",
+    cmd = [
+        "$(out_exe ///pleasegomod//:godeps) -dir third_party/go -clean -builtin -wollemi",
+        "$(out_exe ///pleasings2//tools/go:wollemi-wrapper) gofmt ./...",
+        "$(out_exe ///pleasings2//tools/go:wollemi-wrapper) gofmt ./internal/.generated/...",
+    ],
+    deps = [
+        "///pleasegomod//:godeps",
+        "///pleasings2//tools/go:wollemi-wrapper",
     ],
 )
