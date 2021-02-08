@@ -5,7 +5,7 @@ version = 15.13.0
 importpath = github.com/sagikazarmark/todobackend-go-kit
 
 [buildconfig]
-golangci-lint-version = 1.31.0
+golangci-lint-version = 1.36.0
 gotestsum-version = 0.5.4
 openapi-generator-version = v4.3.1
 go-bindata-version = 3.21.0
