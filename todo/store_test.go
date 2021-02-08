@@ -9,6 +9,8 @@ import (
 )
 
 func TestInMemoryStore_StoreAnItem(t *testing.T) {
+	t.Parallel()
+
 	t.Run("OK", func(t *testing.T) {
 		t.Parallel()
 
@@ -91,6 +93,8 @@ func TestInMemoryStore_DeleteAllItems(t *testing.T) {
 }
 
 func TestInMemoryStore_GetAnItem(t *testing.T) {
+	t.Parallel()
+
 	t.Run("OK", func(t *testing.T) {
 		t.Parallel()
 
@@ -125,6 +129,8 @@ func TestInMemoryStore_GetAnItem(t *testing.T) {
 }
 
 func TestInMemoryStore_DeleteAnItem(t *testing.T) {
+	t.Parallel()
+
 	t.Run("OK", func(t *testing.T) {
 		t.Parallel()
 
