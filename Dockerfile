@@ -1,6 +1,6 @@
 FROM golang:1.15-alpine3.12 AS builder
 
-RUN apk add --update --no-cache bash ca-certificates curl git
+RUN apk add --update --no-cache bash ca-certificates curl git build-base
 
 RUN cd /tmp; GOBIN=/build go get github.com/go-delve/delve/cmd/dlv
 

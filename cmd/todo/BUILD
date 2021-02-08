@@ -6,7 +6,7 @@ date_fmt = "+%FT%T%z"
 
 go_binary(
     name = "todo",
-    srcs = glob(["*.go"], exclude = ["*_test.go"]),
+    srcs = glob(["*.go"], exclude = ["*_test.go"]) + [":bindata"],
     definitions = {
         "main.version": "${VERSION:-" + git_branch() + "}",
         "main.commitHash": git_commit()[0:8],
@@ -17,7 +17,6 @@ go_binary(
     #trimpath = True,
     visibility = ["PUBLIC"],
     deps = [
-        ":bindata",  # wollemi:keep
         "//api/todo/v1",
         "//internal/.generated/api/v1/graphql",
         "//pkg/todo",

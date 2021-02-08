@@ -47,7 +47,7 @@ jobs:
         uses: sagikazarmark/setup-please-action@v0
 
       - name: Generate code
-        run: plz build //...
+        run: plz export outputs -o cmd/todo //cmd/todo:bindata
 
       - name: Lint
         run: plz lint
