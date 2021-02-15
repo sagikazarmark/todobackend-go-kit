@@ -14,8 +14,8 @@ import (
 	"google.golang.org/grpc"
 
 	todov1 "github.com/sagikazarmark/todobackend-go-kit/api/todo/v1"
-	"github.com/sagikazarmark/todobackend-go-kit/todo"
-	"github.com/sagikazarmark/todobackend-go-kit/todo/tododriver"
+	"github.com/sagikazarmark/todobackend-go-kit/pkg/todo"
+	"github.com/sagikazarmark/todobackend-go-kit/pkg/todo/tododriver"
 )
 
 func TestGRPC(t *testing.T) {

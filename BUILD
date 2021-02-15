@@ -1,7 +1,12 @@
 github_repo(
     name = "pleasings2",
     repo = "sagikazarmark/mypleasings",
-    revision = "f6b0609fe9b4b406906e76a2e5c140017b2e3628",
+    revision = "f644350aab5e0090ab69022beeb2feadfcdc223e",
+)
+
+http_archive(
+    name = "pleasegomod",
+    urls = [f"https://github.com/sagikazarmark/please-go-modules/releases/download/v0.0.16/godeps_{CONFIG.HOSTOS}_{CONFIG.HOSTARCH}.tar.gz"],
 )
 
 sh_cmd(
@@ -24,4 +29,10 @@ sh_cmd(
         "///pleasings2//tools/proto:protoc-gen-go-grpc",
         "///pleasings2//tools/proto:protoc-gen-kit",
     ],
+)
+
+go_library(
+    name = "todobackend-go-kit",
+    srcs = glob(["*.go"], exclude = ["*_test.go"]),
+    deps = [],
 )

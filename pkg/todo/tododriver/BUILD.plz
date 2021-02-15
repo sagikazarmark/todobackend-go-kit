@@ -1,0 +1,42 @@
+go_library(
+    name = "tododriver",
+    srcs = glob(["*.go"], exclude = ["*_test.go"]),
+    visibility = ["PUBLIC"],
+    deps = [
+        "//api/todo/v1",
+        "//internal/.generated/api/v1/graphql",
+        "//internal/.generated/api/v1/rest/go",
+        "//pkg/todo",
+        "//third_party/go:emperror.dev__errors",
+        "//third_party/go:github.com__99designs__gqlgen__graphql",
+        "//third_party/go:github.com__go-kit__kit__endpoint",
+        "//third_party/go:github.com__go-kit__kit__transport__grpc",
+        "//third_party/go:github.com__go-kit__kit__transport__http",
+        "//third_party/go:github.com__gorilla__mux",
+        "//third_party/go:github.com__sagikazarmark__appkit__transport__grpc",
+        "//third_party/go:github.com__sagikazarmark__appkit__transport__http",
+        "//third_party/go:github.com__sagikazarmark__kitx__endpoint",
+        "//third_party/go:github.com__sagikazarmark__kitx__transport__graphql",
+        "//third_party/go:github.com__sagikazarmark__kitx__transport__grpc",
+        "//third_party/go:github.com__sagikazarmark__kitx__transport__http",
+    ],
+)
+
+go_test(
+    name = "test",
+    srcs = glob(["*_test.go"]),
+    external = True,
+    deps = [
+        ":tododriver",
+        "//api/todo/v1",
+        "//api/todo/v1/client/rest",
+        "//pkg/todo",
+        "//third_party/go:github.com__go-bdd__gobdd",
+        "//third_party/go:github.com__golang__protobuf__ptypes__wrappers",
+        "//third_party/go:github.com__goph__idgen__ulidgen",
+        "//third_party/go:github.com__gorilla__mux",
+        "//third_party/go:github.com__stretchr__testify__assert",
+        "//third_party/go:github.com__stretchr__testify__require",
+        "//third_party/go:google.golang.org__grpc",
+    ],
+)
