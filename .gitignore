@@ -2,6 +2,7 @@
 /tmp/
 /vendor/
 
-# Please output directory and local configuration
+# Entries below this point are managed by Please (DO NOT EDIT)
 plz-out
 .plzconfig.local
+cmd/todo/bindata.go
