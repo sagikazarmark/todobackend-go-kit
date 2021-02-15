@@ -6,13 +6,19 @@ date_fmt = "+%FT%T%z"
 
 go_binary(
     name = "todo",
-    srcs = glob(["*.go"], exclude = ["*_test.go"]) + [":bindata"],
+    srcs = glob(
+        ["*.go"],
+        exclude = [
+            "*_test.go",
+            "bindata.go",
+        ],
+    ) + [":bindata"],
     definitions = {
         "main.version": "${VERSION:-" + git_branch() + "}",
         "main.commitHash": git_commit()[0:8],
         "main.buildDate": f'$(date -u -d "@{timestamp}" "{date_fmt}" 2>/dev/null || date -u -r "{timestamp}" "{date_fmt}" 2>/dev/null || date -u "{date_fmt}")',
     },
-    #labels = ["binary"],
+    labels = ["binary"],
     #pass_env = ["VERSION"],
     #trimpath = True,
     visibility = ["PUBLIC"],
@@ -35,5 +41,4 @@ go_binary(
 go_bindata(
     name = "bindata",
     srcs = ["//static"],
-    labels = ["generated"],
 )

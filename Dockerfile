@@ -1,8 +1,8 @@
-FROM golang:1.15-alpine3.12 AS builder
+FROM alpine:3.13.0 AS builder
 
-RUN apk add --update --no-cache bash ca-certificates curl git build-base
+RUN apk add --update --no-cache bash ca-certificates curl git build-base libc6-compat
 
-RUN cd /tmp; GOBIN=/build go get github.com/go-delve/delve/cmd/dlv
+# RUN cd /tmp; GOBIN=/build go get github.com/go-delve/delve/cmd/dlv
 
 WORKDIR /usr/local/src/todobackend-go-kit
 
@@ -14,6 +14,14 @@ ENV PLZ_ARGS="-p -o \"build.path:${PATH}\""
 
 COPY .plzconfig* pleasew ./
 RUN ./pleasew update
+
+COPY BUILD .
+
+COPY tools ./tools/
+RUN ./pleasew build //tools:go_toolchain
+
+COPY third_party ./third_party/
+RUN ./pleasew build //third_party/...
 
 COPY . .
 

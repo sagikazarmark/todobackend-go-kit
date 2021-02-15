@@ -1,24 +1,3 @@
-subinclude("///pleasings2//go")
-
-go_test(
-    name = "test",
-    srcs = glob(["*_test.go"]),
-    external = True,
-    deps = [
-        ":tododriver",
-        "//api/todo/v1",
-        "//api/todo/v1/client/rest",
-        "//pkg/todo",
-        "//third_party/go:github.com__go-bdd__gobdd",
-        "//third_party/go:github.com__golang__protobuf__ptypes__wrappers",
-        "//third_party/go:github.com__goph__idgen__ulidgen",
-        "//third_party/go:github.com__gorilla__mux",
-        "//third_party/go:github.com__stretchr__testify__assert",
-        "//third_party/go:github.com__stretchr__testify__require",
-        "//third_party/go:google.golang.org__grpc",
-    ],
-)
-
 go_library(
     name = "tododriver",
     srcs = glob(["*.go"], exclude = ["*_test.go"]),
@@ -40,5 +19,24 @@ go_library(
         "//third_party/go:github.com__sagikazarmark__kitx__transport__graphql",
         "//third_party/go:github.com__sagikazarmark__kitx__transport__grpc",
         "//third_party/go:github.com__sagikazarmark__kitx__transport__http",
+    ],
+)
+
+go_test(
+    name = "test",
+    srcs = glob(["*_test.go"]),
+    external = True,
+    deps = [
+        ":tododriver",
+        "//api/todo/v1",
+        "//api/todo/v1/client/rest",
+        "//pkg/todo",
+        "//third_party/go:github.com__go-bdd__gobdd",
+        "//third_party/go:github.com__golang__protobuf__ptypes__wrappers",
+        "//third_party/go:github.com__goph__idgen__ulidgen",
+        "//third_party/go:github.com__gorilla__mux",
+        "//third_party/go:github.com__stretchr__testify__assert",
+        "//third_party/go:github.com__stretchr__testify__require",
+        "//third_party/go:google.golang.org__grpc",
     ],
 )

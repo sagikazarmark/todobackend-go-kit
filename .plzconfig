@@ -1,12 +1,16 @@
 [please]
-version = 15.15.0-beta.5
+version = 15.16.0-beta.1
 
 [featureflags]
 PleaseGoInstall = true
 
 [go]
-importpath = github.com/sagikazarmark/todobackend-go-kit
+ImportPath = github.com/sagikazarmark/todobackend-go-kit
+GoTool = //tools:go_toolchain|go
 GoTestRootCompat = True
+
+[build]
+LinkGeneratedSources = true
 
 [buildconfig]
 golangci-lint-version = 1.36.0
@@ -21,7 +25,7 @@ buf-version = 0.36.0
 
 [alias "genbuild"]
 desc = Generate third-party dependency and other rules for a Go project
-cmd = run :genbuild
+cmd = run //tools:genbuild
 
 [alias "make"]
 desc = Build and export the outputs of targets
@@ -31,7 +35,7 @@ cmd = export outputs -o .
 desc = Runs linters for this repo
 cmd = run ///pleasings2//tools/go:golangci-lint -- run
 
-[alias "generate"]
+[alias "codegen"]
 desc = Generate code
 cmd = run //:generate --
 

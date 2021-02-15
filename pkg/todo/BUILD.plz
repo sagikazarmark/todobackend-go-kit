@@ -1,5 +1,3 @@
-subinclude("///pleasings2//go")
-
 go_library(
     name = "todo",
     srcs = glob(["*.go"], exclude = ["*_test.go"]),
