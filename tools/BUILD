@@ -2,7 +2,7 @@ subinclude("///pleasings2//go:tools")
 
 go_toolchain(
     name = "go_toolchain",
-    version = "1.15.8",
+    version = "1.16",
 )
 
 # Copied here from https://github.com/sagikazarmark/mypleasings/blob/27b6451ea99d160aec03f242be5261978770b4e1/tools/go/BUILD
@@ -15,10 +15,10 @@ wollemi_wrapper(
 )
 
 sh_cmd(
-    name = "genbuild",
+    name = "plz-tidy",
     cmd = [
         "$(out_exe ///pleasegomod//:godeps) -dir third_party/go -clean -builtin -wollemi",
-        "$(out_exe :wollemi-wrapper) gofmt",
+        "$(out_exe :wollemi-wrapper) gofmt ./...",
         "$(out_exe :wollemi-wrapper) gofmt ./internal/.generated/...",
     ],
     deps = [

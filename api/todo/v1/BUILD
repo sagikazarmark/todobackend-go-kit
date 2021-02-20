@@ -40,7 +40,10 @@ openapi_validate(
 
 go_library(
     name = "v1",
-    srcs = glob(["*.go"], exclude = ["*_test.go"]),
+    srcs = glob(
+        ["*.go"],
+        exclude = ["*_test.go"],
+    ),
     visibility = ["PUBLIC"],
     deps = [
         "//third_party/go:github.com__golang__protobuf__proto",

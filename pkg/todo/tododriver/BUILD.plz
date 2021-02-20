@@ -1,6 +1,9 @@
 go_library(
     name = "tododriver",
-    srcs = glob(["*.go"], exclude = ["*_test.go"]),
+    srcs = glob(
+        ["*.go"],
+        exclude = ["*_test.go"],
+    ),
     visibility = ["PUBLIC"],
     deps = [
         "//api/todo/v1",

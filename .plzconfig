@@ -23,9 +23,9 @@ protoc-gen-go-grpc-version = 1.1.0
 protoc-gen-kit-version = 0.2.0
 buf-version = 0.36.0
 
-[alias "genbuild"]
-desc = Generate third-party dependency and other rules for a Go project
-cmd = run //tools:genbuild
+[alias "tidy"]
+desc = Tidy generates build targets for dependencies and makes sure that BUILD files are up-to-date.
+cmd = run //tools:plz-tidy
 
 [alias "make"]
 desc = Build and export the outputs of targets

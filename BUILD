@@ -6,7 +6,7 @@ github_repo(
 
 http_archive(
     name = "pleasegomod",
-    urls = [f"https://github.com/sagikazarmark/please-go-modules/releases/download/v0.0.16/godeps_{CONFIG.HOSTOS}_{CONFIG.HOSTARCH}.tar.gz"],
+    urls = [f"https://github.com/sagikazarmark/please-go-modules/releases/download/v0.0.19/godeps_{CONFIG.HOSTOS}_{CONFIG.HOSTARCH}.tar.gz"],
 )
 
 sh_cmd(
@@ -33,6 +33,9 @@ sh_cmd(
 
 go_library(
     name = "todobackend-go-kit",
-    srcs = glob(["*.go"], exclude = ["*_test.go"]),
+    srcs = glob(
+        ["*.go"],
+        exclude = ["*_test.go"],
+    ),
     deps = [],
 )
