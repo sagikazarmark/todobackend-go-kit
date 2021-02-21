@@ -1,6 +1,9 @@
 [please]
 version = 15.16.0
 
+[build]
+LinkGeneratedSources = true
+
 [featureflags]
 PleaseGoInstall = true
 
@@ -8,9 +11,6 @@ PleaseGoInstall = true
 ImportPath = github.com/sagikazarmark/todobackend-go-kit
 GoTool = //tools:go_toolchain|go
 GoTestRootCompat = True
-
-[build]
-LinkGeneratedSources = true
 
 [buildconfig]
 golangci-lint-version = 1.37.1
