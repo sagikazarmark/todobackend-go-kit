@@ -262,7 +262,7 @@ func (ec *executionContext) field_Mutation_updateTodoItem_args(ctx context.Conte
 	var arg0 TodoItemUpdate
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNTodoItemUpdate2githubᚗcomᚋsagikazarmarkᚋtodobackendᚑgoᚑkitᚋinternalᚋᚗgeneratedᚋapiᚋv1ᚋgraphqlᚐTodoItemUpdate(ctx, tmp)
+		arg0, err = ec.unmarshalNTodoItemUpdate2githubᚗcomᚋsagikazarmarkᚋtodobackendᚑgoᚑkitᚋinternalᚋgeneratedᚋapiᚋv1ᚋgraphqlᚐTodoItemUpdate(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2304,7 +2304,7 @@ func (ec *executionContext) marshalNTodoItem2ᚖgithubᚗcomᚋsagikazarmarkᚋt
 	return ec._TodoItem(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNTodoItemUpdate2githubᚗcomᚋsagikazarmarkᚋtodobackendᚑgoᚑkitᚋinternalᚋᚗgeneratedᚋapiᚋv1ᚋgraphqlᚐTodoItemUpdate(ctx context.Context, v interface{}) (TodoItemUpdate, error) {
+func (ec *executionContext) unmarshalNTodoItemUpdate2githubᚗcomᚋsagikazarmarkᚋtodobackendᚑgoᚑkitᚋinternalᚋgeneratedᚋapiᚋv1ᚋgraphqlᚐTodoItemUpdate(ctx context.Context, v interface{}) (TodoItemUpdate, error) {
 	res, err := ec.unmarshalInputTodoItemUpdate(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }

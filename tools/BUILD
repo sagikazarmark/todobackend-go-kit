@@ -19,7 +19,6 @@ sh_cmd(
     cmd = [
         "$(out_exe ///pleasegomod//:godeps) -dir third_party/go -clean -builtin -wollemi",
         "$(out_exe :wollemi-wrapper) gofmt ./...",
-        "$(out_exe :wollemi-wrapper) gofmt ./internal/.generated/...",
     ],
     deps = [
         ":wollemi-wrapper",

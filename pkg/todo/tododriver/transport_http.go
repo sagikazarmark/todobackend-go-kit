@@ -12,7 +12,7 @@ import (
 	appkithttp "github.com/sagikazarmark/appkit/transport/http"
 	kitxhttp "github.com/sagikazarmark/kitx/transport/http"
 
-	api "github.com/sagikazarmark/todobackend-go-kit/internal/.generated/api/v1/rest/go"
+	api "github.com/sagikazarmark/todobackend-go-kit/internal/generated/api/v1/rest/go"
 	"github.com/sagikazarmark/todobackend-go-kit/pkg/todo"
 )
 

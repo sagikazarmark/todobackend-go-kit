@@ -23,7 +23,7 @@ genrule(
 
 openapi_library(
     name = "openapi_server",
-    out = "internal/.generated/api/v1/rest",
+    out = "internal/generated/api/v1/rest",
     additional_properties = {
         "packageName": "api",
         "withGoCodegenComment": "true",

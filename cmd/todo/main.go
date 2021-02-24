@@ -20,7 +20,7 @@ import (
 	"google.golang.org/grpc"
 
 	todov1 "github.com/sagikazarmark/todobackend-go-kit/api/todo/v1"
-	"github.com/sagikazarmark/todobackend-go-kit/internal/.generated/api/v1/graphql"
+	"github.com/sagikazarmark/todobackend-go-kit/internal/generated/api/v1/graphql"
 	"github.com/sagikazarmark/todobackend-go-kit/pkg/todo"
 	"github.com/sagikazarmark/todobackend-go-kit/pkg/todo/tododriver"
 )
