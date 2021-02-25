@@ -23,6 +23,7 @@ import (
 	"github.com/sagikazarmark/todobackend-go-kit/internal/generated/api/v1/graphql"
 	"github.com/sagikazarmark/todobackend-go-kit/pkg/todo"
 	"github.com/sagikazarmark/todobackend-go-kit/pkg/todo/tododriver"
+	"github.com/sagikazarmark/todobackend-go-kit/static"
 )
 
 // Provisioned by ldflags
@@ -51,11 +52,14 @@ func main() {
 	grpcServer := grpc.NewServer()
 
 	{
-		index := MustAssetString("static/index.html")
+		index, err := static.Files().ReadFile("index.html")
+		if err != nil {
+			panic(err)
+		}
 
 		r := strings.NewReplacer("PUBLIC_URL", todoURL, "VERSION", version)
 
-		body := []byte(r.Replace(index))
+		body := []byte(r.Replace(string(index)))
 
 		router.Methods(http.MethodGet).Path("/").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Content-Type", "text/html")

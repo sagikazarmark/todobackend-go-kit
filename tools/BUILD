@@ -18,7 +18,7 @@ sh_cmd(
     name = "plz-tidy",
     cmd = [
         "$(out_exe ///pleasegomod//:godeps) -dir third_party/go -clean -builtin -wollemi",
-        "$(out_exe :wollemi-wrapper) gofmt ./...",
+        "$(out_exe :wollemi-wrapper) gofmt",
     ],
     deps = [
         ":wollemi-wrapper",

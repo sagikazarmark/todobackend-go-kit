@@ -1,5 +1,3 @@
-subinclude("///pleasings2//go")
-
 timestamp = git_show("%ct")
 
 date_fmt = "+%FT%T%z"
@@ -12,7 +10,7 @@ go_binary(
             "*_test.go",
             "bindata.go",
         ],
-    ) + [":bindata"],
+    ),
     definitions = {
         "main.version": "${VERSION:-" + git_branch() + "}",
         "main.commitHash": git_commit()[0:8],
@@ -27,6 +25,7 @@ go_binary(
         "//internal/generated/api/v1/graphql",
         "//pkg/todo",
         "//pkg/todo/tododriver",
+        "//static",
         "//third_party/go:github.com__99designs__gqlgen__graphql__handler",
         "//third_party/go:github.com__go-kit__kit__transport__http",
         "//third_party/go:github.com__goph__idgen__ulidgen",
@@ -36,9 +35,4 @@ go_binary(
         "//third_party/go:github.com__spf13__pflag",
         "//third_party/go:google.golang.org__grpc",
     ],
-)
-
-go_bindata(
-    name = "bindata",
-    srcs = ["//static"],
 )

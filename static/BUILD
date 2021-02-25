@@ -1,5 +1,7 @@
-filegroup(
+go_library(
     name = "static",
-    srcs = ["index.html"],
+    srcs = ["static.go"],
+    resources = ["index.html"],
     visibility = ["PUBLIC"],
+    deps = [],
 )
