@@ -5,4 +5,8 @@
 # Entries below this point are managed by Please (DO NOT EDIT)
 plz-out
 .plzconfig.local
-cmd/todo/bindata.go
+api/todo/v1/github.com/sagikazarmark/todobackend-go-kit/api/todo/v1/todo.pb.go
+api/todo/v1/github.com/sagikazarmark/todobackend-go-kit/api/todo/v1/todo_list.pb.go
+api/todo/v1/todo_list_grpc.pb.go
+api/todo/v1/todo.pb.go
+api/todo/v1/todo_list.pb.go

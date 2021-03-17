@@ -54,3 +54,21 @@ go_library(
         "//third_party/go:google.golang.org__protobuf__types__known__wrapperspb",
     ],
 )
+
+proto_library(
+    name = "proto",
+    srcs = ["todo_list.proto", "todo.proto"],
+    languages = ["go"],
+    root_dir = "api",
+    deps = ["//tools:protoc"],
+    protoc_flags = ["--go_opt=paths=source_relative"],
+)
+
+grpc_library(
+    name = "grpc",
+    srcs = ["todo_list.proto", "todo.proto"],
+    languages = ["go"],
+    root_dir = "api",
+    deps = ["//tools:protoc"],
+    protoc_flags = ["--go-grpc_opt=paths=source_relative"],
+)

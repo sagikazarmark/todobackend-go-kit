@@ -4,6 +4,13 @@ version = 16.0.0-prerelease.13
 [build]
 LinkGeneratedSources = true
 
+[Proto]
+ProtocTool = ///pleasings2//tools/proto:protoc
+ProtocGoPlugin = ///pleasings2//tools/proto:protoc-gen-go
+GrpcGoPlugin = ///pleasings2//tools/proto:protoc-gen-go-grpc
+GoDep = //third_party/proto:go-deps
+GoGrpcDep = //third_party/proto:go-grpc-deps
+
 [go]
 ImportPath = github.com/sagikazarmark/todobackend-go-kit
 GoTool = //tools:go_toolchain|go

@@ -25,3 +25,9 @@ sh_cmd(
         "///pleasegomod//:godeps",
     ],
 )
+
+protoc_binary(
+    name = "protoc",
+    version = "3.15.1",
+    visibility = ["PUBLIC"],
+)
