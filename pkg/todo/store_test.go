@@ -123,7 +123,7 @@ func TestInMemoryStore_GetAnItem(t *testing.T) {
 
 		require.IsType(t, NotFoundError{}, err)
 
-		e := err.(NotFoundError)
+		e := err.(NotFoundError) // nolint:errorlint
 		assert.Equal(t, "id", e.ID)
 	})
 }
