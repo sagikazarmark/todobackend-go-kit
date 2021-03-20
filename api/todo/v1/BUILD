@@ -46,12 +46,11 @@ go_library(
     ),
     visibility = ["PUBLIC"],
     deps = [
-        "//third_party/go:github.com__golang__protobuf__proto",
-        "//third_party/go:github.com__golang__protobuf__ptypes__wrappers",
         "//third_party/go:google.golang.org__grpc",
         "//third_party/go:google.golang.org__grpc__codes",
         "//third_party/go:google.golang.org__grpc__status",
         "//third_party/go:google.golang.org__protobuf__reflect__protoreflect",
         "//third_party/go:google.golang.org__protobuf__runtime__protoimpl",
+        "//third_party/go:google.golang.org__protobuf__types__known__wrapperspb",
     ],
 )
