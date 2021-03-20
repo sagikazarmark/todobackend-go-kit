@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 	"net"
@@ -133,7 +134,7 @@ func main() {
 
 	err = group.Run()
 	if err != nil {
-		if _, ok := err.(run.SignalError); ok {
+		if e := (run.SignalError{}); errors.As(err, &e) {
 			log.Println(err)
 
 			return

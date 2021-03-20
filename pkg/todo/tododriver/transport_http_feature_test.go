@@ -64,7 +64,11 @@ func givenAnEmptyTodoListRest(_ gobdd.StepTest, ctx gobdd.Context) {
 	ctx.Set("server", server)
 
 	config := todov1.NewConfiguration()
-	config.BasePath = server.URL
+	config.Servers = todov1.ServerConfigurations{
+		{
+			URL: server.URL,
+		},
+	}
 	config.HTTPClient = server.Client()
 
 	ctx.Set("client", todov1.NewAPIClient(config))
@@ -73,7 +77,7 @@ func givenAnEmptyTodoListRest(_ gobdd.StepTest, ctx gobdd.Context) {
 func addAnItemRest(t gobdd.StepTest, ctx gobdd.Context, title string) {
 	client := getRestClient(t, ctx)
 
-	item, _, err := client.TodoListApi.AddItem(context.Background(), todov1.AddTodoItemRequest{Title: title})
+	item, _, err := client.TodoListApi.AddItem(context.Background()).AddTodoItemRequest(todov1.AddTodoItemRequest{Title: title}).Execute() // nolint: lll
 	require.NoError(t, err)
 
 	ctx.Set("id", item.Id)
@@ -93,7 +97,7 @@ func shouldBeOnTheRest(t gobdd.StepTest, ctx gobdd.Context) {
 
 	client := getRestClient(t, ctx)
 
-	items, _, err := client.TodoListApi.ListItems(context.Background())
+	items, _, err := client.TodoListApi.ListItems(context.Background()).Execute()
 	require.NoError(t, err)
 
 	title, _ := ctx.GetString("title", "")
@@ -109,7 +113,7 @@ func allShouldBeOnTheListRest(t gobdd.StepTest, ctx gobdd.Context) {
 
 	client := getRestClient(t, ctx)
 
-	items, _, err := client.TodoListApi.ListItems(context.Background())
+	items, _, err := client.TodoListApi.ListItems(context.Background()).Execute()
 	require.NoError(t, err)
 
 	ids, _ := ctx.Get("ids", []string{})
@@ -131,7 +135,7 @@ func allShouldBeOnTheListRest(t gobdd.StepTest, ctx gobdd.Context) {
 func theListShouldBeEmptyRest(t gobdd.StepTest, ctx gobdd.Context) {
 	client := getRestClient(t, ctx)
 
-	items, _, err := client.TodoListApi.ListItems(context.Background())
+	items, _, err := client.TodoListApi.ListItems(context.Background()).Execute()
 	require.NoError(t, err)
 
 	assert.Len(t, items, 0, "the list should be empty")
@@ -144,7 +148,7 @@ func itemMarkedAsCompleteRest(t gobdd.StepTest, ctx gobdd.Context) {
 
 	completed := true
 
-	_, _, err := client.TodoListApi.UpdateItem(context.Background(), id, todov1.UpdateTodoItemRequest{Completed: &completed}) // nolint: lll
+	_, _, err := client.TodoListApi.UpdateItem(context.Background(), id).UpdateTodoItemRequest(todov1.UpdateTodoItemRequest{Completed: *todov1.NewNullableBool(&completed)}).Execute() // nolint: lll
 	require.NoError(t, err)
 }
 
@@ -153,7 +157,7 @@ func itemShouldBeCompleteRest(t gobdd.StepTest, ctx gobdd.Context) {
 
 	client := getRestClient(t, ctx)
 
-	item, _, err := client.TodoListApi.GetItem(context.Background(), id)
+	item, _, err := client.TodoListApi.GetItem(context.Background(), id).Execute()
 	require.NoError(t, err)
 
 	assert.True(t, item.Completed, "item should be complete")
@@ -164,13 +168,13 @@ func deleteAnItemRest(t gobdd.StepTest, ctx gobdd.Context) {
 
 	client := getRestClient(t, ctx)
 
-	_, err := client.TodoListApi.DeleteItem(context.Background(), id)
+	_, err := client.TodoListApi.DeleteItem(context.Background(), id).Execute()
 	require.NoError(t, err)
 }
 
 func clearListRest(t gobdd.StepTest, ctx gobdd.Context) {
 	client := getRestClient(t, ctx)
 
-	_, err := client.TodoListApi.DeleteItems(context.Background())
+	_, err := client.TodoListApi.DeleteItems(context.Background()).Execute()
 	require.NoError(t, err)
 }

@@ -24,6 +24,7 @@ linters:
         - dogsled
         - dupl
         - errcheck
+        - errorlint
         - exhaustive
         - exportloopref
         - gci
@@ -48,6 +49,7 @@ linters:
         - makezero
         - misspell
         - nakedret
+        - nilerr
         - nlreturn
         - noctx
         - nolintlint
@@ -67,6 +69,7 @@ linters:
         - unparam
         - unused
         - varcheck
+        - wastedassign
         - whitespace
 
         # unused
