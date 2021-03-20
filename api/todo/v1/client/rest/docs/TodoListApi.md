@@ -15,17 +15,49 @@ Method | HTTP request | Description
 
 ## AddItem
 
-> TodoItem AddItem(ctx, addTodoItemRequest)
+> TodoItem AddItem(ctx).AddTodoItemRequest(addTodoItemRequest).Execute()
 
 Add a new item to the list
 
-### Required Parameters
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+    addTodoItemRequest := *openapiclient.NewAddTodoItemRequest("Title_example", int32(123)) // AddTodoItemRequest | 
+
+    configuration := openapiclient.NewConfiguration()
+    api_client := openapiclient.NewAPIClient(configuration)
+    resp, r, err := api_client.TodoListApi.AddItem(context.Background()).AddTodoItemRequest(addTodoItemRequest).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `TodoListApi.AddItem``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `AddItem`: TodoItem
+    fmt.Fprintf(os.Stdout, "Response from `TodoListApi.AddItem`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiAddItemRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
-**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**addTodoItemRequest** | [**AddTodoItemRequest**](AddTodoItemRequest.md)|  | 
+ **addTodoItemRequest** | [**AddTodoItemRequest**](AddTodoItemRequest.md) |  | 
 
 ### Return type
 
@@ -47,17 +79,51 @@ No authorization required
 
 ## DeleteItem
 
-> DeleteItem(ctx, id)
+> DeleteItem(ctx, id).Execute()
 
 Delete an item
 
-### Required Parameters
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+    id := "id_example" // string | Item ID
+
+    configuration := openapiclient.NewConfiguration()
+    api_client := openapiclient.NewAPIClient(configuration)
+    resp, r, err := api_client.TodoListApi.DeleteItem(context.Background(), id).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `TodoListApi.DeleteItem``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+}
+```
+
+### Path Parameters
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string**| Item ID | 
+**id** | **string** | Item ID | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiDeleteItemRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
 
 ### Return type
 
@@ -79,13 +145,42 @@ No authorization required
 
 ## DeleteItems
 
-> DeleteItems(ctx, )
+> DeleteItems(ctx).Execute()
 
 Delete all items
 
-### Required Parameters
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+
+    configuration := openapiclient.NewConfiguration()
+    api_client := openapiclient.NewAPIClient(configuration)
+    resp, r, err := api_client.TodoListApi.DeleteItems(context.Background()).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `TodoListApi.DeleteItems``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+}
+```
+
+### Path Parameters
 
 This endpoint does not need any parameter.
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiDeleteItemsRequest struct via the builder pattern
+
 
 ### Return type
 
@@ -107,17 +202,53 @@ No authorization required
 
 ## GetItem
 
-> TodoItem GetItem(ctx, id)
+> TodoItem GetItem(ctx, id).Execute()
 
 Get an item
 
-### Required Parameters
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+    id := "id_example" // string | Item ID
+
+    configuration := openapiclient.NewConfiguration()
+    api_client := openapiclient.NewAPIClient(configuration)
+    resp, r, err := api_client.TodoListApi.GetItem(context.Background(), id).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `TodoListApi.GetItem``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `GetItem`: TodoItem
+    fmt.Fprintf(os.Stdout, "Response from `TodoListApi.GetItem`: %v\n", resp)
+}
+```
+
+### Path Parameters
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string**| Item ID | 
+**id** | **string** | Item ID | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiGetItemRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
 
 ### Return type
 
@@ -139,13 +270,44 @@ No authorization required
 
 ## ListItems
 
-> []TodoItem ListItems(ctx, )
+> []TodoItem ListItems(ctx).Execute()
 
 List items
 
-### Required Parameters
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+
+    configuration := openapiclient.NewConfiguration()
+    api_client := openapiclient.NewAPIClient(configuration)
+    resp, r, err := api_client.TodoListApi.ListItems(context.Background()).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `TodoListApi.ListItems``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `ListItems`: []TodoItem
+    fmt.Fprintf(os.Stdout, "Response from `TodoListApi.ListItems`: %v\n", resp)
+}
+```
+
+### Path Parameters
 
 This endpoint does not need any parameter.
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiListItemsRequest struct via the builder pattern
+
 
 ### Return type
 
@@ -167,18 +329,55 @@ No authorization required
 
 ## UpdateItem
 
-> TodoItem UpdateItem(ctx, id, updateTodoItemRequest)
+> TodoItem UpdateItem(ctx, id).UpdateTodoItemRequest(updateTodoItemRequest).Execute()
 
 Update an existing item
 
-### Required Parameters
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+    id := "id_example" // string | Item ID
+    updateTodoItemRequest := *openapiclient.NewUpdateTodoItemRequest() // UpdateTodoItemRequest | 
+
+    configuration := openapiclient.NewConfiguration()
+    api_client := openapiclient.NewAPIClient(configuration)
+    resp, r, err := api_client.TodoListApi.UpdateItem(context.Background(), id).UpdateTodoItemRequest(updateTodoItemRequest).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `TodoListApi.UpdateItem``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `UpdateItem`: TodoItem
+    fmt.Fprintf(os.Stdout, "Response from `TodoListApi.UpdateItem`: %v\n", resp)
+}
+```
+
+### Path Parameters
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string**| Item ID | 
-**updateTodoItemRequest** | [**UpdateTodoItemRequest**](UpdateTodoItemRequest.md)|  | 
+**id** | **string** | Item ID | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiUpdateItemRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+ **updateTodoItemRequest** | [**UpdateTodoItemRequest**](UpdateTodoItemRequest.md) |  | 
 
 ### Return type
 

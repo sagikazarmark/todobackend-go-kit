@@ -11,7 +11,7 @@ GoTestRootCompat = True
 
 [buildconfig]
 golangci-lint-version = 1.38.0
-openapi-generator-version = v4.3.1
+openapi-generator-version = 5.1.0
 protoc-version = 3.15.1
 protoc-gen-go-version = 1.25.0
 protoc-gen-go-grpc-version = 1.1.0

@@ -1,7 +1,7 @@
 github_repo(
     name = "pleasings2",
     repo = "sagikazarmark/mypleasings",
-    revision = "3dea080ba8070af5a9dac6e382703f862e97a4f0",
+    revision = "ae0d49ae0eac8d227d202e9aed3b1b1b8915c073",
 )
 
 http_archive(

@@ -11,6 +11,7 @@
 package todov1
 
 import (
+	"bytes"
 	_context "context"
 	_ioutil "io/ioutil"
 	_nethttp "net/http"
@@ -26,13 +27,38 @@ var (
 // TodoListApiService TodoListApi service
 type TodoListApiService service
 
+type ApiAddItemRequest struct {
+	ctx _context.Context
+	ApiService *TodoListApiService
+	addTodoItemRequest *AddTodoItemRequest
+}
+
+func (r ApiAddItemRequest) AddTodoItemRequest(addTodoItemRequest AddTodoItemRequest) ApiAddItemRequest {
+	r.addTodoItemRequest = &addTodoItemRequest
+	return r
+}
+
+func (r ApiAddItemRequest) Execute() (TodoItem, *_nethttp.Response, error) {
+	return r.ApiService.AddItemExecute(r)
+}
+
 /*
-AddItem Add a new item to the list
+ * AddItem Add a new item to the list
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @param addTodoItemRequest
-@return TodoItem
-*/
-func (a *TodoListApiService) AddItem(ctx _context.Context, addTodoItemRequest AddTodoItemRequest) (TodoItem, *_nethttp.Response, error) {
+ * @return ApiAddItemRequest
+ */
+func (a *TodoListApiService) AddItem(ctx _context.Context) ApiAddItemRequest {
+	return ApiAddItemRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+/*
+ * Execute executes the request
+ * @return TodoItem
+ */
+func (a *TodoListApiService) AddItemExecute(r ApiAddItemRequest) (TodoItem, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
@@ -42,11 +68,19 @@ func (a *TodoListApiService) AddItem(ctx _context.Context, addTodoItemRequest Ad
 		localVarReturnValue  TodoItem
 	)
 
-	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/todos"
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TodoListApiService.AddItem")
+	if err != nil {
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/todos"
+
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
+	if r.addTodoItemRequest == nil {
+		return localVarReturnValue, nil, reportError("addTodoItemRequest is required and must be specified")
+	}
 
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"application/json"}
@@ -66,19 +100,20 @@ func (a *TodoListApiService) AddItem(ctx _context.Context, addTodoItemRequest Ad
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = &addTodoItemRequest
-	r, err := a.client.prepareRequest(ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	localVarPostBody = r.addTodoItemRequest
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
 		return localVarReturnValue, nil, err
 	}
 
-	localVarHTTPResponse, err := a.client.callAPI(r)
+	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -130,12 +165,35 @@ func (a *TodoListApiService) AddItem(ctx _context.Context, addTodoItemRequest Ad
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type ApiDeleteItemRequest struct {
+	ctx _context.Context
+	ApiService *TodoListApiService
+	id string
+}
+
+
+func (r ApiDeleteItemRequest) Execute() (*_nethttp.Response, error) {
+	return r.ApiService.DeleteItemExecute(r)
+}
+
 /*
-DeleteItem Delete an item
+ * DeleteItem Delete an item
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param id Item ID
-*/
-func (a *TodoListApiService) DeleteItem(ctx _context.Context, id string) (*_nethttp.Response, error) {
+ * @return ApiDeleteItemRequest
+ */
+func (a *TodoListApiService) DeleteItem(ctx _context.Context, id string) ApiDeleteItemRequest {
+	return ApiDeleteItemRequest{
+		ApiService: a,
+		ctx: ctx,
+		id: id,
+	}
+}
+
+/*
+ * Execute executes the request
+ */
+func (a *TodoListApiService) DeleteItemExecute(r ApiDeleteItemRequest) (*_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodDelete
 		localVarPostBody     interface{}
@@ -144,9 +202,13 @@ func (a *TodoListApiService) DeleteItem(ctx _context.Context, id string) (*_neth
 		localVarFileBytes    []byte
 	)
 
-	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/todos/{id}"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", _neturl.QueryEscape(parameterToString(id, "")) , -1)
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TodoListApiService.DeleteItem")
+	if err != nil {
+		return nil, GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/todos/{id}"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", _neturl.PathEscape(parameterToString(r.id, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -169,18 +231,19 @@ func (a *TodoListApiService) DeleteItem(ctx _context.Context, id string) (*_neth
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	r, err := a.client.prepareRequest(ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
 		return nil, err
 	}
 
-	localVarHTTPResponse, err := a.client.callAPI(r)
+	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
 		return localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
@@ -203,11 +266,32 @@ func (a *TodoListApiService) DeleteItem(ctx _context.Context, id string) (*_neth
 	return localVarHTTPResponse, nil
 }
 
+type ApiDeleteItemsRequest struct {
+	ctx _context.Context
+	ApiService *TodoListApiService
+}
+
+
+func (r ApiDeleteItemsRequest) Execute() (*_nethttp.Response, error) {
+	return r.ApiService.DeleteItemsExecute(r)
+}
+
 /*
-DeleteItems Delete all items
+ * DeleteItems Delete all items
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-*/
-func (a *TodoListApiService) DeleteItems(ctx _context.Context) (*_nethttp.Response, error) {
+ * @return ApiDeleteItemsRequest
+ */
+func (a *TodoListApiService) DeleteItems(ctx _context.Context) ApiDeleteItemsRequest {
+	return ApiDeleteItemsRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+/*
+ * Execute executes the request
+ */
+func (a *TodoListApiService) DeleteItemsExecute(r ApiDeleteItemsRequest) (*_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodDelete
 		localVarPostBody     interface{}
@@ -216,8 +300,13 @@ func (a *TodoListApiService) DeleteItems(ctx _context.Context) (*_nethttp.Respon
 		localVarFileBytes    []byte
 	)
 
-	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/todos"
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TodoListApiService.DeleteItems")
+	if err != nil {
+		return nil, GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/todos"
+
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
@@ -239,18 +328,19 @@ func (a *TodoListApiService) DeleteItems(ctx _context.Context) (*_nethttp.Respon
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	r, err := a.client.prepareRequest(ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
 		return nil, err
 	}
 
-	localVarHTTPResponse, err := a.client.callAPI(r)
+	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
 		return localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
@@ -273,13 +363,36 @@ func (a *TodoListApiService) DeleteItems(ctx _context.Context) (*_nethttp.Respon
 	return localVarHTTPResponse, nil
 }
 
+type ApiGetItemRequest struct {
+	ctx _context.Context
+	ApiService *TodoListApiService
+	id string
+}
+
+
+func (r ApiGetItemRequest) Execute() (TodoItem, *_nethttp.Response, error) {
+	return r.ApiService.GetItemExecute(r)
+}
+
 /*
-GetItem Get an item
+ * GetItem Get an item
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param id Item ID
-@return TodoItem
-*/
-func (a *TodoListApiService) GetItem(ctx _context.Context, id string) (TodoItem, *_nethttp.Response, error) {
+ * @return ApiGetItemRequest
+ */
+func (a *TodoListApiService) GetItem(ctx _context.Context, id string) ApiGetItemRequest {
+	return ApiGetItemRequest{
+		ApiService: a,
+		ctx: ctx,
+		id: id,
+	}
+}
+
+/*
+ * Execute executes the request
+ * @return TodoItem
+ */
+func (a *TodoListApiService) GetItemExecute(r ApiGetItemRequest) (TodoItem, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
@@ -289,9 +402,13 @@ func (a *TodoListApiService) GetItem(ctx _context.Context, id string) (TodoItem,
 		localVarReturnValue  TodoItem
 	)
 
-	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/todos/{id}"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", _neturl.QueryEscape(parameterToString(id, "")) , -1)
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TodoListApiService.GetItem")
+	if err != nil {
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/todos/{id}"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", _neturl.PathEscape(parameterToString(r.id, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -314,18 +431,19 @@ func (a *TodoListApiService) GetItem(ctx _context.Context, id string) (TodoItem,
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	r, err := a.client.prepareRequest(ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
 		return localVarReturnValue, nil, err
 	}
 
-	localVarHTTPResponse, err := a.client.callAPI(r)
+	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -367,12 +485,33 @@ func (a *TodoListApiService) GetItem(ctx _context.Context, id string) (TodoItem,
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type ApiListItemsRequest struct {
+	ctx _context.Context
+	ApiService *TodoListApiService
+}
+
+
+func (r ApiListItemsRequest) Execute() ([]TodoItem, *_nethttp.Response, error) {
+	return r.ApiService.ListItemsExecute(r)
+}
+
 /*
-ListItems List items
+ * ListItems List items
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-@return []TodoItem
-*/
-func (a *TodoListApiService) ListItems(ctx _context.Context) ([]TodoItem, *_nethttp.Response, error) {
+ * @return ApiListItemsRequest
+ */
+func (a *TodoListApiService) ListItems(ctx _context.Context) ApiListItemsRequest {
+	return ApiListItemsRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+/*
+ * Execute executes the request
+ * @return []TodoItem
+ */
+func (a *TodoListApiService) ListItemsExecute(r ApiListItemsRequest) ([]TodoItem, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
@@ -382,8 +521,13 @@ func (a *TodoListApiService) ListItems(ctx _context.Context) ([]TodoItem, *_neth
 		localVarReturnValue  []TodoItem
 	)
 
-	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/todos"
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TodoListApiService.ListItems")
+	if err != nil {
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/todos"
+
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
@@ -405,18 +549,19 @@ func (a *TodoListApiService) ListItems(ctx _context.Context) ([]TodoItem, *_neth
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	r, err := a.client.prepareRequest(ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
 		return localVarReturnValue, nil, err
 	}
 
-	localVarHTTPResponse, err := a.client.callAPI(r)
+	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -448,14 +593,41 @@ func (a *TodoListApiService) ListItems(ctx _context.Context) ([]TodoItem, *_neth
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type ApiUpdateItemRequest struct {
+	ctx _context.Context
+	ApiService *TodoListApiService
+	id string
+	updateTodoItemRequest *UpdateTodoItemRequest
+}
+
+func (r ApiUpdateItemRequest) UpdateTodoItemRequest(updateTodoItemRequest UpdateTodoItemRequest) ApiUpdateItemRequest {
+	r.updateTodoItemRequest = &updateTodoItemRequest
+	return r
+}
+
+func (r ApiUpdateItemRequest) Execute() (TodoItem, *_nethttp.Response, error) {
+	return r.ApiService.UpdateItemExecute(r)
+}
+
 /*
-UpdateItem Update an existing item
+ * UpdateItem Update an existing item
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param id Item ID
- * @param updateTodoItemRequest
-@return TodoItem
-*/
-func (a *TodoListApiService) UpdateItem(ctx _context.Context, id string, updateTodoItemRequest UpdateTodoItemRequest) (TodoItem, *_nethttp.Response, error) {
+ * @return ApiUpdateItemRequest
+ */
+func (a *TodoListApiService) UpdateItem(ctx _context.Context, id string) ApiUpdateItemRequest {
+	return ApiUpdateItemRequest{
+		ApiService: a,
+		ctx: ctx,
+		id: id,
+	}
+}
+
+/*
+ * Execute executes the request
+ * @return TodoItem
+ */
+func (a *TodoListApiService) UpdateItemExecute(r ApiUpdateItemRequest) (TodoItem, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPatch
 		localVarPostBody     interface{}
@@ -465,13 +637,20 @@ func (a *TodoListApiService) UpdateItem(ctx _context.Context, id string, updateT
 		localVarReturnValue  TodoItem
 	)
 
-	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/todos/{id}"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", _neturl.QueryEscape(parameterToString(id, "")) , -1)
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TodoListApiService.UpdateItem")
+	if err != nil {
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/todos/{id}"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", _neturl.PathEscape(parameterToString(r.id, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
+	if r.updateTodoItemRequest == nil {
+		return localVarReturnValue, nil, reportError("updateTodoItemRequest is required and must be specified")
+	}
 
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"application/json"}
@@ -491,19 +670,20 @@ func (a *TodoListApiService) UpdateItem(ctx _context.Context, id string, updateT
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = &updateTodoItemRequest
-	r, err := a.client.prepareRequest(ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	localVarPostBody = r.updateTodoItemRequest
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
 		return localVarReturnValue, nil, err
 	}
 
-	localVarHTTPResponse, err := a.client.callAPI(r)
+	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
