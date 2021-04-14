@@ -3,5 +3,4 @@ go_library(
     srcs = ["static.go"],
     resources = ["index.html"],
     visibility = ["PUBLIC"],
-    deps = [],
 )

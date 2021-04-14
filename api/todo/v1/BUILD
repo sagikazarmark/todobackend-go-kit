@@ -41,11 +41,13 @@ openapi_validate(
 go_library(
     name = "v1",
     srcs = glob(
-        ["*.go"],
+        ["*.go", ":proto"],
         exclude = ["*_test.go"],
     ),
     visibility = ["PUBLIC"],
     deps = [
+        #":proto", # wollemi:keep
+        "//third_party/go:github.com__golang__protobuf__proto",
         "//third_party/go:google.golang.org__grpc",
         "//third_party/go:google.golang.org__grpc__codes",
         "//third_party/go:google.golang.org__grpc__status",
@@ -55,20 +57,21 @@ go_library(
     ],
 )
 
+subinclude("///pleasings2//proto")
+
 proto_library(
     name = "proto",
-    srcs = ["todo_list.proto", "todo.proto"],
-    languages = ["go"],
+    srcs = [
+        "todo.proto",
+        "todo_list.proto",
+    ],
+    languages = {
+        "go": go_proto_language(
+            grpc = True,
+            plugins = {
+                "kit": "///pleasings2//tools/proto:protoc-gen-kit",
+            },
+        ),
+    },
     root_dir = "api",
-    deps = ["//tools:protoc"],
-    protoc_flags = ["--go_opt=paths=source_relative"],
-)
-
-grpc_library(
-    name = "grpc",
-    srcs = ["todo_list.proto", "todo.proto"],
-    languages = ["go"],
-    root_dir = "api",
-    deps = ["//tools:protoc"],
-    protoc_flags = ["--go-grpc_opt=paths=source_relative"],
 )
