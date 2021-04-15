@@ -39,10 +39,10 @@ openapi_validate(
 )
 
 go_library(
-    name = "v1",
+    name = "v1a",
     srcs = glob(
-        ["*.go", ":proto"],
-        exclude = ["*_test.go"],
+        ["*.go"],
+        exclude = ["*_test.go", "*.pb.go", "*.kit.go"],
     ),
     visibility = ["PUBLIC"],
     deps = [
@@ -60,7 +60,7 @@ go_library(
 subinclude("///pleasings2//proto")
 
 proto_library(
-    name = "proto",
+    name = "v1",
     srcs = [
         "todo.proto",
         "todo_list.proto",
@@ -74,4 +74,5 @@ proto_library(
         ),
     },
     root_dir = "api",
+    visibility = ["PUBLIC"],
 )
