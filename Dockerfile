@@ -17,6 +17,7 @@ RUN ./pleasew update
 
 COPY BUILD .
 
+COPY .build_defs ./.build_defs/
 COPY tools ./tools/
 RUN ./pleasew build //tools:go_toolchain
 

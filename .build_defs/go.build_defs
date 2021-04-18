@@ -1,0 +1,73 @@
+def go_mod_download(name:str, module:str, version:str, test_only:bool=False, visibility:list=None, strip:list=[],
+                    licences:list=None, hashes:list=None, labels:list=[], _tag:str='', deps:list=[],
+                    go_path_compatibility:bool=False, patch:list=[]):
+    """Downloads a third-party Go module using `go mod download`
+    This rule is typically used in conjunction with go_module() to resolve cyclic dependencies between modules. This rule
+    can be passed to go_module() via the download param which enables multiple go_module() rules to compile parts of the
+    whole module. It can also be useful to download from a fork of a module where the import path doesn't match the
+    repo path.
+    Args:
+      name (str): Name of the rule
+      module (str): The module to download
+      version (str): The version of the module.
+      deps (list): Dependencies
+      visibility (list): Visibility specification
+      test_only (bool): If true this rule will only be visible to tests.
+      strip (list ): List of paths to strip from the target after downloading but before building it.
+      hashes (list): List of hashes to verify the downloaded sources against.
+      licences (list): Licences this rule is subject to.
+      labels (list): Labels to apply to this rule.
+      go_path_compatibility (bool): Whether this rule's outputs have to be a valid GOPATH i.e. output into
+                             src/example.com/author/module. This can be useful when used with go_get(). When false, this
+                             rule's outputs will be based on the name parameter, guaranteeing uniqueness, but is then
+                             only compatible with go_module() rules. Defaults to false.
+    """
+    out = name if not go_path_compatibility else f'src/{module}'
+    # TODO(jpoole): write a proper please_go tool for this
+    cmds = [
+        _set_go_env(),
+        f'$TOOLS_GO mod download -x -modcacherw -json {module}@{version} | tee mod.json',
+        'export MOD_DIR=$(cat mod.json | ' 'awk -F\\" \'/"Dir": / { print $4 }\')',
+        "cp -r $MOD_DIR $OUT",
+    ] + [f'rm -rf $OUT/{s}' for s in strip]
+
+    if patch:
+        cmds += [f'for p in "$TMP_DIR"/$SRCS_PATCH; do patch -d {out} -p1 < $p; done']
+
+    return build_rule(
+        name = name,
+        srcs = {
+            "PATCH": patch,
+        },
+        tag = _tag,
+        outs = [out],
+        tools = {"go": [CONFIG.GO_TOOL]},
+        building_description = 'Fetching...',
+        cmd = ' && '.join(cmds),
+        requires = ['go_src'],
+        test_only = test_only,
+        # TODO(jpoole): We probably want to somehow link this to the correct place but Please doesn't really facilitate
+        #  that right now.
+        labels = labels + ['link:plz-out/go'] if go_path_compatibility else [],
+        hashes = hashes,
+        sandbox = False,
+        licences = licences,
+        visibility = visibility,
+        deps = deps,
+    )
+
+def _set_go_env():
+    if CONFIG.GOROOT:
+        go_root = CONFIG.GOROOT
+    elif CONFIG.HOSTOS == 'freebsd':
+        # FreeBSD has some very strange semantics around hardlinks that lead to it finding
+        # the wrong thing (essentially os.Executable, which go uses to define GOROOT, returns
+        # the most recent hardlink to the file). We can work around this way although it's
+        # not very nice (we don't do this globally because OSX doesn't have realpath).
+        go_root = f'$(dirname $(dirname $(realpath S_GOS_GO)))'
+    else:
+        go_root = '$("$TOOLS_GO" env GOROOT)'
+    cmd = f'export GOPATH=$TMP_DIR && export GOROOT={go_root}'
+    if CONFIG.CGO_ENABLED:
+        return f'export CGO_ENABLED={CONFIG.CGO_ENABLED} && {cmd}'
+    return cmd
