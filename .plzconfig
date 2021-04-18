@@ -1,8 +1,8 @@
 [please]
 version = 16.0.0-prerelease.13
 
-[Parse]
-PreloadBuildDefs = .build_defs/go.build_defs
+#[Parse]
+#PreloadBuildDefs = .build_defs/go.build_defs
 
 [build]
 LinkGeneratedSources = true
