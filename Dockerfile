@@ -1,6 +1,12 @@
 FROM alpine:3.13.4 AS builder
 
-RUN apk add --update --no-cache bash ca-certificates curl git build-base libc6-compat gcc gcompat
+RUN apk add --update --no-cache bash ca-certificates curl git build-base
+#libc6-compat
+
+
+RUN wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub
+RUN wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.33-r0/glibc-2.33-r0.apk
+RUN apk add glibc-2.33-r0.apk
 
 # RUN cd /tmp; GOBIN=/build go get github.com/go-delve/delve/cmd/dlv
 
