@@ -15,6 +15,7 @@ GoGrpcDep = //third_party/proto:go-grpc-deps
 ImportPath = github.com/sagikazarmark/todobackend-go-kit
 GoTool = //tools:go_toolchain|go
 GoTestRootCompat = True
+CgoEnabled = 0
 
 [buildconfig]
 golangci-lint-version = 1.38.0

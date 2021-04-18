@@ -10,7 +10,7 @@ ARG PLZ_BUILD_CONFIG
 ARG PLZ_OVERRIDES
 ARG PLZ_CONFIG_PROFILE
 
-ENV PLZ_ARGS="-p -o \"build.path:${PATH}\""
+ENV PLZ_ARGS="-p -o \"build.path:${PATH}\" -o \"go.CgoEnabled:0\""
 
 COPY .plzconfig* pleasew ./
 RUN ./pleasew update
@@ -23,7 +23,7 @@ RUN ./pleasew build //tools:go_toolchain
 COPY third_party ./third_party/
 RUN ./pleasew build //third_party/...
 
-#RUN apk add --update --no-cache gcompat
+RUN apk add --update --no-cache gcompat
 
 COPY . .
 
