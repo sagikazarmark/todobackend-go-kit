@@ -23,7 +23,7 @@ RUN ./pleasew build //tools:go_toolchain
 COPY third_party ./third_party/
 RUN ./pleasew build //third_party/...
 
-RUN apk add --update --no-cache gcompat
+#RUN apk add --update --no-cache gcompat
 
 COPY . .
 
