@@ -1,6 +1,6 @@
 FROM alpine:3.13.4 AS builder
 
-RUN apk add --update --no-cache bash ca-certificates curl git build-base libc6-compat gcc
+RUN apk add --update --no-cache bash ca-certificates curl git build-base libc6-compat gcc gcompat
 
 # RUN cd /tmp; GOBIN=/build go get github.com/go-delve/delve/cmd/dlv
 
