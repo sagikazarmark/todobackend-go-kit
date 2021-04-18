@@ -1,12 +1,14 @@
 FROM alpine:3.13.4 AS builder
 
 RUN apk add --update --no-cache bash ca-certificates curl git build-base
-#libc6-compat
 
+ENV GLIBC_VERSION=2.33-r0
 
-RUN wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub
-RUN wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.33-r0/glibc-2.33-r0.apk
-RUN apk add glibc-2.33-r0.apk
+RUN set -xe && \
+    wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub && \
+    wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-${GLIBC_VERSION}.apk && \
+    apk add glibc-${GLIBC_VERSION}.apk && \
+    rm glibc-${GLIBC_VERSION}.apk
 
 # RUN cd /tmp; GOBIN=/build go get github.com/go-delve/delve/cmd/dlv
 
@@ -16,7 +18,7 @@ ARG PLZ_BUILD_CONFIG
 ARG PLZ_OVERRIDES
 ARG PLZ_CONFIG_PROFILE
 
-ENV PLZ_ARGS="-p -o \"build.path:${PATH}\" -o \"go.CgoEnabled:0\""
+ENV PLZ_ARGS="-p -o \"build.path:${PATH}\""
 
 COPY .plzconfig* pleasew ./
 RUN ./pleasew update
