@@ -42,7 +42,11 @@ go_library(
     name = "v1a",
     srcs = glob(
         ["*.go"],
-        exclude = ["*_test.go", "*.pb.go", "*.kit.go"],
+        exclude = [
+            "*_test.go",
+            "*.pb.go",
+            "*.kit.go",
+        ],
     ),
     visibility = ["PUBLIC"],
     deps = [
