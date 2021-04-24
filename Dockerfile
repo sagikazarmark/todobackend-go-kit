@@ -1,6 +1,14 @@
 FROM alpine:3.13.5 AS builder
 
-RUN apk add --update --no-cache bash ca-certificates curl git build-base libc6-compat
+RUN apk add --update --no-cache bash ca-certificates curl git build-base
+
+ENV GLIBC_VERSION=2.33-r0
+
+RUN set -xe && \
+    wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub && \
+    wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-${GLIBC_VERSION}.apk && \
+    apk add glibc-${GLIBC_VERSION}.apk && \
+    rm glibc-${GLIBC_VERSION}.apk
 
 # RUN cd /tmp; GOBIN=/build go get github.com/go-delve/delve/cmd/dlv
 

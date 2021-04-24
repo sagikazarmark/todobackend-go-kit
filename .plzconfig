@@ -1,8 +1,15 @@
 [please]
-version = 16.0.0-prerelease.13
+version = 16.0.0
 
 [build]
 LinkGeneratedSources = true
+
+[Proto]
+ProtocTool = ///pleasings2//tools/proto:protoc
+ProtocGoPlugin = ///pleasings2//tools/proto:protoc-gen-go
+GrpcGoPlugin = ///pleasings2//tools/proto:protoc-gen-go-grpc
+GoDep = //third_party/proto:go-deps
+GoGrpcDep = //third_party/proto:go-grpc-deps
 
 [go]
 ImportPath = github.com/sagikazarmark/todobackend-go-kit
@@ -17,6 +24,7 @@ protoc-gen-go-version = 1.26.0
 protoc-gen-go-grpc-version = 1.1.0
 protoc-gen-kit-version = 0.2.0
 buf-version = 0.40.0
+wollemi-version = 0.3.0
 
 [alias "tidy"]
 desc = Tidy generates build targets for dependencies and makes sure that BUILD files are up-to-date.

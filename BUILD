@@ -1,7 +1,7 @@
 github_repo(
     name = "pleasings2",
     repo = "sagikazarmark/mypleasings",
-    revision = "ae0d49ae0eac8d227d202e9aed3b1b1b8915c073",
+    revision = "49e5adb3ce51a58fb64dfdb268bbaaf771dfe538",
 )
 
 http_archive(
@@ -37,5 +37,4 @@ go_library(
         ["*.go"],
         exclude = ["*_test.go"],
     ),
-    deps = [],
 )
