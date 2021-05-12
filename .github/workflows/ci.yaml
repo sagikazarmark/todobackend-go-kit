@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up Please
-        uses: sagikazarmark/setup-please-action@v0
+        uses: sagikazarmark/setup-please-action@v0.6.0
 
       - name: Test
         run: plz cover //...
@@ -44,7 +44,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up Please
-        uses: sagikazarmark/setup-please-action@v0
+        uses: sagikazarmark/setup-please-action@v0.6.0
 
       - name: Generate code
         run: plz generate //...
