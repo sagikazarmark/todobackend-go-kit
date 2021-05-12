@@ -18,7 +18,7 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/stretchr/testify v1.7.0
 	github.com/vektah/gqlparser/v2 v2.1.0
-	google.golang.org/grpc v1.36.0
+	google.golang.org/grpc v1.37.1
 )
 
 replace github.com/sagikazarmark/todobackend-go-kit/api => ./api
