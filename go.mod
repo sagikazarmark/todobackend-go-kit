@@ -6,8 +6,8 @@ require (
 	emperror.dev/errors v0.8.0
 	github.com/99designs/gqlgen v0.13.0
 	github.com/go-bdd/gobdd v1.1.2
-	github.com/go-kit/kit v0.10.0
-	github.com/golang/protobuf v1.5.1
+	github.com/go-kit/kit v0.11.0
+	github.com/golang/protobuf v1.5.2
 	github.com/goph/idgen v0.4.0
 	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.0
@@ -18,7 +18,7 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/stretchr/testify v1.7.0
 	github.com/vektah/gqlparser/v2 v2.1.0
-	google.golang.org/grpc v1.36.0
+	google.golang.org/grpc v1.39.1
 )
 
 replace github.com/sagikazarmark/todobackend-go-kit/api => ./api
