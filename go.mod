@@ -6,7 +6,7 @@ require (
 	emperror.dev/errors v0.8.0
 	github.com/99designs/gqlgen v0.13.0
 	github.com/go-bdd/gobdd v1.1.3
-	github.com/go-kit/kit v0.11.0
+	github.com/go-kit/kit v0.12.0
 	github.com/golang/protobuf v1.5.2
 	github.com/goph/idgen v0.4.0
 	github.com/gorilla/handlers v1.5.1
