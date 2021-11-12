@@ -1,4 +1,4 @@
-FROM alpine:3.14.2 AS builder
+FROM alpine:3.14.3 AS builder
 
 RUN apk add --update --no-cache bash ca-certificates curl git build-base libc6-compat
 
@@ -28,7 +28,7 @@ COPY . .
 RUN ./pleasew export outputs -o /usr/local/bin //cmd/todo
 
 
-FROM alpine:3.14.2
+FROM alpine:3.14.3
 
 RUN apk add --update --no-cache ca-certificates tzdata bash curl libc6-compat
 
