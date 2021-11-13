@@ -1,8 +1,6 @@
 module github.com/sagikazarmark/todobackend-go-kit
 
-go 1.16
-
-replace github.com/sagikazarmark/todobackend-go-kit/api => ./api
+go 1.17
 
 require (
 	emperror.dev/errors v0.8.0
@@ -22,3 +20,35 @@ require (
 	github.com/vektah/gqlparser/v2 v2.2.0
 	google.golang.org/grpc v1.42.0
 )
+
+require (
+	github.com/agnivade/levenshtein v1.1.0 // indirect
+	github.com/cucumber/gherkin-go/v13 v13.0.0 // indirect
+	github.com/cucumber/messages-go/v12 v12.0.0 // indirect
+	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/felixge/httpsnoop v1.0.1 // indirect
+	github.com/go-kit/log v0.2.0 // indirect
+	github.com/go-logfmt/logfmt v0.5.1 // indirect
+	github.com/gofrs/uuid v3.2.0+incompatible // indirect
+	github.com/gogo/protobuf v1.3.2 // indirect
+	github.com/gorilla/websocket v1.4.2 // indirect
+	github.com/hashicorp/golang-lru v0.5.4 // indirect
+	github.com/mitchellh/mapstructure v1.4.2 // indirect
+	github.com/moogar0880/problems v0.1.1 // indirect
+	github.com/oklog/ulid v1.3.1 // indirect
+	github.com/pkg/errors v0.9.1 // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
+	go.uber.org/atomic v1.9.0 // indirect
+	go.uber.org/multierr v1.7.0 // indirect
+	golang.org/x/net v0.0.0-20211112202133-69e39bad7dc2 // indirect
+	golang.org/x/oauth2 v0.0.0-20210514164344-f6687ab2804c // indirect
+	golang.org/x/sys v0.0.0-20211113001501-0c823b97ae02 // indirect
+	golang.org/x/text v0.3.7 // indirect
+	google.golang.org/appengine v1.6.6 // indirect
+	google.golang.org/genproto v0.0.0-20211112145013-271947fe86fd // indirect
+	google.golang.org/protobuf v1.27.1 // indirect
+	gopkg.in/yaml.v2 v2.4.0 // indirect
+	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
+)
+
+replace github.com/sagikazarmark/todobackend-go-kit/api => ./api
