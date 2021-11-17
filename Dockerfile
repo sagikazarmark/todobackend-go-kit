@@ -17,15 +17,20 @@ RUN ./pleasew update
 
 COPY BUILD .
 
+# Required for certain please functions to work
+RUN git init && git config --global user.email "you@example.com" && git config --global user.name "Your Name" && git commit -m 'dummy' --allow-empty
+
 COPY tools ./tools/
 RUN ./pleasew build //tools:go_toolchain
 
 COPY third_party ./third_party/
 RUN ./pleasew build //third_party/...
 
+RUN rm -rf .git
+
 COPY . .
 
-RUN ./pleasew export outputs -o /usr/local/bin //cmd/todo
+RUN ./pleasew export outputs -o /usr/local/bin :todo
 
 
 FROM alpine:3.14.3
