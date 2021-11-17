@@ -37,7 +37,7 @@ go_mod_download(
     name = "github.com__99designs__gqlgen",
     _tag = "download",
     module = "github.com/99designs/gqlgen",
-    version = "v0.13.0",
+    version = "v0.14.0",
 )
 
 go_module(
@@ -160,7 +160,7 @@ go_mod_download(
     name = "github.com__agnivade__levenshtein",
     _tag = "download",
     module = "github.com/agnivade/levenshtein",
-    version = "v1.0.3",
+    version = "v1.1.1",
 )
 
 go_module(
@@ -230,7 +230,7 @@ go_mod_download(
     name = "github.com__felixge__httpsnoop",
     _tag = "download",
     module = "github.com/felixge/httpsnoop",
-    version = "v1.0.1",
+    version = "v1.0.2",
 )
 
 go_module(
@@ -246,7 +246,7 @@ go_mod_download(
     name = "github.com__go-bdd__gobdd",
     _tag = "download",
     module = "github.com/go-bdd/gobdd",
-    version = "v1.1.2",
+    version = "v1.1.3",
 )
 
 go_module(
@@ -265,7 +265,7 @@ go_mod_download(
     name = "github.com__go-kit__kit",
     _tag = "download",
     module = "github.com/go-kit/kit",
-    version = "v0.10.0",
+    version = "v0.12.0",
 )
 
 go_module(
@@ -278,21 +278,12 @@ go_module(
 )
 
 go_module(
-    name = "github.com__go-kit__kit__log",
-    download = ":_github.com__go-kit__kit#download",
-    install = ["log"],
-    module = "github.com/go-kit/kit",
-    visibility = ["PUBLIC"],
-    deps = [":github.com__go-logfmt__logfmt"],
-)
-
-go_module(
     name = "github.com__go-kit__kit__transport",
     download = ":_github.com__go-kit__kit#download",
     install = ["transport"],
     module = "github.com/go-kit/kit",
     visibility = ["PUBLIC"],
-    deps = [":github.com__go-kit__kit__log"],
+    deps = [":github.com__go-kit__log"],
 )
 
 go_module(
@@ -303,8 +294,8 @@ go_module(
     visibility = ["PUBLIC"],
     deps = [
         ":github.com__go-kit__kit__endpoint",
-        ":github.com__go-kit__kit__log",
         ":github.com__go-kit__kit__transport",
+        ":github.com__go-kit__log",
         ":google.golang.org__grpc",
         ":google.golang.org__grpc__metadata",
     ],
@@ -318,16 +309,32 @@ go_module(
     visibility = ["PUBLIC"],
     deps = [
         ":github.com__go-kit__kit__endpoint",
-        ":github.com__go-kit__kit__log",
         ":github.com__go-kit__kit__transport",
+        ":github.com__go-kit__log",
     ],
+)
+
+go_mod_download(
+    name = "github.com__go-kit__log",
+    _tag = "download",
+    module = "github.com/go-kit/log",
+    version = "v0.2.0",
+)
+
+go_module(
+    name = "github.com__go-kit__log",
+    download = ":_github.com__go-kit__log#download",
+    install = ["."],
+    module = "github.com/go-kit/log",
+    visibility = ["PUBLIC"],
+    deps = [":github.com__go-logfmt__logfmt"],
 )
 
 go_mod_download(
     name = "github.com__go-logfmt__logfmt",
     _tag = "download",
     module = "github.com/go-logfmt/logfmt",
-    version = "v0.5.0",
+    version = "v0.5.1",
 )
 
 go_module(
@@ -359,7 +366,7 @@ go_mod_download(
     name = "github.com__gogo__protobuf",
     _tag = "download",
     module = "github.com/gogo/protobuf",
-    version = "v1.3.1",
+    version = "v1.3.2",
 )
 
 go_module(
@@ -384,7 +391,7 @@ go_mod_download(
     name = "github.com__golang__protobuf",
     _tag = "download",
     module = "github.com/golang/protobuf",
-    version = "v1.5.1",
+    version = "v1.5.2",
 )
 
 go_module(
@@ -544,7 +551,7 @@ go_mod_download(
     name = "github.com__hashicorp__golang-lru",
     _tag = "download",
     module = "github.com/hashicorp/golang-lru",
-    version = "v0.5.1",
+    version = "v0.5.4",
 )
 
 go_module(
@@ -569,7 +576,7 @@ go_mod_download(
     name = "github.com__mitchellh__mapstructure",
     _tag = "download",
     module = "github.com/mitchellh/mapstructure",
-    version = "v1.1.2",
+    version = "v1.4.2",
 )
 
 go_module(
@@ -665,7 +672,7 @@ go_mod_download(
     name = "github.com__sagikazarmark__appkit",
     _tag = "download",
     module = "github.com/sagikazarmark/appkit",
-    version = "v0.10.0",
+    version = "v0.13.0",
 )
 
 go_module(
@@ -707,7 +714,7 @@ go_mod_download(
     name = "github.com__sagikazarmark__kitx",
     _tag = "download",
     module = "github.com/sagikazarmark/kitx",
-    version = "v0.14.0",
+    version = "v0.17.0",
 )
 
 go_module(
@@ -727,8 +734,8 @@ go_module(
     visibility = ["PUBLIC"],
     deps = [
         ":github.com__go-kit__kit__endpoint",
-        ":github.com__go-kit__kit__log",
         ":github.com__go-kit__kit__transport",
+        ":github.com__go-kit__log",
     ],
 )
 
@@ -809,7 +816,7 @@ go_mod_download(
     name = "github.com__vektah__gqlparser__v2",
     _tag = "download",
     module = "github.com/vektah/gqlparser/v2",
-    version = "v2.1.0",
+    version = "v2.2.0",
 )
 
 go_module(
@@ -900,7 +907,7 @@ go_mod_download(
     name = "go.uber.org__atomic",
     _tag = "download",
     module = "go.uber.org/atomic",
-    version = "v1.7.0",
+    version = "v1.9.0",
 )
 
 go_module(
@@ -916,7 +923,7 @@ go_mod_download(
     name = "go.uber.org__multierr",
     _tag = "download",
     module = "go.uber.org/multierr",
-    version = "v1.6.0",
+    version = "v1.7.0",
 )
 
 go_module(
@@ -932,7 +939,7 @@ go_mod_download(
     name = "golang.org__x__net",
     _tag = "download",
     module = "golang.org/x/net",
-    version = "v0.0.0-20200822124328-c89045814202",
+    version = "v0.0.0-20211116212703-e8b54dec6f95",
 )
 
 go_module(
@@ -1010,7 +1017,7 @@ go_mod_download(
     name = "golang.org__x__oauth2",
     _tag = "download",
     module = "golang.org/x/oauth2",
-    version = "v0.0.0-20210313182246-cd4f82c27b84",
+    version = "v0.0.0-20210514164344-f6687ab2804c",
 )
 
 go_module(
@@ -1035,7 +1042,7 @@ go_mod_download(
     name = "golang.org__x__sys",
     _tag = "download",
     module = "golang.org/x/sys",
-    version = "v0.0.0-20200803210538-64077c9b5642",
+    version = "v0.0.0-20211116061358-0a5406a5449c",
 )
 
 if is_platform(
@@ -1054,7 +1061,7 @@ go_mod_download(
     name = "golang.org__x__text",
     _tag = "download",
     module = "golang.org/x/text",
-    version = "v0.3.3",
+    version = "v0.3.7",
 )
 
 go_module(
@@ -1100,7 +1107,7 @@ go_mod_download(
     name = "google.golang.org__genproto",
     _tag = "download",
     module = "google.golang.org/genproto",
-    version = "v0.0.0-20200825200019-8632dd797987",
+    version = "v0.0.0-20211116182654-e63d96a377c4",
 )
 
 go_module(
@@ -1110,7 +1117,6 @@ go_module(
     module = "google.golang.org/genproto",
     visibility = ["PUBLIC"],
     deps = [
-        ":github.com__golang__protobuf__proto",
         ":google.golang.org__protobuf__reflect__protoreflect",
         ":google.golang.org__protobuf__runtime__protoimpl",
         ":google.golang.org__protobuf__types__known__durationpb",
@@ -1124,7 +1130,6 @@ go_module(
     module = "google.golang.org/genproto",
     visibility = ["PUBLIC"],
     deps = [
-        ":github.com__golang__protobuf__proto",
         ":google.golang.org__protobuf__reflect__protoreflect",
         ":google.golang.org__protobuf__runtime__protoimpl",
         ":google.golang.org__protobuf__types__known__anypb",
@@ -1135,7 +1140,7 @@ go_mod_download(
     name = "google.golang.org__grpc",
     _tag = "download",
     module = "google.golang.org/grpc",
-    version = "v1.36.0",
+    version = "v1.42.0",
 )
 
 go_module(
@@ -1296,7 +1301,6 @@ go_module(
     deps = [
         ":github.com__golang__protobuf__proto",
         ":google.golang.org__grpc__attributes",
-        ":google.golang.org__grpc__internal",
         ":google.golang.org__grpc__internal__credentials",
     ],
 )
@@ -1338,7 +1342,9 @@ go_module(
     module = "google.golang.org/grpc",
     visibility = ["PUBLIC"],
     deps = [
+        ":google.golang.org__grpc__attributes",
         ":google.golang.org__grpc__connectivity",
+        ":google.golang.org__grpc__resolver",
         ":google.golang.org__grpc__serviceconfig",
     ],
 )
@@ -1422,7 +1428,7 @@ go_module(
     install = ["internal/envconfig"],
     module = "google.golang.org/grpc",
     visibility = ["PUBLIC"],
-    deps = [],
+    deps = [":google.golang.org__grpc__internal__xds__env"],
 )
 
 go_module(
@@ -1458,10 +1464,7 @@ go_module(
     install = ["internal/grpcutil"],
     module = "google.golang.org/grpc",
     visibility = ["PUBLIC"],
-    deps = [
-        ":google.golang.org__grpc__metadata",
-        ":google.golang.org__grpc__resolver",
-    ],
+    deps = [":google.golang.org__grpc__metadata"],
 )
 
 go_module(
@@ -1484,6 +1487,7 @@ go_module(
     visibility = ["PUBLIC"],
     deps = [
         ":google.golang.org__grpc__internal__serviceconfig",
+        ":google.golang.org__grpc__metadata",
         ":google.golang.org__grpc__resolver",
     ],
 )
@@ -1497,6 +1501,7 @@ go_module(
     deps = [
         ":google.golang.org__grpc__balancer__grpclb__state",
         ":google.golang.org__grpc__grpclog",
+        ":google.golang.org__grpc__internal__backoff",
         ":google.golang.org__grpc__internal__envconfig",
         ":google.golang.org__grpc__internal__grpcrand",
         ":google.golang.org__grpc__resolver",
@@ -1580,8 +1585,8 @@ go_module(
         ":google.golang.org__grpc__codes",
         ":google.golang.org__grpc__credentials",
         ":google.golang.org__grpc__grpclog",
-        ":google.golang.org__grpc__internal",
         ":google.golang.org__grpc__internal__channelz",
+        ":google.golang.org__grpc__internal__credentials",
         ":google.golang.org__grpc__internal__grpcrand",
         ":google.golang.org__grpc__internal__grpcutil",
         ":google.golang.org__grpc__internal__metadata",
@@ -1604,6 +1609,15 @@ go_module(
     module = "google.golang.org/grpc",
     visibility = ["PUBLIC"],
     deps = [":google.golang.org__grpc__resolver"],
+)
+
+go_module(
+    name = "google.golang.org__grpc__internal__xds__env",
+    download = ":_google.golang.org__grpc#download",
+    install = ["internal/xds/env"],
+    module = "google.golang.org/grpc",
+    visibility = ["PUBLIC"],
+    deps = [],
 )
 
 go_module(
@@ -1690,7 +1704,7 @@ go_mod_download(
     name = "google.golang.org__protobuf",
     _tag = "download",
     module = "google.golang.org/protobuf",
-    version = "v1.26.0",
+    version = "v1.27.1",
 )
 
 go_module(
@@ -2052,7 +2066,6 @@ go_module(
     visibility = ["PUBLIC"],
     deps = [
         ":google.golang.org__protobuf__reflect__protoreflect",
-        ":google.golang.org__protobuf__runtime__protoiface",
         ":google.golang.org__protobuf__runtime__protoimpl",
     ],
 )
@@ -2111,7 +2124,7 @@ go_mod_download(
     name = "gopkg.in__yaml.v3",
     _tag = "download",
     module = "gopkg.in/yaml.v3",
-    version = "v3.0.0-20200313102051-9f266ea9e77c",
+    version = "v3.0.0-20210107192922-496545a6307b",
 )
 
 go_module(
