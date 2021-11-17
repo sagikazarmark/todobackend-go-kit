@@ -3,5 +3,5 @@ bin/gqlgen: go.mod
 	go build -o bin/gqlgen github.com/99designs/gqlgen
 
 .PHONY: graphql
-graphql: bin/gqlgen ## Generate GraphQL code
+graphql: ## Generate GraphQL code
 	bin/gqlgen

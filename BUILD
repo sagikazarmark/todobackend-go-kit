@@ -36,7 +36,7 @@ timestamp = git_show("%ct")
 date_fmt = "+%FT%T%z"
 
 go_binary(
-    name = "todo",
+    name = "todobackend",
     srcs = glob(
         ["*.go"],
         exclude = [
@@ -56,8 +56,6 @@ go_binary(
     deps = [
         "//api/todo/v1",
         "//internal/generated/api/v1/graphql",
-        "//pkg/todo",
-        "//pkg/todo/tododriver",
         "//static",
         "//third_party/go:github.com__99designs__gqlgen__graphql__handler",
         "//third_party/go:github.com__go-kit__kit__transport__http",
@@ -67,5 +65,7 @@ go_binary(
         "//third_party/go:github.com__oklog__run",
         "//third_party/go:github.com__spf13__pflag",
         "//third_party/go:google.golang.org__grpc",
+        "//todo",
+        "//todo/tododriver",
     ],
 )

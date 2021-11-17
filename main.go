@@ -22,9 +22,9 @@ import (
 
 	todov1 "github.com/sagikazarmark/todobackend-go-kit/api/todo/v1"
 	"github.com/sagikazarmark/todobackend-go-kit/internal/generated/api/v1/graphql"
-	"github.com/sagikazarmark/todobackend-go-kit/pkg/todo"
-	"github.com/sagikazarmark/todobackend-go-kit/pkg/todo/tododriver"
 	"github.com/sagikazarmark/todobackend-go-kit/static"
+	"github.com/sagikazarmark/todobackend-go-kit/todo"
+	"github.com/sagikazarmark/todobackend-go-kit/todo/tododriver"
 )
 
 // Provisioned by ldflags
