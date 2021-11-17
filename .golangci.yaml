@@ -38,7 +38,6 @@ linters:
         - gofmt
         - gofumpt
         - goimports
-        - golint
         - goprintffuncname
         - gosec
         - gosimple
@@ -57,7 +56,6 @@ linters:
         - predeclared
         - revive
         - rowserrcheck
-        - scopelint
         - sqlclosecheck
         - staticcheck
         - structcheck
