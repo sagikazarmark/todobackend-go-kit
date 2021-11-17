@@ -30,7 +30,7 @@ RUN rm -rf .git
 
 COPY . .
 
-RUN ./pleasew export outputs -o /usr/local/bin :todo
+RUN ./pleasew export outputs -o /usr/local/bin :todobackend
 
 
 FROM alpine:3.14.3
@@ -46,4 +46,4 @@ RUN test ! -e /etc/nsswitch.conf && echo 'hosts: files dns' > /etc/nsswitch.conf
 COPY --from=builder /usr/local/bin/* /usr/local/bin/
 
 EXPOSE 8000 8001
-CMD todo --http-addr :${PORT:-8000} --public-url ${PUBLIC_URL}
+CMD todobackend --http-addr :${PORT:-8000} --public-url ${PUBLIC_URL}

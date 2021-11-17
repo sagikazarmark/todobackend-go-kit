@@ -3,10 +3,10 @@ go_library(
     srcs = glob(["*.go"], exclude = ["*_test.go"]),
     visibility = ["PUBLIC"],
     deps = [
-        "//pkg/todo",
         "//third_party/go:github.com__99designs__gqlgen__graphql",
         "//third_party/go:github.com__99designs__gqlgen__graphql__introspection",
         "//third_party/go:github.com__vektah__gqlparser__v2",
         "//third_party/go:github.com__vektah__gqlparser__v2__ast",
+        "//todo",
     ],
 )

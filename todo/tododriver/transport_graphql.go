@@ -7,7 +7,7 @@ import (
 	kitxgraphql "github.com/sagikazarmark/kitx/transport/graphql"
 
 	"github.com/sagikazarmark/todobackend-go-kit/internal/generated/api/v1/graphql"
-	"github.com/sagikazarmark/todobackend-go-kit/pkg/todo"
+	"github.com/sagikazarmark/todobackend-go-kit/todo"
 )
 
 // MakeGraphQLSchema mounts all of the service endpoints into a GraphQL executable schema.

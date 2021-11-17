@@ -8,7 +8,7 @@ import (
 	kitxgrpc "github.com/sagikazarmark/kitx/transport/grpc"
 
 	api "github.com/sagikazarmark/todobackend-go-kit/api/todo/v1"
-	"github.com/sagikazarmark/todobackend-go-kit/pkg/todo"
+	"github.com/sagikazarmark/todobackend-go-kit/todo"
 )
 
 // MakeGRPCServer makes a set of endpoints available as a gRPC server.
