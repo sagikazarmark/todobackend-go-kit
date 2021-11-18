@@ -939,7 +939,7 @@ go_mod_download(
     name = "golang.org__x__net",
     _tag = "download",
     module = "golang.org/x/net",
-    version = "v0.0.0-20211116212703-e8b54dec6f95",
+    version = "v0.0.0-20211116231205-47ca1ff31462",
 )
 
 go_module(
@@ -1017,7 +1017,7 @@ go_mod_download(
     name = "golang.org__x__oauth2",
     _tag = "download",
     module = "golang.org/x/oauth2",
-    version = "v0.0.0-20210514164344-f6687ab2804c",
+    version = "v0.0.0-20211104180415-d3ed0bb246c8",
 )
 
 go_module(
@@ -1042,7 +1042,7 @@ go_mod_download(
     name = "golang.org__x__sys",
     _tag = "download",
     module = "golang.org/x/sys",
-    version = "v0.0.0-20211116061358-0a5406a5449c",
+    version = "v0.0.0-20211117180635-dee7805ff2e1",
 )
 
 if is_platform(
@@ -1107,7 +1107,7 @@ go_mod_download(
     name = "google.golang.org__genproto",
     _tag = "download",
     module = "google.golang.org/genproto",
-    version = "v0.0.0-20211116182654-e63d96a377c4",
+    version = "v0.0.0-20211117155847-120650a500bb",
 )
 
 go_module(
