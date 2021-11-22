@@ -25,7 +25,6 @@
           protoc-gen-go
           protoc-gen-go-grpc
           protoc-gen-kit
-          buf
           # gqlgen
           openapi-generator-cli
         ];

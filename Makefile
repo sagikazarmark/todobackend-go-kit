@@ -63,7 +63,6 @@ PROTOC_VERSION ?= 3.18.0
 PROTOC_GEN_GO_VERSION ?= 1.27.1
 PROTOC_GEN_GO_GRPC_VERSION ?= 1.1.0
 PROTOC_GEN_KIT_VERSION ?= 0.3.0
-BUF_VERSION ?= 1.0.0-rc8
 GQLGEN_VERSION ?= 0.14.0
 
 deps: bin/gotestsum bin/golangci-lint bin/protoc bin/protoc-gen-go bin/protoc-gen-go-grpc bin/gqlgen
@@ -102,21 +101,6 @@ bin/protoc-gen-kit:
 	@mkdir -p bin
 	curl -L https://github.com/sagikazarmark/protoc-gen-kit/releases/download/v${PROTOC_GEN_KIT_VERSION}/protoc-gen-kit_$(shell uname | tr A-Z a-z)_amd64.tar.gz | tar -zOxf - protoc-gen-kit > ./bin/protoc-gen-kit
 	@chmod +x ./bin/protoc-gen-kit
-
-bin/buf: bin/protoc-gen-buf-breaking bin/protoc-gen-buf-lint
-	@mkdir -p bin
-	curl -L https://github.com/bufbuild/buf/releases/download/v${BUF_VERSION}/buf-$(shell uname)-x86_64 > ./bin/buf
-	@chmod +x ./bin/buf
-
-bin/protoc-gen-buf-breaking:
-	@mkdir -p bin
-	curl -L https://github.com/bufbuild/buf/releases/download/v${BUF_VERSION}/protoc-gen-buf-breaking-$(shell uname)-x86_64 > ./bin/protoc-gen-buf-breaking
-	@chmod +x ./bin/protoc-gen-buf-breaking
-
-bin/protoc-gen-buf-lint:
-	@mkdir -p bin
-	curl -L https://github.com/bufbuild/buf/releases/download/v${BUF_VERSION}/protoc-gen-buf-lint-$(shell uname)-x86_64 > ./bin/protoc-gen-buf-lint
-	@chmod +x ./bin/protoc-gen-buf-lint
 
 bin/gqlgen:
 	@mkdir -p bin
