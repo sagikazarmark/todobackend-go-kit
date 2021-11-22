@@ -25,7 +25,9 @@
           protoc-gen-go
           protoc-gen-go-grpc
           protoc-gen-kit
-          gqlgen
+          buf
+          # gqlgen
+          openapi-generator-cli
         ];
       in
       { devShell = pkgs.mkShell { buildInputs = devDeps; }; });

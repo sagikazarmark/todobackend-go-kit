@@ -2,11 +2,11 @@ schema:
     - "api/todo/v1/todo.graphql"
 
 exec:
-    filename: internal/generated/api/v1/graphql/exec.go
+    filename: internal/generated/api/todo/v1/graphql/exec.go
     package: graphql
 
 model:
-    filename: internal/generated/api/v1/graphql/generated.go
+    filename: internal/generated/api/todo/v1/graphql/generated.go
     package: graphql
 
 struct_tag: json

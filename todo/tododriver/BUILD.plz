@@ -7,8 +7,8 @@ go_library(
     visibility = ["PUBLIC"],
     deps = [
         "//api/todo/v1",
-        "//internal/generated/api/v1/graphql",
-        "//internal/generated/api/v1/rest/go",
+        "//internal/generated/api/todo/v1/graphql",
+        "//internal/generated/api/todo/v1/rest/api",
         "//third_party/go:emperror.dev__errors",
         "//third_party/go:github.com__99designs__gqlgen__graphql",
         "//third_party/go:github.com__go-kit__kit__endpoint",

@@ -6,7 +6,7 @@ import (
 	graphql2 "github.com/99designs/gqlgen/graphql"
 	kitxgraphql "github.com/sagikazarmark/kitx/transport/graphql"
 
-	"github.com/sagikazarmark/todobackend-go-kit/internal/generated/api/v1/graphql"
+	"github.com/sagikazarmark/todobackend-go-kit/internal/generated/api/todo/v1/graphql"
 	"github.com/sagikazarmark/todobackend-go-kit/todo"
 )
 

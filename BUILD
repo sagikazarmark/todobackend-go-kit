@@ -55,7 +55,7 @@ go_binary(
     visibility = ["PUBLIC"],
     deps = [
         "//api/todo/v1",
-        "//internal/generated/api/v1/graphql",
+        "//internal/generated/api/todo/v1/graphql",
         "//static",
         "//third_party/go:github.com__99designs__gqlgen__graphql__handler",
         "//third_party/go:github.com__go-kit__kit__transport__http",

@@ -9,11 +9,8 @@
 
 package api
 
-type UpdateTodoItemRequest struct {
-
-	Title *string `json:"title,omitempty"`
-
-	Completed *bool `json:"completed,omitempty"`
-
-	Order *int32 `json:"order,omitempty"`
+//Implementation response defines an error code with the associated body
+type ImplResponse struct {
+	Code int
+	Body interface{}
 }
