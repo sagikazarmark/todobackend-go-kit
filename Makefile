@@ -20,6 +20,10 @@ build: ## Build all binaries
 	@mkdir -p ${BUILD_DIR}
 	go build -trimpath -ldflags "${LDFLAGS}" -o ${BUILD_DIR}/ .
 
+.PHONY: run
+run: build ## Build and run the application
+	${BUILD_DIR}/todobackend-go-kit
+
 .PHONY: check
 check: test lint ## Run checks (tests and linters)
 

@@ -22,7 +22,11 @@ In addition to the [Todo-Backend](http://todobackend.com/) implementation, this 
 ## Development
 
 1. Clone the repository
-1. `./pleasew run cmd/todo`
+1. `make run`
+
+For the best developer experience, install [Nix](https://builtwithnix.org/) and [direnv](https://direnv.net/).
+
+Alternatively, install Go manually or using a package manager. Install the rest of the dependencies by running `make deps`.
 
 [Try the client](http://todobackend.com/client/index.html?http://localhost:8000/todos) or
 [run the tests](http://todobackend.com/specs/index.html?http://localhost:8000/todos) locally.
