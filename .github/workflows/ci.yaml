@@ -7,6 +7,25 @@ on:
   pull_request:
 
 jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Nix
+        uses: cachix/install-nix-action@v16
+        with:
+          extra_nix_config: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+
+      - name: Lint
+        run: nix develop -c make lint
+        env:
+          LINT_ARGS: --out-format=github-actions
+
   test:
     name: Test
     runs-on: ubuntu-latest
@@ -14,40 +33,20 @@ jobs:
       GOFLAGS: -mod=readonly
 
     steps:
-      - name: Set up Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: 1.16
-
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Please
-        uses: sagikazarmark/setup-please-action@v0
+      - name: Set up Nix
+        uses: cachix/install-nix-action@v16
+        with:
+          extra_nix_config: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
 
       - name: Test
-        run: plz cover //...
+        run: nix develop -c make test
 
-  lint:
-    name: Lint
-    runs-on: ubuntu-latest
-    env:
-      GOFLAGS: -mod=readonly
-
-    steps:
-      - name: Set up Go
-        uses: actions/setup-go@v2
+      - name: Annotate tests
+        uses: guyarb/golang-test-annotations@v0.5.0
+        if: always()
         with:
-          go-version: 1.16
-
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Please
-        uses: sagikazarmark/setup-please-action@v0
-
-      - name: Generate code
-        run: plz generate //...
-
-      - name: Lint
-        run: plz lint
+          test-results: build/test.json

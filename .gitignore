@@ -1,9 +1,5 @@
 /.direnv/
 /bin/
+/build/
 /tmp/
 /vendor/
-
-# Entries below this point are managed by Please (DO NOT EDIT)
-plz-out
-.plzconfig.local
-cmd/todo/bindata.go

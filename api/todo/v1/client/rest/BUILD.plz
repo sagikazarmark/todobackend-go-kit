@@ -1,9 +1,0 @@
-go_library(
-    name = "rest",
-    srcs = glob(
-        ["*.go"],
-        exclude = ["*_test.go"],
-    ),
-    visibility = ["PUBLIC"],
-    deps = ["//third_party/go:golang.org__x__oauth2"],
-)

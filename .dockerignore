@@ -1,6 +1,4 @@
 .github/
 bin/
 Dockerfile
-plz-out/
-.plzconfig.local
 tmp/
