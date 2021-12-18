@@ -12,6 +12,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 
 	todov1 "github.com/sagikazarmark/todobackend-go-kit/api/todo/v1"
 	"github.com/sagikazarmark/todobackend-go-kit/todo"
@@ -86,7 +87,7 @@ func givenAnEmptyTodoListGRPC(t gobdd.StepTest, ctx gobdd.Context) {
 
 	ctx.Set("server", server)
 
-	conn, err := grpc.Dial(l.Addr().String(), grpc.WithInsecure())
+	conn, err := grpc.Dial(l.Addr().String(), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		server.Stop()
 
