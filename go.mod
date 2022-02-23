@@ -3,7 +3,7 @@ module github.com/sagikazarmark/todobackend-go-kit
 go 1.17
 
 require (
-	emperror.dev/errors v0.8.0
+	emperror.dev/errors v0.8.1
 	github.com/99designs/gqlgen v0.14.0
 	github.com/go-bdd/gobdd v1.1.3
 	github.com/go-kit/kit v0.12.0
