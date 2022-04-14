@@ -46,7 +46,7 @@ jobs:
         run: nix develop -c make test
 
       - name: Annotate tests
-        uses: guyarb/golang-test-annotations@v0.5.0
+        uses: guyarb/golang-test-annotations@v0.5.1
         if: always()
         with:
           test-results: build/test.json
