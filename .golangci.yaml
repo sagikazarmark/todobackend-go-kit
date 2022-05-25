@@ -41,7 +41,7 @@ linters:
         - gosec
         - gosimple
         - govet
-        - ifshort
+        # - ifshort
         - ineffassign
         - lll
         - makezero
