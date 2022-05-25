@@ -22,14 +22,6 @@ dagger.#Plan & {
 	]
 	client: filesystem: "./build": write: contents: actions.build.debug.output
 	client: network: "unix:///var/run/docker.sock": connect: dagger.#Socket
-	client: env: {
-		DAGGER_LOG_FORMAT:      string | *"auto"
-		DAGGER_CACHE_FROM?:     string
-		DAGGER_CACHE_TO?:       string
-		GITHUB_ACTIONS?:        string
-		ACTIONS_RUNTIME_TOKEN?: string
-		ACTIONS_CACHE_URL?:     string
-	}
 
 	actions: {
 		_source: client.filesystem["."].read.contents
