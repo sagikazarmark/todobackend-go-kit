@@ -61,13 +61,13 @@ openapi: ## Generate go server based on openapi description
 	-o internal/generated/api/todo/v1/rest
 
 # Dependency versions
-GOTESTSUM_VERSION ?= 1.7.0
-GOLANGCI_VERSION ?= 1.43.0
-PROTOC_VERSION ?= 3.18.0
-PROTOC_GEN_GO_VERSION ?= 1.27.1
-PROTOC_GEN_GO_GRPC_VERSION ?= 1.1.0
+GOTESTSUM_VERSION ?= 1.8.0
+GOLANGCI_VERSION ?= 1.46.0
+PROTOC_VERSION ?= 3.19.4
+PROTOC_GEN_GO_VERSION ?= 1.28.0
+PROTOC_GEN_GO_GRPC_VERSION ?= 1.2.0
 PROTOC_GEN_KIT_VERSION ?= 0.3.0
-GQLGEN_VERSION ?= 0.14.0
+GQLGEN_VERSION ?= 0.17.8
 
 deps: bin/gotestsum bin/golangci-lint bin/protoc bin/protoc-gen-go bin/protoc-gen-go-grpc bin/gqlgen
 
