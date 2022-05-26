@@ -49,7 +49,7 @@
             ];
           };
 
-          buildDeps = with pkgs; [ git go_1_17 gnumake ];
+          buildDeps = with pkgs; [ git go_1_18 gnumake ];
           devDeps = with pkgs; buildDeps ++ [
             golangci-lint
             gotestsum

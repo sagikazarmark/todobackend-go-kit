@@ -1,4 +1,4 @@
-FROM golang:1.17-alpine3.14 AS builder
+FROM golang:1.18-alpine3.16 AS builder
 
 RUN apk add --update --no-cache ca-certificates make git curl
 
@@ -15,7 +15,7 @@ COPY . .
 RUN make build
 
 
-FROM alpine:3.15.4
+FROM alpine:3.16.0
 
 RUN apk add --update --no-cache ca-certificates tzdata bash curl
 
