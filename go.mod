@@ -16,7 +16,7 @@ require (
 	github.com/sagikazarmark/kitx v0.18.0
 	github.com/sagikazarmark/todobackend-go-kit/api v0.6.0
 	github.com/spf13/pflag v1.0.5
-	github.com/stretchr/testify v1.7.1
+	github.com/stretchr/testify v1.7.2
 	github.com/vektah/gqlparser/v2 v2.4.4
 	google.golang.org/grpc v1.46.2
 )
@@ -47,7 +47,7 @@ require (
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/genproto v0.0.0-20220525015930-6ca3db687a9d // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
-	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
 replace github.com/sagikazarmark/todobackend-go-kit/api => ./api
