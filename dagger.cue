@@ -11,6 +11,9 @@ import (
 	"universe.dagger.io/go"
 
 	"github.com/sagikazarmark/todobackend-go-kit/ci/golangci"
+	"github.com/sagikazarmark/todobackend-go-kit/ci/superlinter"
+	"github.com/sagikazarmark/todobackend-go-kit/ci/editorconfig"
+	dockerlint "github.com/sagikazarmark/todobackend-go-kit/ci/docker"
 )
 
 dagger.#Plan & {
@@ -92,6 +95,15 @@ dagger.#Plan & {
 				go: golangci.#Lint & {
 					source:  _source
 					version: "1.46"
+				}
+				"superlinter": superlinter.#Lint & {
+					source: _source
+				}
+				"editorconfig": editorconfig.#Lint & {
+					source: _source
+				}
+				"docker": dockerlint.#Lint & {
+					source: _source
 				}
 			}
 		}
