@@ -16,7 +16,7 @@ require (
 	github.com/sagikazarmark/kitx v0.18.0
 	github.com/sagikazarmark/todobackend-go-kit/api v0.6.0
 	github.com/spf13/pflag v1.0.5
-	github.com/stretchr/testify v1.7.2
+	github.com/stretchr/testify v1.7.5
 	github.com/vektah/gqlparser/v2 v2.4.4
 	google.golang.org/grpc v1.46.2
 )
