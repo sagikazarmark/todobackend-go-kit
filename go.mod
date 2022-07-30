@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	emperror.dev/errors v0.8.1
-	github.com/99designs/gqlgen v0.17.9
+	github.com/99designs/gqlgen v0.17.13
 	github.com/go-bdd/gobdd v1.1.3
 	github.com/go-kit/kit v0.12.0
 	github.com/golang/protobuf v1.5.2
@@ -17,7 +17,7 @@ require (
 	github.com/sagikazarmark/todobackend-go-kit/api v0.6.0
 	github.com/spf13/pflag v1.0.5
 	github.com/stretchr/testify v1.8.0
-	github.com/vektah/gqlparser/v2 v2.4.4
+	github.com/vektah/gqlparser/v2 v2.4.6
 	google.golang.org/grpc v1.48.0
 )
 
