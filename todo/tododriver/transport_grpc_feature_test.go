@@ -173,7 +173,7 @@ func itemMarkedAsCompleteGRPC(t gobdd.StepTest, ctx gobdd.Context) {
 
 	client := getGRPCClient(t, ctx)
 
-	_, err := client.UpdateItem(context.Background(), &todov1.UpdateItemRequest{Id: id, Completed: &wrappers.BoolValue{Value: true}}) // nolint: lll
+	_, err := client.UpdateItem(context.Background(), &todov1.UpdateItemRequest{Id: id, Completed: &wrappers.BoolValue{Value: true}}) //nolint: lll
 	require.NoError(t, err)
 }
 
