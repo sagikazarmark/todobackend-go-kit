@@ -35,16 +35,20 @@ lint: ## Run linter
 fmt: ## Format code
 	golangci-lint run --fix
 
+.PHONY: generate
+generate: proto graphql openapi
+generate: ## Run code generators
+
 .PHONY: proto
-proto:
+proto: ## Generate code from protobuf
 	protoc -I api/ --go_out=paths=source_relative:api/ --go-grpc_out=paths=source_relative:api/ --go-kit_out=paths=source_relative:api/ api/todo/v1/*.proto
 
 .PHONY: graphql
-graphql: ## Generate GraphQL code
+graphql: ## Generate code from GraphQL schema
 	go run github.com/99designs/gqlgen generate
 
 .PHONY: openapi
-openapi: ## Generate go server based on openapi description
+openapi: ## Generate go server based on OpenAPI description
 	openapi-generator-cli generate \
 	--additional-properties packageName=api \
 	--additional-properties sourceFolder=api \
@@ -60,9 +64,8 @@ PROTOC_VERSION ?= 3.19.4
 PROTOC_GEN_GO_VERSION ?= 1.28.1
 PROTOC_GEN_GO_GRPC_VERSION ?= 1.2.0
 PROTOC_GEN_GO_KIT_VERSION ?= 0.1.1
-GQLGEN_VERSION ?= 0.17.8
 
-deps: bin/gotestsum bin/golangci-lint bin/protoc bin/protoc-gen-go bin/protoc-gen-go-grpc bin/protoc-gen-go-kit bin/gqlgen
+deps: bin/gotestsum bin/golangci-lint bin/protoc bin/protoc-gen-go bin/protoc-gen-go-grpc bin/protoc-gen-go-kit
 
 bin/gotestsum:
 	@mkdir -p bin
@@ -98,10 +101,6 @@ bin/protoc-gen-go-kit:
 	@mkdir -p bin
 	curl -L https://github.com/sagikazarmark/protoc-gen-go-kit/releases/download/v${PROTOC_GEN_GO_KIT_VERSION}/protoc-gen-go-kit_$(shell uname | tr A-Z a-z)_amd64.tar.gz | tar -zOxf - protoc-gen-go-kit > ./bin/protoc-gen-go-kit
 	@chmod +x ./bin/protoc-gen-go-kit
-
-bin/gqlgen:
-	@mkdir -p bin
-	GOBIN=${PWD}/bin/ go install github.com/99designs/gqlgen@v${GQLGEN_VERSION}
 
 .PHONY: help
 .DEFAULT_GOAL := help
