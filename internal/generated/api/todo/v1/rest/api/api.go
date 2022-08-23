@@ -17,7 +17,7 @@ import (
 
 
 // TodoListApiRouter defines the required methods for binding the api requests to a responses for the TodoListApi
-// The TodoListApiRouter implementation should parse necessary information from the http request, 
+// The TodoListApiRouter implementation should parse necessary information from the http request,
 // pass the data to a TodoListApiServicer to perform the required actions, then write the service results to the http response.
 type TodoListApiRouter interface { 
 	AddItem(http.ResponseWriter, *http.Request)
@@ -30,8 +30,8 @@ type TodoListApiRouter interface {
 
 
 // TodoListApiServicer defines the api actions for the TodoListApi service
-// This interface intended to stay up to date with the openapi yaml used to generate it, 
-// while the service implementation can ignored with the .openapi-generator-ignore file 
+// This interface intended to stay up to date with the openapi yaml used to generate it,
+// while the service implementation can be ignored with the .openapi-generator-ignore file
 // and updated with the logic required for the API.
 type TodoListApiServicer interface { 
 	AddItem(context.Context, AddTodoItemRequest) (ImplResponse, error)

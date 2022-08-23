@@ -15,8 +15,8 @@ import (
 	"errors"
 )
 
-// TodoListApiService is a service that implents the logic for the TodoListApiServicer
-// This service should implement the business logic for every endpoint for the TodoListApi API. 
+// TodoListApiService is a service that implements the logic for the TodoListApiServicer
+// This service should implement the business logic for every endpoint for the TodoListApi API.
 // Include any external packages or services that will be required by this service.
 type TodoListApiService struct {
 }
@@ -121,4 +121,3 @@ func (s *TodoListApiService) UpdateItem(ctx context.Context, id string, updateTo
 
 	return Response(http.StatusNotImplemented, nil), errors.New("UpdateItem method not implemented")
 }
-

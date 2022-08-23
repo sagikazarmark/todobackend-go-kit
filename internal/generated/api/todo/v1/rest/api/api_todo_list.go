@@ -47,7 +47,7 @@ func NewTodoListApiController(s TodoListApiServicer, opts ...TodoListApiOption) 
 	return controller
 }
 
-// Routes returns all of the api route for the TodoListApiController
+// Routes returns all the api routes for the TodoListApiController
 func (c *TodoListApiController) Routes() Routes {
 	return Routes{ 
 		{
@@ -91,18 +91,18 @@ func (c *TodoListApiController) Routes() Routes {
 
 // AddItem - Add a new item to the list
 func (c *TodoListApiController) AddItem(w http.ResponseWriter, r *http.Request) {
-	addTodoItemRequest := AddTodoItemRequest{}
+	addTodoItemRequestParam := AddTodoItemRequest{}
 	d := json.NewDecoder(r.Body)
 	d.DisallowUnknownFields()
-	if err := d.Decode(&addTodoItemRequest); err != nil {
+	if err := d.Decode(&addTodoItemRequestParam); err != nil {
 		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
 		return
 	}
-	if err := AssertAddTodoItemRequestRequired(addTodoItemRequest); err != nil {
+	if err := AssertAddTodoItemRequestRequired(addTodoItemRequestParam); err != nil {
 		c.errorHandler(w, r, err, nil)
 		return
 	}
-	result, err := c.service.AddItem(r.Context(), addTodoItemRequest)
+	result, err := c.service.AddItem(r.Context(), addTodoItemRequestParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
 		c.errorHandler(w, r, err, &result)
@@ -116,9 +116,9 @@ func (c *TodoListApiController) AddItem(w http.ResponseWriter, r *http.Request) 
 // DeleteItem - Delete an item
 func (c *TodoListApiController) DeleteItem(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	id := params["id"]
+	idParam := params["id"]
 	
-	result, err := c.service.DeleteItem(r.Context(), id)
+	result, err := c.service.DeleteItem(r.Context(), idParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
 		c.errorHandler(w, r, err, &result)
@@ -145,9 +145,9 @@ func (c *TodoListApiController) DeleteItems(w http.ResponseWriter, r *http.Reque
 // GetItem - Get an item
 func (c *TodoListApiController) GetItem(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	id := params["id"]
+	idParam := params["id"]
 	
-	result, err := c.service.GetItem(r.Context(), id)
+	result, err := c.service.GetItem(r.Context(), idParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
 		c.errorHandler(w, r, err, &result)
@@ -174,20 +174,20 @@ func (c *TodoListApiController) ListItems(w http.ResponseWriter, r *http.Request
 // UpdateItem - Update an existing item
 func (c *TodoListApiController) UpdateItem(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	id := params["id"]
+	idParam := params["id"]
 	
-	updateTodoItemRequest := UpdateTodoItemRequest{}
+	updateTodoItemRequestParam := UpdateTodoItemRequest{}
 	d := json.NewDecoder(r.Body)
 	d.DisallowUnknownFields()
-	if err := d.Decode(&updateTodoItemRequest); err != nil {
+	if err := d.Decode(&updateTodoItemRequestParam); err != nil {
 		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
 		return
 	}
-	if err := AssertUpdateTodoItemRequestRequired(updateTodoItemRequest); err != nil {
+	if err := AssertUpdateTodoItemRequestRequired(updateTodoItemRequestParam); err != nil {
 		c.errorHandler(w, r, err, nil)
 		return
 	}
-	result, err := c.service.UpdateItem(r.Context(), id, updateTodoItemRequest)
+	result, err := c.service.UpdateItem(r.Context(), idParam, updateTodoItemRequestParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
 		c.errorHandler(w, r, err, &result)

@@ -9,7 +9,7 @@
 
 package api
 
-//Implementation response defines an error code with the associated body
+// ImplResponse response defines an error code with the associated body
 type ImplResponse struct {
 	Code int
 	Body interface{}
