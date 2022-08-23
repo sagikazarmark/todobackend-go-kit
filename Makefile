@@ -48,7 +48,7 @@ proto:
 
 .PHONY: graphql
 graphql: ## Generate GraphQL code
-	gqlgen
+	go run github.com/99designs/gqlgen generate
 
 .PHONY: openapi
 openapi: ## Generate go server based on openapi description
