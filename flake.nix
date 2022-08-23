@@ -57,7 +57,7 @@
             protobuf
             protoc-gen-go
             protoc-gen-go-grpc
-            protoc-gen-kit
+            protoc-gen-go-kit
             # gqlgen
             openapi-generator-cli
             dagger
