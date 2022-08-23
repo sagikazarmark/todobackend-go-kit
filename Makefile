@@ -62,14 +62,14 @@ openapi: ## Generate go server based on openapi description
 
 # Dependency versions
 GOTESTSUM_VERSION ?= 1.8.0
-GOLANGCI_VERSION ?= 1.46.0
+GOLANGCI_VERSION ?= 1.48.0
 PROTOC_VERSION ?= 3.19.4
-PROTOC_GEN_GO_VERSION ?= 1.28.0
+PROTOC_GEN_GO_VERSION ?= 1.28.1
 PROTOC_GEN_GO_GRPC_VERSION ?= 1.2.0
-PROTOC_GEN_KIT_VERSION ?= 0.3.0
+PROTOC_GEN_GO_KIT_VERSION ?= 0.1.1
 GQLGEN_VERSION ?= 0.17.8
 
-deps: bin/gotestsum bin/golangci-lint bin/protoc bin/protoc-gen-go bin/protoc-gen-go-grpc bin/gqlgen
+deps: bin/gotestsum bin/golangci-lint bin/protoc bin/protoc-gen-go bin/protoc-gen-go-grpc bin/protoc-gen-go-kit bin/gqlgen
 
 bin/gotestsum:
 	@mkdir -p bin
@@ -101,10 +101,10 @@ bin/protoc-gen-go-grpc:
 	curl -L https://github.com/grpc/grpc-go/releases/download/cmd/protoc-gen-go-grpc/v${PROTOC_GEN_GO_GRPC_VERSION}/protoc-gen-go-grpc.v${PROTOC_GEN_GO_GRPC_VERSION}.$(shell uname | tr A-Z a-z).amd64.tar.gz | tar -zOxf - ./protoc-gen-go-grpc > ./bin/protoc-gen-go-grpc
 	@chmod +x ./bin/protoc-gen-go-grpc
 
-bin/protoc-gen-kit:
+bin/protoc-gen-go-kit:
 	@mkdir -p bin
-	curl -L https://github.com/sagikazarmark/protoc-gen-kit/releases/download/v${PROTOC_GEN_KIT_VERSION}/protoc-gen-kit_$(shell uname | tr A-Z a-z)_amd64.tar.gz | tar -zOxf - protoc-gen-kit > ./bin/protoc-gen-kit
-	@chmod +x ./bin/protoc-gen-kit
+	curl -L https://github.com/sagikazarmark/protoc-gen-go-kit/releases/download/v${PROTOC_GEN_GO_KIT_VERSION}/protoc-gen-go-kit_$(shell uname | tr A-Z a-z)_amd64.tar.gz | tar -zOxf - protoc-gen-go-kit > ./bin/protoc-gen-go-kit
+	@chmod +x ./bin/protoc-gen-go-kit
 
 bin/gqlgen:
 	@mkdir -p bin
