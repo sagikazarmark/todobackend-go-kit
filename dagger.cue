@@ -25,11 +25,11 @@ dagger.#Plan & {
 	actions: {
 		_source: client.filesystem["."].read.contents
 
-		build: {
-			_goImage: go.#Image & {
-				version: "1.19"
-			}
+		_goImage: go.#Image & {
+			version: "1.19"
+		}
 
+		build: {
 			debug: go.#Build & {
 				source:  _source
 				image:   _goImage.output
