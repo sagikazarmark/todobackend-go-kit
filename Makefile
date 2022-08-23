@@ -31,8 +31,8 @@ test: ## Run tests
 lint: ## Run linter
 	golangci-lint run ${LINT_ARGS}
 
-.PHONY: fix
-fix: ## Fix lint violations
+.PHONY: fmt
+fmt: ## Format code
 	golangci-lint run --fix
 
 .PHONY: proto
