@@ -77,7 +77,7 @@ func givenAnEmptyTodoListRest(_ gobdd.StepTest, ctx gobdd.Context) {
 func addAnItemRest(t gobdd.StepTest, ctx gobdd.Context, title string) {
 	client := getRestClient(t, ctx)
 
-	item, _, err := client.TodoListApi.AddItem(context.Background()).AddTodoItemRequest(todov1.AddTodoItemRequest{Title: title}).Execute() // nolint: lll
+	item, _, err := client.TodoListApi.AddItem(context.Background()).AddTodoItemRequest(todov1.AddTodoItemRequest{Title: title}).Execute() //nolint: lll
 	require.NoError(t, err)
 
 	ctx.Set("id", item.Id)
@@ -148,7 +148,7 @@ func itemMarkedAsCompleteRest(t gobdd.StepTest, ctx gobdd.Context) {
 
 	completed := true
 
-	_, _, err := client.TodoListApi.UpdateItem(context.Background(), id).UpdateTodoItemRequest(todov1.UpdateTodoItemRequest{Completed: *todov1.NewNullableBool(&completed)}).Execute() // nolint: lll
+	_, _, err := client.TodoListApi.UpdateItem(context.Background(), id).UpdateTodoItemRequest(todov1.UpdateTodoItemRequest{Completed: *todov1.NewNullableBool(&completed)}).Execute() //nolint: lll
 	require.NoError(t, err)
 }
 

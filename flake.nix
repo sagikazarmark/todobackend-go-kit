@@ -19,10 +19,19 @@
 
             overlays = [
               goflake.overlay
+
+              # Required until golangci-lint is built with Go 1.19
+              (
+                final: prev: {
+                  golangci-lint = prev.golangci-lint.override {
+                    buildGoModule = final.buildGo119Module;
+                  };
+                }
+              )
             ];
           };
 
-          buildDeps = with pkgs; [ git go_1_18 gnumake ];
+          buildDeps = with pkgs; [ git go_1_19 gnumake ];
           devDeps = with pkgs; buildDeps ++ [
             golangci-lint
             gotestsum

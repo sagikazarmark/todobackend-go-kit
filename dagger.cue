@@ -26,8 +26,13 @@ dagger.#Plan & {
 		_source: client.filesystem["."].read.contents
 
 		build: {
+			_goImage: go.#Image & {
+				version: "1.19"
+			}
+
 			debug: go.#Build & {
 				source:  _source
+				image:   _goImage.output
 				package: "."
 				os:      *client.platform.os | "linux"
 				arch:    client.platform.arch
@@ -42,6 +47,7 @@ dagger.#Plan & {
 
 				[platform=string]: go.#Build & {
 					source:  _source
+					image:   _goImage.output
 					package: "."
 					os:      strings.Split(platform, "/")[0]
 					arch:    strings.Split(platform, "/")[1]
@@ -81,6 +87,7 @@ dagger.#Plan & {
 				// Go unit tests
 				unit: go.#Test & {
 					source:  _source
+					image:   _goImage.output
 					package: "./..."
 
 					command: flags: "-race": true
@@ -91,7 +98,7 @@ dagger.#Plan & {
 				go: golangci.#Lint & {
 					source: _source
 					_image: golangci.#Image & {
-						tag: "v1.46"
+						tag: "v1.48"
 					}
 					image: _image.output
 				}

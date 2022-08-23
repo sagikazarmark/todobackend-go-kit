@@ -10,6 +10,7 @@ import (
 	"os"
 	"strings"
 	"syscall"
+	"time"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	kithttp "github.com/go-kit/kit/transport/http"
@@ -28,7 +29,8 @@ import (
 )
 
 // Provisioned by ldflags
-// nolint: gochecknoglobals
+//
+//nolint:gochecknoglobals
 var (
 	version    string
 	commitHash string
@@ -97,8 +99,9 @@ func main() {
 	)
 
 	httpServer := &http.Server{
-		Addr:    *httpAddr,
-		Handler: cors(router),
+		Addr:              *httpAddr,
+		ReadHeaderTimeout: 30 * time.Second,
+		Handler:           cors(router),
 	}
 
 	log.Println("listening on", *httpAddr)
