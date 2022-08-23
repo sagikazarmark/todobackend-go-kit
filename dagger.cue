@@ -6,11 +6,10 @@ import (
 	"dagger.io/dagger"
 
 	"universe.dagger.io/alpine"
+	"universe.dagger.io/alpha/go/golangci"
 	"universe.dagger.io/docker"
 	"universe.dagger.io/docker/cli"
 	"universe.dagger.io/go"
-
-	"github.com/sagikazarmark/todobackend-go-kit/ci/golangci"
 )
 
 dagger.#Plan & {
@@ -90,8 +89,11 @@ dagger.#Plan & {
 
 			lint: {
 				go: golangci.#Lint & {
-					source:  _source
-					version: "1.46"
+					source: _source
+					_image: golangci.#Image & {
+						tag: "v1.46"
+					}
+					image: _image.output
 				}
 			}
 		}
