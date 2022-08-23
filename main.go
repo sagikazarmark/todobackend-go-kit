@@ -8,6 +8,7 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"runtime/debug"
 	"strings"
 	"syscall"
 	"time"
@@ -31,11 +32,7 @@ import (
 // Provisioned by ldflags
 //
 //nolint:gochecknoglobals
-var (
-	version    string
-	commitHash string
-	buildDate  string
-)
+var version string
 
 func main() {
 	flags := pflag.NewFlagSet("Go kit TodoBackend", pflag.ExitOnError)
@@ -46,7 +43,23 @@ func main() {
 
 	_ = flags.Parse(os.Args[1:])
 
-	log.Println("starting application version", version, fmt.Sprintf("(%s)", commitHash), "built on", buildDate)
+	// TODO: write a package for getting build info
+	buildInfo, _ := debug.ReadBuildInfo()
+
+	revision := "unknown"
+	buildDate := "unknown"
+
+	for _, setting := range buildInfo.Settings {
+		if setting.Key == "vcs.revision" {
+			revision = setting.Value
+		}
+
+		if setting.Key == "vcs.time" {
+			buildDate = setting.Value
+		}
+	}
+
+	log.Println("starting application version", version, fmt.Sprintf("(%s)", revision[:8]), "built on", buildDate)
 
 	todoURL := *publicURL + "/todos"
 

@@ -5,14 +5,7 @@ export PATH := $(abspath bin/protoc/bin/):$(abspath bin/):${PATH}
 # Build variables
 BUILD_DIR ?= build
 VERSION ?= $(shell git describe --tags --exact-match 2>/dev/null || git symbolic-ref -q --short HEAD)
-COMMIT_HASH ?= $(shell git rev-parse --short HEAD 2>/dev/null)
-DATE_FMT = +%FT%T%z
-ifdef SOURCE_DATE_EPOCH
-    BUILD_DATE ?= $(shell date -u -d "@$(SOURCE_DATE_EPOCH)" "$(DATE_FMT)" 2>/dev/null || date -u -r "$(SOURCE_DATE_EPOCH)" "$(DATE_FMT)" 2>/dev/null || date -u "$(DATE_FMT)")
-else
-    BUILD_DATE ?= $(shell date "$(DATE_FMT)")
-endif
-LDFLAGS += -X main.version=${VERSION} -X main.commitHash=${COMMIT_HASH} -X main.buildDate=${BUILD_DATE}
+LDFLAGS += -X main.version=${VERSION}
 export CGO_ENABLED ?= 0
 
 .PHONY: build
