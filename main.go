@@ -29,9 +29,7 @@ import (
 	"github.com/sagikazarmark/todobackend-go-kit/todo/tododriver"
 )
 
-// Provisioned by ldflags
-//
-//nolint:gochecknoglobals
+// Provisioned by ldflags.
 var version string
 
 func main() {
