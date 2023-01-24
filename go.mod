@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	emperror.dev/errors v0.8.1
-	github.com/99designs/gqlgen v0.17.22
+	github.com/99designs/gqlgen v0.17.24
 	github.com/go-bdd/gobdd v1.1.3
 	github.com/go-kit/kit v0.12.0
 	github.com/golang/protobuf v1.5.2
