@@ -15,7 +15,7 @@ COPY . .
 RUN make build
 
 
-FROM alpine:3.17.1
+FROM alpine:3.17.3
 
 RUN apk add --update --no-cache ca-certificates tzdata bash curl
 
