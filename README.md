@@ -1,6 +1,6 @@
 # Todo-Backend: Go kit
 
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/sagikazarmark/todobackend-go-kit/CI?style=flat-square)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/sagikazarmark/todobackend-go-kit/ci.yaml?style=flat-square)
 [![Go Report Card](https://goreportcard.com/badge/github.com/sagikazarmark/todobackend-go-kit?style=flat-square)](https://goreportcard.com/report/github.com/sagikazarmark/todobackend-go-kit)
 [![go.dev reference](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white&style=flat-square)](https://pkg.go.dev/mod/github.com/sagikazarmark/todobackend-go-kit)
 
