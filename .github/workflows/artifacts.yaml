@@ -2,10 +2,8 @@ name: Artifacts
 
 on:
   push:
-    branches:
-      - master
-    tags:
-      - v[0-9]+.[0-9]+.[0-9]+
+    branches: [main]
+    tags: ["v[0-9]+.[0-9]+.[0-9]+"]
   pull_request:
 
 jobs:
