@@ -1,4 +1,6 @@
+.direnv/
 .github/
 bin/
+build/
 Dockerfile
 tmp/

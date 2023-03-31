@@ -1,7 +1,6 @@
 run:
     skip-dirs:
-        - .gen
-        - .generated
+        - internal/generated
 
     skip-files:
         - ".*_gen\\.go$"
@@ -9,7 +8,10 @@ run:
 
 linters-settings:
     gci:
-        local-prefixes: github.com/sagikazarmark/todobackend-go-kit
+        sections:
+          - standard
+          - default
+          - prefix(github.com/sagikazarmark/todobackend-go-kit)
     goimports:
         local-prefixes: github.com/sagikazarmark/todobackend-go-kit
     golint:
@@ -19,7 +21,6 @@ linters:
     disable-all: true
     enable:
         - bodyclose
-        - deadcode
         - dogsled
         - dupl
         - errcheck
@@ -57,7 +58,6 @@ linters:
         - rowserrcheck
         - sqlclosecheck
         - staticcheck
-        - structcheck
         - stylecheck
         - thelper
         - tparallel
@@ -65,7 +65,6 @@ linters:
         - unconvert
         - unparam
         - unused
-        - varcheck
         - wastedassign
         - whitespace
 

@@ -4,7 +4,7 @@ package graphql
 
 type TodoItemUpdate struct {
 	ID        string  `json:"id"`
-	Title     *string `json:"title"`
-	Completed *bool   `json:"completed"`
-	Order     *int    `json:"order"`
+	Title     *string `json:"title,omitempty"`
+	Completed *bool   `json:"completed,omitempty"`
+	Order     *int    `json:"order,omitempty"`
 }

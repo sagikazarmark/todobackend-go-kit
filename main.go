@@ -8,7 +8,6 @@ import (
 	"net"
 	"net/http"
 	"os"
-	"runtime/debug"
 	"strings"
 	"syscall"
 	"time"
@@ -29,9 +28,6 @@ import (
 	"github.com/sagikazarmark/todobackend-go-kit/todo/tododriver"
 )
 
-// Provisioned by ldflags.
-var version string
-
 func main() {
 	flags := pflag.NewFlagSet("Go kit TodoBackend", pflag.ExitOnError)
 
@@ -41,23 +37,7 @@ func main() {
 
 	_ = flags.Parse(os.Args[1:])
 
-	// TODO: write a package for getting build info
-	buildInfo, _ := debug.ReadBuildInfo()
-
-	revision := "unknown"
-	buildDate := "unknown"
-
-	for _, setting := range buildInfo.Settings {
-		if setting.Key == "vcs.revision" {
-			revision = setting.Value
-		}
-
-		if setting.Key == "vcs.time" {
-			buildDate = setting.Value
-		}
-	}
-
-	log.Println("starting application version", version, fmt.Sprintf("(%s)", revision[:8]), "built on", buildDate)
+	log.Println("starting application version", version, fmt.Sprintf("(%s)", revision[:8]), "built on", revisionDate)
 
 	todoURL := *publicURL + "/todos"
 
