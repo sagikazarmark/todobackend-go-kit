@@ -30,13 +30,20 @@
               gnumake
               golangci-lint
               gotestsum
-              goreleaser
               protobuf
               protoc-gen-go
               protoc-gen-go-grpc
               protoc-gen-go-kit
               openapi-generator-cli
             ];
+
+            shellHook = ''
+              go version
+              golangci-lint --version
+              gotestsum --version
+              protoc --version
+              openapi-generator-cli --version | head -1
+            '';
           };
 
           ci = devShells.default;
