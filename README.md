@@ -8,8 +8,8 @@ A simple [Todo-Backend](http://todobackend.com/) application written using [Go k
 
 *Code extracted from [Modern Go Application](https://github.com/sagikazarmark/modern-go-application/tree/558c8cf1844fd76399f1e086b4df1385bf6ea439).*
 
-[Try the client](http://todobackend.com/client/index.html?https://todobackend-go-kit.herokuapp.com/todos) or
-[run the tests](http://todobackend.com/specs/index.html?https://todobackend-go-kit.herokuapp.com/todos).
+[Try the client](http://todobackend.com/client/index.html?https://todobackend-go-kit.fly.dev/todos) or
+[run the tests](http://todobackend.com/specs/index.html?https://todobackend-go-kit.fly.dev/todos).
 
 In addition to the [Todo-Backend](http://todobackend.com/) implementation, this project comes with:
 
