@@ -22,11 +22,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1680657707,
-        "narHash": "sha256-winJB3m8KRt3yFOOCGGwNRI32d/d5oH/zIA99OgJM6I=",
+        "lastModified": 1680659771,
+        "narHash": "sha256-5Gli0PdnZh2rUQTDapyz0pDG+yzRq5AAPoMpZkdMaGQ=",
         "owner": "sagikazarmark",
         "repo": "go-flake",
-        "rev": "9b11a309602d5810d7aa006bde175edb24b833ee",
+        "rev": "1a32d77792361575b617f7e52f107273ef4ba723",
         "type": "github"
       },
       "original": {
