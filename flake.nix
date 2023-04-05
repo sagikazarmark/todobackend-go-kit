@@ -9,8 +9,7 @@
   };
 
   outputs = { self, nixpkgs, flake-utils, goflake, ... }:
-    flake-utils.lib.eachDefaultSystem (
-      system:
+    flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs {
           inherit system;
