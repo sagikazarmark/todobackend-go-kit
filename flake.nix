@@ -45,7 +45,16 @@
             '';
           };
 
-          ci = devShells.default;
+          ci = devShells.default.overrideAttrs (final: prev: {
+            buildInputs = prev.buildInputs ++ (with pkgs; [
+              flyctl
+            ]);
+
+            shellHook = ''
+              ${prev.shellHook}
+              flyctl version
+            '';
+          });
         };
       }
     );

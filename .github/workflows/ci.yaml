@@ -24,6 +24,9 @@ jobs:
           extra_nix_config: |
             access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
 
+      - name: Prepare Nix shell
+        run: echo
+
       - name: Test
         run: make test
 
@@ -46,6 +49,9 @@ jobs:
         with:
           extra_nix_config: |
             access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+
+      - name: Prepare Nix shell
+        run: echo
 
       - name: Lint
         run: make lint

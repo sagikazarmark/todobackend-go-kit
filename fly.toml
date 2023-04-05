@@ -1,0 +1,32 @@
+# fly.toml file generated for todobackend-go-kit on 2023-04-05T10:33:32+02:00
+
+app = "todobackend-go-kit"
+kill_signal = "SIGINT"
+kill_timeout = 5
+mounts = []
+primary_region = "waw"
+processes = []
+
+[build]
+  image = "ghcr.io/sagikazarmark/todobackend-go-kit:latest"
+
+[env]
+  PUBLIC_URL = "https://todobackend-go-kit.fly.dev"
+
+[[services]]
+  internal_port = 8000
+  processes = ["app"]
+  protocol = "tcp"
+  [services.concurrency]
+    hard_limit = 25
+    soft_limit = 20
+    type = "connections"
+
+  [[services.ports]]
+    force_https = true
+    handlers = ["http"]
+    port = 80
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 443
