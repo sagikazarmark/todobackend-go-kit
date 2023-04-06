@@ -41,7 +41,8 @@ generate: ## Run code generators
 
 .PHONY: proto
 proto: ## Generate code from protobuf
-	protoc -I api/ --go_out=paths=source_relative:api/ --go-grpc_out=paths=source_relative:api/ --go-kit_out=paths=source_relative:api/ api/todo/v1/*.proto
+	buf generate
+	# protoc -I api/ --go_out=paths=source_relative:api/ --go-grpc_out=paths=source_relative:api/ --go-kit_out=paths=source_relative:api/ api/todo/v1/*.proto
 
 .PHONY: graphql
 graphql: ## Generate code from GraphQL schema
