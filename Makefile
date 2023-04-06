@@ -53,6 +53,9 @@ openapi: ## Generate go server based on OpenAPI description
 	--additional-properties packageName=api \
 	--additional-properties sourceFolder=api \
 	--additional-properties withGoCodegenComment=true \
+	--additional-properties router=chi \
+	--additional-properties outputAsLibrary=true \
+	--additional-properties onlyInterfaces=true \
 	-i api/todo/v1/openapi.yaml \
 	-g go-server \
 	-o internal/generated/api/todo/v1/rest

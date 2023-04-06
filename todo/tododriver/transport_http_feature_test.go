@@ -6,8 +6,8 @@ import (
 	"testing"
 
 	"github.com/go-bdd/gobdd"
+	"github.com/go-chi/chi/v5"
 	"github.com/goph/idgen/ulidgen"
-	"github.com/gorilla/mux"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -55,9 +55,9 @@ func givenAnEmptyTodoListRest(_ gobdd.StepTest, ctx gobdd.Context) {
 	service := todo.NewService(ulidgen.NewGenerator(), store)
 	endpoints := tododriver.MakeEndpoints(service)
 
-	router := mux.NewRouter()
+	router := chi.NewRouter()
 
-	tododriver.RegisterHTTPHandlers(endpoints, router.PathPrefix("/todos").Subrouter())
+	router.Mount("/todos", tododriver.MakeHTTPHandler(endpoints))
 
 	server := httptest.NewServer(router)
 
