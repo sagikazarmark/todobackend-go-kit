@@ -4,11 +4,4 @@
 # Use this file to prevent files from being overwritten by the generator.
 # The patterns follow closely to .gitignore or .dockerignore.
 
-# api/*
-!api/error.go
-!api/helpers.go
-!api/model_*.go
-Dockerfile
-go.mod
-main.go
 README.md

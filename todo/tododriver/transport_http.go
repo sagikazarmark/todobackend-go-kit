@@ -7,8 +7,8 @@ import (
 	"net/http"
 
 	"emperror.dev/errors"
+	"github.com/go-chi/chi/v5"
 	kithttp "github.com/go-kit/kit/transport/http"
-	"github.com/gorilla/mux"
 	appkithttp "github.com/sagikazarmark/appkit/transport/http"
 	kitxhttp "github.com/sagikazarmark/kitx/transport/http"
 
@@ -22,51 +22,54 @@ const (
 	ContextKeyBaseURL contextKey = iota
 )
 
-// RegisterHTTPHandlers mounts all of the service endpoints into a router.
-func RegisterHTTPHandlers(endpoints Endpoints, router *mux.Router, options ...kithttp.ServerOption) {
+// MakeHTTPHandler mounts all of the service endpoints into an {http.Handler}.
+func MakeHTTPHandler(endpoints Endpoints, options ...kithttp.ServerOption) http.Handler {
+	router := chi.NewRouter()
 	errorEncoder := kitxhttp.NewJSONProblemErrorResponseEncoder(appkithttp.NewDefaultProblemConverter())
 
-	router.Methods(http.MethodPost).Path("").Handler(kithttp.NewServer(
+	router.Method(http.MethodPost, "/", kithttp.NewServer(
 		endpoints.AddItem,
 		decodeAddItemHTTPRequest,
 		kitxhttp.ErrorResponseEncoder(encodeAddItemHTTPResponse, errorEncoder),
 		options...,
 	))
 
-	router.Methods(http.MethodGet).Path("").Handler(kithttp.NewServer(
+	router.Method(http.MethodGet, "/", kithttp.NewServer(
 		endpoints.ListItems,
 		kithttp.NopRequestDecoder,
 		kitxhttp.ErrorResponseEncoder(encodeListItemsHTTPResponse, errorEncoder),
 		options...,
 	))
 
-	router.Methods(http.MethodDelete).Path("").Handler(kithttp.NewServer(
+	router.Method(http.MethodDelete, "/", kithttp.NewServer(
 		endpoints.DeleteItems,
 		kithttp.NopRequestDecoder,
 		kitxhttp.ErrorResponseEncoder(kitxhttp.StatusCodeResponseEncoder(http.StatusNoContent), errorEncoder),
 		options...,
 	))
 
-	router.Methods(http.MethodGet).Path("/{id}").Handler(kithttp.NewServer(
+	router.Method(http.MethodGet, "/{id}", kithttp.NewServer(
 		endpoints.GetItem,
 		decodeGetItemHTTPRequest,
 		kitxhttp.ErrorResponseEncoder(encodeGetItemHTTPResponse, errorEncoder),
 		options...,
 	))
 
-	router.Methods(http.MethodPatch).Path("/{id}").Handler(kithttp.NewServer(
+	router.Method(http.MethodPatch, "/{id}", kithttp.NewServer(
 		endpoints.UpdateItem,
 		decodeUpdateItemHTTPRequest,
 		kitxhttp.ErrorResponseEncoder(encodeUpdateItemHTTPResponse, errorEncoder),
 		options...,
 	))
 
-	router.Methods(http.MethodDelete).Path("/{id}").Handler(kithttp.NewServer(
+	router.Method(http.MethodDelete, "/{id}", kithttp.NewServer(
 		endpoints.DeleteItem,
 		decodeDeleteItemHTTPRequest,
 		kitxhttp.ErrorResponseEncoder(kitxhttp.StatusCodeResponseEncoder(http.StatusNoContent), errorEncoder),
 		options...,
 	))
+
+	return router
 }
 
 func decodeAddItemHTTPRequest(_ context.Context, r *http.Request) (interface{}, error) {
@@ -186,10 +189,8 @@ func marshalItemHTTP(ctx context.Context, item todo.Item) api.TodoItem {
 }
 
 func getIDParamFromRequest(r *http.Request) (string, error) {
-	vars := mux.Vars(r)
-
-	id, ok := vars["id"]
-	if !ok || id == "" {
+	id := chi.URLParam(r, "id")
+	if id == "" {
 		return "", errors.NewWithDetails("missing parameter from the URL", "param", "id")
 	}
 

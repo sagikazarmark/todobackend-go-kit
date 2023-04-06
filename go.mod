@@ -6,11 +6,11 @@ require (
 	emperror.dev/errors v0.8.1
 	github.com/99designs/gqlgen v0.17.28
 	github.com/go-bdd/gobdd v1.1.3
+	github.com/go-chi/chi/v5 v5.0.8
+	github.com/go-chi/cors v1.2.1
 	github.com/go-kit/kit v0.12.0
 	github.com/golang/protobuf v1.5.3
 	github.com/goph/idgen v0.4.0
-	github.com/gorilla/handlers v1.5.1
-	github.com/gorilla/mux v1.8.0
 	github.com/oklog/run v1.1.0
 	github.com/sagikazarmark/appkit v0.14.0
 	github.com/sagikazarmark/kitx v0.18.0
@@ -27,7 +27,6 @@ require (
 	github.com/cucumber/gherkin-go/v13 v13.0.0 // indirect
 	github.com/cucumber/messages-go/v12 v12.0.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/felixge/httpsnoop v1.0.3 // indirect
 	github.com/go-kit/log v0.2.1 // indirect
 	github.com/go-logfmt/logfmt v0.5.1 // indirect
 	github.com/gofrs/uuid v3.2.0+incompatible // indirect

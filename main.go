@@ -13,10 +13,11 @@ import (
 	"time"
 
 	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/99designs/gqlgen/graphql/playground"
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/cors"
 	kithttp "github.com/go-kit/kit/transport/http"
 	"github.com/goph/idgen/ulidgen"
-	"github.com/gorilla/handlers"
-	"github.com/gorilla/mux"
 	"github.com/oklog/run"
 	"github.com/spf13/pflag"
 	"google.golang.org/grpc"
@@ -41,7 +42,13 @@ func main() {
 
 	todoURL := *publicURL + "/todos"
 
-	router := mux.NewRouter()
+	router := chi.NewRouter()
+
+	router.Use(cors.Handler(cors.Options{
+		AllowedOrigins: []string{"https://*", "http://*"},
+		AllowedMethods: []string{http.MethodGet, http.MethodPost, http.MethodPatch, http.MethodDelete},
+		AllowedHeaders: []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+	}))
 
 	grpcServer := grpc.NewServer()
 
@@ -55,7 +62,7 @@ func main() {
 
 		body := []byte(r.Replace(string(index)))
 
-		router.Methods(http.MethodGet).Path("/").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		router.Get("/", func(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Content-Type", "text/html")
 			w.WriteHeader(http.StatusOK)
 
@@ -68,31 +75,25 @@ func main() {
 		service := todo.NewService(ulidgen.NewGenerator(), store)
 		endpoints := tododriver.MakeEndpoints(service)
 
-		tododriver.RegisterHTTPHandlers(
+		router.Mount("/todos", tododriver.MakeHTTPHandler(
 			endpoints,
-			router.PathPrefix("/todos").Subrouter(),
 			kithttp.ServerBefore(func(ctx context.Context, request *http.Request) context.Context {
 				return context.WithValue(ctx, tododriver.ContextKeyBaseURL, todoURL)
 			}),
-		)
+		))
 		todov1.RegisterTodoListServiceServer(grpcServer, tododriver.MakeGRPCServer(endpoints))
-		router.PathPrefix("/graphql").Handler(handler.NewDefaultServer(
+		router.Handle("/graphql/playground", playground.Handler("GraphQL playground", "/graphql/query"))
+		router.Handle("/graphql/query", handler.NewDefaultServer(
 			graphql.NewExecutableSchema(graphql.Config{
 				Resolvers: tododriver.MakeGraphQLResolver(endpoints),
 			}),
 		))
 	}
 
-	cors := handlers.CORS(
-		handlers.AllowedOrigins([]string{"*"}),
-		handlers.AllowedMethods([]string{http.MethodGet, http.MethodPost, http.MethodPatch, http.MethodDelete}),
-		handlers.AllowedHeaders([]string{"content-type"}),
-	)
-
 	httpServer := &http.Server{
 		Addr:              *httpAddr,
 		ReadHeaderTimeout: 30 * time.Second,
-		Handler:           cors(router),
+		Handler:           router,
 	}
 
 	log.Println("listening on", *httpAddr)

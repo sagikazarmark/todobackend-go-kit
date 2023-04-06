@@ -14,7 +14,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/gorilla/mux"
+	"github.com/go-chi/chi/v5"
 )
 
 // TodoListApiController binds http requests to an api service and writes the service results to the http response
@@ -115,8 +115,7 @@ func (c *TodoListApiController) AddItem(w http.ResponseWriter, r *http.Request) 
 
 // DeleteItem - Delete an item
 func (c *TodoListApiController) DeleteItem(w http.ResponseWriter, r *http.Request) {
-	params := mux.Vars(r)
-	idParam := params["id"]
+	idParam := chi.URLParam(r, "id")
 	
 	result, err := c.service.DeleteItem(r.Context(), idParam)
 	// If an error occurred, encode the error with the status code
@@ -144,8 +143,7 @@ func (c *TodoListApiController) DeleteItems(w http.ResponseWriter, r *http.Reque
 
 // GetItem - Get an item
 func (c *TodoListApiController) GetItem(w http.ResponseWriter, r *http.Request) {
-	params := mux.Vars(r)
-	idParam := params["id"]
+	idParam := chi.URLParam(r, "id")
 	
 	result, err := c.service.GetItem(r.Context(), idParam)
 	// If an error occurred, encode the error with the status code
@@ -173,8 +171,7 @@ func (c *TodoListApiController) ListItems(w http.ResponseWriter, r *http.Request
 
 // UpdateItem - Update an existing item
 func (c *TodoListApiController) UpdateItem(w http.ResponseWriter, r *http.Request) {
-	params := mux.Vars(r)
-	idParam := params["id"]
+	idParam := chi.URLParam(r, "id")
 	
 	updateTodoItemRequestParam := UpdateTodoItemRequest{}
 	d := json.NewDecoder(r.Body)
