@@ -25,10 +25,13 @@
           default = pkgs.mkShell {
             buildInputs = with pkgs; [
               git
-              go_1_20
               gnumake
+
+              go_1_20
               golangci-lint
               gotestsum
+
+              buf
               protobuf
               protoc-gen-go
               protoc-gen-go-grpc
