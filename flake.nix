@@ -51,6 +51,9 @@
           ci = devShells.default.overrideAttrs (final: prev: {
             buildInputs = prev.buildInputs ++ (with pkgs; [
               flyctl
+
+              cosign
+              syft
             ]);
 
             shellHook = ''
