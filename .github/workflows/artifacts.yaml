@@ -15,6 +15,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Set up Nix
+        uses: cachix/install-nix-action@v20
+        with:
+          extra_nix_config: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+
+      - name: Prepare Nix shell
+        run: echo
+
       - name: Gather metadata
         id: meta
         uses: docker/metadata-action@v4
@@ -63,12 +72,14 @@ jobs:
 
       - name: Sign
         run: cosign sign --recursive "ghcr.io/${{ github.repository }}:${{ steps.build.outputs.digest }}"
+        shell: nix develop .#ci -c bash {0}
         if: github.event_name == 'push'
 
       - name: Attach SBOM attestation
         run: |
           syft -o spdx-json=sbom-spdx.json "ghcr.io/${{ github.repository }}:${{ steps.build.outputs.digest }}"
           cosign attest --predicate sbom-spdx.json --type spdx "ghcr.io/${{ github.repository }}:${{ steps.build.outputs.digest }}"
+        shell: nix develop .#ci -c bash {0}
         if: github.event_name == 'push'
 
       - name: Run Trivy vulnerability scanner
