@@ -4,6 +4,7 @@ on:
   workflow_run:
     workflows: [Artifacts]
     types: [completed]
+    branches: [main]
 
 defaults:
   run:
