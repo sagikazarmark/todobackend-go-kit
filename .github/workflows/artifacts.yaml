@@ -79,7 +79,7 @@ jobs:
       - name: Sign
         run: |
           cosign sign --yes --recursive "ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}"
-          echo "::notice title=Verify signature::cosign verify --certificate-identity 'https://github.com/${{ github.repository }}' --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }} | jq '.[0]'"
+          echo "::notice title=Verify signature::cosign verify --certificate-identity 'https://github.com/${{ github.workflow_ref }}' --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }} | jq '.[0]'"
         shell: nix develop .#ci -c bash {0}
         if: github.event_name == 'push'
 
