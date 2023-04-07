@@ -49,6 +49,7 @@ jobs:
         if: github.event_name == 'push'
 
       - name: Build and push
+        id: build
         uses: docker/build-push-action@v4
         with:
           context: .
@@ -61,7 +62,7 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.9.2
         with:
-          image-ref: "ghcr.io/${{ github.repository }}:${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.version'] }}"
+          image-ref: "ghcr.io/${{ github.repository }}:${{ steps.build.outputs.digest }}"
           format: "sarif"
           output: "trivy-results.sarif"
         if: github.event_name == 'push'
