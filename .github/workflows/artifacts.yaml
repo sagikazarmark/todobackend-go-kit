@@ -61,6 +61,16 @@ jobs:
             VERSION=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.version'] }}
           labels: ${{ steps.meta.outputs.labels }}
 
+      - name: Sign
+        run: cosign sign --recursive "ghcr.io/${{ github.repository }}:${{ steps.build.outputs.digest }}"
+        if: github.event_name == 'push'
+
+      - name: Attach SBOM attestation
+        run: |
+          syft -o spdx-json=sbom-spdx.json "ghcr.io/${{ github.repository }}:${{ steps.build.outputs.digest }}"
+          cosign attest --predicate sbom-spdx.json --type spdx "ghcr.io/${{ github.repository }}:${{ steps.build.outputs.digest }}"
+        if: github.event_name == 'push'
+
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.9.2
         with:
