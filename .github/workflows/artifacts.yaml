@@ -23,6 +23,7 @@ jobs:
 
       - name: Prepare Nix shell
         run: echo
+        shell: nix develop .#ci -c bash {0}
 
       - name: Gather metadata
         id: meta
@@ -71,21 +72,21 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Sign
-        run: cosign sign --recursive "ghcr.io/${{ github.repository }}:${{ steps.build.outputs.digest }}"
+        run: cosign sign --yes --recursive "ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}"
         shell: nix develop .#ci -c bash {0}
         if: github.event_name == 'push'
 
       - name: Attach SBOM attestation
         run: |
-          syft -o spdx-json=sbom-spdx.json "ghcr.io/${{ github.repository }}:${{ steps.build.outputs.digest }}"
-          cosign attest --predicate sbom-spdx.json --type spdx "ghcr.io/${{ github.repository }}:${{ steps.build.outputs.digest }}"
+          syft -o spdx-json=sbom-spdx.json "ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}"
+          cosign attest --yes --predicate sbom-spdx.json --type spdx "ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}"
         shell: nix develop .#ci -c bash {0}
         if: github.event_name == 'push'
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.9.2
         with:
-          image-ref: "ghcr.io/${{ github.repository }}:${{ steps.build.outputs.digest }}"
+          image-ref: "ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}"
           format: "sarif"
           output: "trivy-results.sarif"
         if: github.event_name == 'push'
