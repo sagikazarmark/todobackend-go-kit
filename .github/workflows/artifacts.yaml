@@ -11,6 +11,10 @@ jobs:
     name: Container images
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        shell: nix develop .#ci -c bash {0}
+
     permissions:
       packages: write
       id-token: write
@@ -28,15 +32,15 @@ jobs:
 
       - name: Prepare Nix shell
         run: echo
-        shell: nix develop .#ci -c bash {0}
 
-      - name: Gather metadata
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Gather build metadata
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: |
-            ghcr.io/${{ github.repository }}
-            docker.io/${{ github.repository }}
+          images: ghcr.io/${{ github.repository }}
           flavor: |
             latest = false
           tags: |
@@ -44,9 +48,6 @@ jobs:
             type=ref,event=pr
             type=semver,pattern={{raw}}
             type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
@@ -56,38 +57,30 @@ jobs:
           password: ${{ github.token }}
         if: github.event_name == 'push'
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-        if: github.event_name == 'push'
-
-      - name: Build and push
+      - name: Build and push images
         id: build
         uses: docker/build-push-action@v4
-        env:
-          DOCKER_CONTENT_TRUST: 1
         with:
           context: .
-          push: ${{ github.event_name == 'push' }}
           tags: ${{ steps.meta.outputs.tags }}
           build-args: |
             VERSION=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.version'] }}
           labels: ${{ steps.meta.outputs.labels }}
+          push: ${{ github.event_name == 'push' }}
 
-      - name: Sign
+      - name: Sign images
         run: |
           cosign sign --yes --recursive "ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}"
-          echo "::notice title=Verify signature::cosign verify --certificate-identity 'https://github.com/${{ github.workflow_ref }}' --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }} | jq '.[0]'"
-        shell: nix develop .#ci -c bash {0}
+          echo "::notice title=Verify signature::cosign verify --certificate-identity 'https://github.com/${{ github.workflow_ref }}' --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}"
+          echo "::notice title=Verify signature(pretty print)::cosign verify --certificate-identity 'https://github.com/${{ github.workflow_ref }}' --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }} | jq '.[0]'"
         if: github.event_name == 'push'
 
       - name: Attach SBOM attestation
         run: |
           syft -o spdx-json=sbom-spdx.json "ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}"
           cosign attest --yes --predicate sbom-spdx.json --type spdx "ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}"
-        shell: nix develop .#ci -c bash {0}
+          echo "::notice title=Verify SBOM attestation::cosign verify-attestation --certificate-identity 'https://github.com/${{ github.workflow_ref }}' --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' --type spdx ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}"
+          echo "::notice title=Inspect SBOM::cosign verify-attestation --certificate-identity 'https://github.com/${{ github.workflow_ref }}' --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' --type spdx ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }} | jq '.payload |= @base64d | .payload | fromjson | select(.predicateType == \"https://spdx.dev/Document\") | .predicate | fromjson'"
         if: github.event_name == 'push'
 
       - name: Run Trivy vulnerability scanner
