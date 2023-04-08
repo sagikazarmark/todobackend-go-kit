@@ -60,6 +60,15 @@ jobs:
         env:
           LINT_ARGS: --out-format=github-actions
 
+  artifacts:
+    name: Artifacts
+    uses: ./.github/workflows/artifacts2.yaml
+    with:
+      publish: ${{ github.event_name == 'push' }}
+    permissions:
+      packages: write
+      id-token: write
+
   dependency-review:
     name: Dependency review
     runs-on: ubuntu-latest

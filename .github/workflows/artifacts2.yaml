@@ -1,0 +1,96 @@
+name: Artifacts
+
+on:
+  workflow_call:
+    inputs:
+      publish:
+        description: Publish artifacts to the artifact store
+        default: false
+        required: false
+        type: boolean
+      release:
+        description: Build artifacts for release
+        default: false
+        required: false
+        type: boolean
+
+# permissions: read-all
+
+jobs:
+  container-images:
+    name: Container images
+    runs-on: ubuntu-latest
+
+    permissions:
+      packages: write
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3.5.0
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@e81a89b1732b9c48d79cd809d8d81d79c4647a18 # v2.1.0
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@4b4e9c3e2d4531116a6f8ba8e71fc6e2cb6e6c8c # v2.5.0
+
+      - name: Set up Cosign
+        uses: sigstore/cosign-installer@v3.0.2
+        with:
+          cosign-release: v2.0.1
+
+      - name: Set up Syft
+        uses: anchore/sbom-action/download-syft@v0.14.1
+        with:
+          syft-version: v0.76.1
+
+      - name: Gather build metadata
+        id: meta
+        uses: docker/metadata-action@507c2f2dc502c992ad446e3d7a5dfbe311567a96 # v4.3.0
+        with:
+          images: ghcr.io/${{ github.repository }}
+          flavor: |
+            latest = false
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{raw}}
+            type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a # v2.1.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+        if: inputs.publish
+
+      - name: Build and push images
+        id: build
+        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671 # v4.0.0
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          tags: ${{ steps.meta.outputs.tags }}
+          build-args: |
+            VERSION=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.version'] }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          push: ${{ inputs.publish }}
+
+      - name: Sign images
+        run: |
+          cosign sign --yes --recursive "ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}"
+          echo "::notice title=Verify signature::cosign verify --certificate-identity 'https://github.com/${{ github.workflow_ref }}' --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}"
+          echo "::notice title=Verify signature(pretty print)::cosign verify --certificate-identity 'https://github.com/${{ github.workflow_ref }}' --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }} | jq '.[0]'"
+        if: inputs.publish
+
+      - name: Attach SBOM attestation
+        run: |
+          syft -o spdx-json=sbom-spdx.json "ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}"
+          cosign attest --yes --predicate sbom-spdx.json --type spdx "ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}"
+          echo "::notice title=Verify SBOM attestation::cosign verify-attestation --certificate-identity 'https://github.com/${{ github.workflow_ref }}' --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' --type spdx ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}"
+          echo "::notice title=Inspect SBOM::cosign verify-attestation --certificate-identity 'https://github.com/${{ github.workflow_ref }}' --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' --type spdx ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }} | jq '.payload |= @base64d | .payload | fromjson | select(.predicateType == \"https://spdx.dev/Document\") | .predicate | fromjson'"
+        if: inputs.publish
