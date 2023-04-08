@@ -63,6 +63,7 @@ jobs:
   dependency-review:
     name: Dependency review
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
 
     steps:
       - name: Checkout code
@@ -70,4 +71,3 @@ jobs:
 
       - name: Dependency Review
         uses: actions/dependency-review-action@0efb1d1d84fc9633afcdaad14c485cbbc90ef46c # v2.5.1
-        if: github.event_name == 'pull_request'
