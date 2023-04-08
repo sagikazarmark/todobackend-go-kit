@@ -6,15 +6,17 @@ on:
     types: [completed]
     branches: [main]
 
-defaults:
-  run:
-    shell: nix develop .#ci -c bash {0}
+permissions: read-all
 
 jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
     environment: production
+
+    defaults:
+      run:
+        shell: nix develop .#ci -c bash {0}
 
     steps:
       - name: Checkout code

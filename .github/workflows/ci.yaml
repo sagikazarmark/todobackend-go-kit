@@ -5,6 +5,8 @@ on:
     branches: [main]
   pull_request:
 
+permissions: read-all
+
 defaults:
   run:
     shell: nix develop .#ci -c bash {0}

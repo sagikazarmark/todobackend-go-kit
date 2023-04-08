@@ -13,6 +13,7 @@ jobs:
   analysis:
     name: Scorecard analysis
     runs-on: ubuntu-latest
+
     permissions:
       security-events: write
       id-token: write
