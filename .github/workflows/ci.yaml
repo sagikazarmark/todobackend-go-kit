@@ -5,16 +5,16 @@ on:
     branches: [ main ]
   pull_request:
 
-defaults:
-  run:
-    shell: nix develop .#ci -c bash {0}
-
 permissions: read-all
 
 jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: nix develop .#ci -c bash {0}
 
     steps:
       - name: Checkout code
@@ -41,6 +41,10 @@ jobs:
   lint:
     name: Lint
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: nix develop .#ci -c bash {0}
 
     steps:
       - name: Checkout code
