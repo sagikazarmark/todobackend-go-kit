@@ -2,9 +2,9 @@ name: Release
 
 on:
   workflow_run:
-    workflows: [Artifacts]
-    types: [completed]
-    branches: [main]
+    workflows: [ Artifacts ]
+    types: [ completed ]
+    branches: [ main ]
 
 permissions: read-all
 

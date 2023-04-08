@@ -1,22 +1,22 @@
-name: Scorecard supply-chain security
+name: OpenSSF Scorecard
 
 on:
   branch_protection_rule:
+  push:
+    branches: [ main ]
   schedule:
     - cron: '30 0 * * 5'
-  push:
-    branches: [main]
 
 permissions: read-all
 
 jobs:
-  analysis:
-    name: Scorecard analysis
+  analyze:
+    name: Analyze
     runs-on: ubuntu-latest
 
     permissions:
-      security-events: write
       id-token: write
+      security-events: write
 
     steps:
       - name: Checkout code

@@ -2,14 +2,14 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
-
-permissions: read-all
 
 defaults:
   run:
     shell: nix develop .#ci -c bash {0}
+
+permissions: read-all
 
 jobs:
   test:

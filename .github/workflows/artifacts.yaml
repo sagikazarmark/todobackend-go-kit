@@ -2,8 +2,8 @@ name: Artifacts
 
 on:
   push:
-    branches: [main]
-    tags: ["v[0-9]+.[0-9]+.[0-9]+"]
+    branches: [ main ]
+    tags: [ "v[0-9]+.[0-9]+.[0-9]+" ]
   pull_request:
 
 permissions: read-all
