@@ -18,10 +18,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3.5.0
 
       - name: Set up Nix
-        uses: cachix/install-nix-action@v20
+        uses: cachix/install-nix-action@29bd9290ef037a3ecbdafe83cbd2185e9dd0fa0a # v20
         with:
           extra_nix_config: |
             access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
@@ -33,7 +33,7 @@ jobs:
         run: make test
 
       - name: Annotate tests
-        uses: guyarb/golang-test-annotations@v0.6.0
+        uses: guyarb/golang-test-annotations@9ab2ea84a399d03ffd114bf49dd23ffadc794541 # v0.6.0
         if: always()
         with:
           test-results: build/test.json
@@ -44,10 +44,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3.5.0
 
       - name: Set up Nix
-        uses: cachix/install-nix-action@v20
+        uses: cachix/install-nix-action@29bd9290ef037a3ecbdafe83cbd2185e9dd0fa0a # v20
         with:
           extra_nix_config: |
             access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
