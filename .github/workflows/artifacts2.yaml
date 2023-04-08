@@ -13,17 +13,37 @@ on:
         default: false
         required: false
         type: boolean
+      upload:
+        description: Upload artifacts to GitHub Actions artifact store
+        default: false
+        required: false
+        type: boolean
+    outputs:
+      image-name:
+        description: Container image name
+        value: ${{ jobs.container-image.outputs.name }}
+      image-digest:
+        description: Container image digest
+        value: ${{ jobs.container-image.outputs.digest }}
+      image-ref:
+        description: Container image ref
+        value: ${{ jobs.container-image.outputs.ref }}
 
 # permissions: read-all
 
 jobs:
-  container-images:
-    name: Container images
+  container-image:
+    name: Container image
     runs-on: ubuntu-latest
 
     permissions:
       packages: write
       id-token: write
+
+    outputs:
+      name: ghcr.io/${{ github.repository }}
+      digest: ${{ steps.build.outputs.digest }}
+      ref: ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}
 
     steps:
       - name: Checkout
@@ -78,6 +98,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          outputs: type=oci,dest=image.tar
           push: ${{ inputs.publish }}
 
       - name: Sign images
@@ -94,3 +115,9 @@ jobs:
           echo "::notice title=Verify SBOM attestation::cosign verify-attestation --certificate-identity 'https://github.com/${{ github.workflow_ref }}' --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' --type spdx ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}"
           echo "::notice title=Inspect SBOM::cosign verify-attestation --certificate-identity 'https://github.com/${{ github.workflow_ref }}' --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' --type spdx ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }} | jq '.payload |= @base64d | .payload | fromjson | select(.predicateType == \"https://spdx.dev/Document\") | .predicate | fromjson'"
         if: inputs.publish
+
+      - name: Upload image to GitHub
+        uses: actions/upload-artifact@v3
+        with:
+          name: container-image
+          path: image.tar
