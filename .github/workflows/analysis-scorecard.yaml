@@ -31,14 +31,14 @@ jobs:
           results_format: sarif
           publish_results: true
 
-      - name: Upload scan results as artifact
+      - name: Upload results as artifact
         uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
         with:
-          name: SARIF file
+          name: OpenSSF Scorecard results
           path: results.sarif
           retention-days: 5
 
-      - name: Upload scan results to GitHub Security tab
+      - name: Upload results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@d186a2a36cc67bfa1b860e6170d37fb9634742c7 # v2.2.11
         with:
           sarif_file: results.sarif

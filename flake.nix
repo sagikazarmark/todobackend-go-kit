@@ -37,6 +37,10 @@
               protoc-gen-go-grpc
               protoc-gen-go-kit
               openapi-generator-cli
+
+              regctl
+              skopeo
+              syft
             ];
 
             shellHook = ''
