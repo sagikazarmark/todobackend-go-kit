@@ -100,7 +100,7 @@ jobs:
           ls -lah /tmp/image
 
       - name: Generate SBOM
-        run: syft -o spdx-json=sbom-spdx.json oci-dir:/tmp/image
+        run: syft -o spdx-json=sbom-spdx.json oci-archive:image.tar
 
       - name: Sign image
         run: |
