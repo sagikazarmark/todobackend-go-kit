@@ -96,7 +96,7 @@ jobs:
       - name: Extract OCI tarball
         run: |
           # mkdir -p /tmp/image
-          tar -xzf image.tar -C /tmp/image
+          tar -xf image.tar -C /tmp/image
           ls -lah /tmp/image
 
       - name: Generate SBOM
