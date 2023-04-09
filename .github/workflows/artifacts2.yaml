@@ -90,8 +90,10 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          outputs: type=oci,dest=image.tar
-          push: ${{ inputs.publish }}
+          outputs: |
+            type=image,push=${{ inputs.publish }}
+            type=oci,dest=image.tar
+          # push: ${{ inputs.publish }}
 
       - name: Extract OCI tarball
         run: |
