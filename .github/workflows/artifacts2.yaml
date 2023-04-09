@@ -90,8 +90,17 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          outputs: type=oci,dest=/tmp/image.tar
+          outputs: type=oci,dest=image.tar
           push: ${{ inputs.publish }}
+
+      - name: Extract OCI tarball
+        run: |
+          # mkdir -p /tmp/image
+          tar -xzf image.tar -C /tmp/image
+          ls -lah /tmp/image
+
+      - name: Generate SBOM
+        run: syft -o spdx-json=sbom-spdx.json oci-dir:/tmp/image
 
       - name: Sign image
         run: |
@@ -99,14 +108,6 @@ jobs:
           echo "::notice title=Verify signature::cosign verify --certificate-identity 'https://github.com/${{ github.workflow_ref }}' --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}"
           echo "::notice title=Verify signature(pretty print)::cosign verify --certificate-identity 'https://github.com/${{ github.workflow_ref }}' --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }} | jq '.[0]'"
         if: inputs.publish
-
-      - name: Extract OCI tarball
-        run: |
-          mkdir -p /tmp/image
-          tar -xzf /tmp/image.tar
-
-      - name: Generate SBOM
-        run: syft -o spdx-json=sbom-spdx.json oci-dir:/tmp/image
 
       - name: Attach SBOM attestation
         run: |
