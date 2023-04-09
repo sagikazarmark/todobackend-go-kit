@@ -2,7 +2,7 @@ FROM golang:1.20.3-alpine3.16@sha256:29c4e6e307eac79e5db29a261b243f27ffe0563fa17
 
 RUN apk add --update --no-cache ca-certificates make git curl
 
-WORKDIR /usr/local/src/app
+WORKDIR /usr/local/src/todobackend-go-kit
 
 ARG GOPROXY
 
@@ -21,7 +21,9 @@ RUN apk add --update --no-cache ca-certificates tzdata bash curl
 
 SHELL ["/bin/bash", "-c"]
 
-COPY --from=builder /usr/local/src/app/build/* /usr/local/bin/
+COPY --from=builder /usr/local/src/todobackend-go-kit/build/* /usr/local/bin/
+COPY --from=builder /usr/local/src/todobackend-go-kit/go.* /usr/local/src/todobackend-go-kit/
+COPY --from=builder /usr/local/src/todobackend-go-kit/api/go.* /usr/local/src/todobackend-go-kit/
 
 EXPOSE 8000 8001
 CMD todobackend-go-kit --http-addr :${PORT:-8000} --public-url ${PUBLIC_URL}
