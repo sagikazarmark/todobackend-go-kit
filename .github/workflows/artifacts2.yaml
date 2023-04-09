@@ -8,16 +8,6 @@ on:
         default: false
         required: false
         type: boolean
-      release:
-        description: Build artifacts for release
-        default: false
-        required: false
-        type: boolean
-      upload:
-        description: Upload artifacts to GitHub Actions artifact store
-        default: false
-        required: false
-        type: boolean
     outputs:
       container-image-name:
         description: Container image name
@@ -60,6 +50,7 @@ jobs:
         uses: sigstore/cosign-installer@v3.0.2
         with:
           cosign-release: v2.0.1
+        if: inputs.publish
 
       - name: Set up Syft
         uses: anchore/sbom-action/download-syft@v0.14.1
@@ -109,13 +100,22 @@ jobs:
           echo "::notice title=Verify signature(pretty print)::cosign verify --certificate-identity 'https://github.com/${{ github.workflow_ref }}' --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }} | jq '.[0]'"
         if: inputs.publish
 
+      - name: Generate SBOM
+        run: syft -o spdx-json=sbom-spdx.json "ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}"
+
       - name: Attach SBOM attestation
         run: |
-          syft -o spdx-json=sbom-spdx.json "ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}"
           cosign attest --yes --predicate sbom-spdx.json --type spdx "ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}"
           echo "::notice title=Verify SBOM attestation::cosign verify-attestation --certificate-identity 'https://github.com/${{ github.workflow_ref }}' --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' --type spdx ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}"
           echo "::notice title=Inspect SBOM::cosign verify-attestation --certificate-identity 'https://github.com/${{ github.workflow_ref }}' --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' --type spdx ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }} | jq '.payload |= @base64d | .payload | fromjson | select(.predicateType == \"https://spdx.dev/Document\") | .predicate | fromjson'"
         if: inputs.publish
+
+      - name: Upload SBOM as artifact
+        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        with:
+          name: SBOM
+          path: sbom-spdx.json
+          retention-days: 5
 
       - name: Extract OCI tarball
         run: |
@@ -128,6 +128,13 @@ jobs:
           input: /tmp/image
           format: sarif
           output: trivy-results.sarif
+
+      - name: Upload Trivy scan results as artifact
+        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        with:
+          name: Trivy scan results
+          path: trivy-results.sarif
+          retention-days: 5
 
       - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@d186a2a36cc67bfa1b860e6170d37fb9634742c7 # v2.2.11

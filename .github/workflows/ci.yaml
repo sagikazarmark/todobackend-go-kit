@@ -69,7 +69,6 @@ jobs:
     uses: ./.github/workflows/artifacts2.yaml
     with:
       publish: ${{ github.event_name == 'push' }}
-      upload: true
     permissions:
       packages: write
       id-token: write
