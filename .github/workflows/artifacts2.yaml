@@ -104,7 +104,7 @@ jobs:
           # push: ${{ inputs.publish }}
 
       - name: Download image
-        run: skopeo --insecure-policy copy docker:ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }} oci-archive:image.tar
+        run: skopeo --insecure-policy copy docker://ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }} oci-archive:image.tar
         if: inputs.publish
 
       - name: Extract OCI tarball
