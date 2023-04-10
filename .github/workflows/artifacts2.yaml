@@ -70,6 +70,16 @@ jobs:
             type=semver,pattern={{raw}}
             type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
 
+      # Multiple exporters are not supported yet
+      # See https://github.com/moby/buildkit/pull/2760
+      - name: Determine build output
+        uses: haya14busa/action-cond@v1
+        id: build-output
+        with:
+          cond: ${{ inputs.publish }}
+          if_true: type=image,push=true
+          if_false: type=oci,dest=image.tar
+
       - name: Login to GitHub Container Registry
         uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a # v2.1.0
         with:
@@ -90,10 +100,12 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          outputs: |
-            type=image,push=${{ inputs.publish }}
-            type=oci,dest=image.tar
+          outputs: ${{ steps.build-output.outputs.value }}
           # push: ${{ inputs.publish }}
+
+      - name: Download image
+        run: skopeo --insecure-policy copy docker:ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }} oci-archive:image.tar
+        if: inputs.publish
 
       - name: Extract OCI tarball
         run: |
