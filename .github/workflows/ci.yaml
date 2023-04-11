@@ -48,7 +48,7 @@ jobs:
 
   artifacts:
     name: Artifacts
-    uses: ./.github/workflows/artifacts2.yaml
+    uses: ./.github/workflows/artifacts.yaml
     with:
       publish: ${{ github.event_name == 'push' }}
     permissions:
