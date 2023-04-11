@@ -21,6 +21,9 @@ on:
 
 # permissions: read-all
 
+permissions:
+  contents: read
+
 jobs:
   container-image:
     name: Container image
