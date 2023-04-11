@@ -19,7 +19,8 @@ on:
         description: Container image ref
         value: ${{ jobs.container-image.outputs.ref }}
 
-# permissions: read-all
+permissions:
+  contents: read
 
 jobs:
   container-image:
@@ -27,6 +28,7 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
+      contents: read
       packages: write
       id-token: write
       security-events: write

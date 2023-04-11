@@ -13,6 +13,7 @@ jobs:
     with:
       publish: true
     permissions:
+      contents: read
       packages: write
       id-token: write
       security-events: write

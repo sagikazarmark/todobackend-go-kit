@@ -52,6 +52,7 @@ jobs:
     with:
       publish: ${{ github.event_name == 'push' }}
     permissions:
+      contents: read
       packages: write
       id-token: write
       security-events: write
