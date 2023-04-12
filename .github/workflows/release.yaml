@@ -26,7 +26,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3.5.0
+        uses: actions/checkout@83b7061638ee4956cf7545a6f7efe594e5ad0247 # v3.5.1
 
       - name: Fly.io CLI
         uses: superfly/flyctl-actions/setup-flyctl@adbb124b95f2e47566253d95497432c27f4bdd70 # 1.3
