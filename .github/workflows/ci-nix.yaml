@@ -28,7 +28,7 @@ jobs:
             access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
 
       - name: Prepare Nix shell
-        run: echo
+        run: make versions
 
       - name: Test
         run: make test
@@ -58,7 +58,7 @@ jobs:
             access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
 
       - name: Prepare Nix shell
-        run: echo
+        run: make versions
 
       - name: Lint
         run: make lint

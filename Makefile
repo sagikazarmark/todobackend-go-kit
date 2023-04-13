@@ -69,6 +69,15 @@ PROTOC_GEN_GO_VERSION ?= 1.29.1
 PROTOC_GEN_GO_GRPC_VERSION ?= 1.3.0
 PROTOC_GEN_GO_KIT_VERSION ?= 0.1.1
 
+.PHONY: versions
+versions: ## Tool versions
+	@go version
+	@golangci-lint --version
+	@gotestsum --version
+	@echo "buf $$(buf --version)"
+	@protoc --version
+	@openapi-generator-cli --version | head -1
+
 deps: bin/gotestsum bin/golangci-lint bin/protoc bin/protoc-gen-go bin/protoc-gen-go-grpc bin/protoc-gen-go-kit
 
 bin/gotestsum:

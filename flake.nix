@@ -37,19 +37,7 @@
               protoc-gen-go-grpc
               protoc-gen-go-kit
               openapi-generator-cli
-
-              regctl
-              skopeo
-              syft
             ];
-
-            shellHook = ''
-              go version
-              golangci-lint --version
-              gotestsum --version
-              protoc --version
-              openapi-generator-cli --version | head -1
-            '';
           };
 
           ci = devShells.default.overrideAttrs (final: prev: {
@@ -58,12 +46,8 @@
 
               cosign
               syft
+              skopeo
             ]);
-
-            shellHook = ''
-              ${prev.shellHook}
-              flyctl version
-            '';
           });
         };
       }
