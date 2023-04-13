@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	emperror.dev/errors v0.8.1
-	github.com/99designs/gqlgen v0.17.28
+	github.com/99designs/gqlgen v0.17.29
 	github.com/go-bdd/gobdd v1.1.3
 	github.com/go-chi/chi/v5 v5.0.8
 	github.com/go-chi/cors v1.2.1
