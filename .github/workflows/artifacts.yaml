@@ -34,9 +34,9 @@ jobs:
       security-events: write
 
     outputs:
-      name: ghcr.io/${{ github.repository }}
+      name: ${{ steps.image-name.outputs.value }}
       digest: ${{ steps.build.outputs.digest }}
-      ref: ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}
+      ref: ${{ steps.image-ref.outputs.value }}
 
     steps:
       - name: Checkout repository
@@ -59,11 +59,15 @@ jobs:
         with:
           syft-version: v0.76.1
 
+      - name: Set image name
+        id: image-name
+        run: echo "value=ghcr.io/${{ github.repository }}" >> "$GITHUB_OUTPUT"
+
       - name: Gather build metadata
         id: meta
         uses: docker/metadata-action@507c2f2dc502c992ad446e3d7a5dfbe311567a96 # v4.3.0
         with:
-          images: ghcr.io/${{ github.repository }}
+          images: ${{ steps.image-name.outputs.value }}
           flavor: |
             latest = false
           tags: |
@@ -105,8 +109,12 @@ jobs:
           outputs: ${{ steps.build-output.outputs.value }}
           # push: ${{ inputs.publish }}
 
+      - name: Set image ref
+        id: image-ref
+        run: echo "value=${{ steps.image-name.outputs.value }}@${{ steps.build.outputs.digest }}" >> "$GITHUB_OUTPUT"
+
       - name: Fetch image
-        run: skopeo --insecure-policy copy docker://ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }} oci-archive:image.tar
+        run: skopeo --insecure-policy copy docker://${{ steps.image-ref.outputs.value }} oci-archive:image.tar
         if: inputs.publish
 
       - name: Extract OCI tarball
@@ -130,16 +138,16 @@ jobs:
 
       - name: Sign image
         run: |
-          cosign sign --yes --recursive "ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}"
-          echo "::notice title=Verify signature::cosign verify --certificate-identity 'https://github.com/${{ github.workflow_ref }}' --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}"
-          echo "::notice title=Verify signature(pretty print)::cosign verify --certificate-identity 'https://github.com/${{ github.workflow_ref }}' --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }} | jq '.[0]'"
+          cosign sign --yes --recursive "${{ steps.image-ref.outputs.value }}"
+          echo "::notice title=Verify signature::cosign verify --certificate-identity 'https://github.com/${{ github.workflow_ref }}' --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' ${{ steps.image-ref.outputs.value }}"
+          echo "::notice title=Verify signature(pretty print)::cosign verify --certificate-identity 'https://github.com/${{ github.workflow_ref }}' --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' ${{ steps.image-ref.outputs.value }} | jq '.[0]'"
         if: inputs.publish
 
       - name: Attach SBOM attestation
         run: |
-          cosign attest --yes --predicate sbom-spdx.json --type spdx "ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}"
-          echo "::notice title=Verify SBOM attestation::cosign verify-attestation --certificate-identity 'https://github.com/${{ github.workflow_ref }}' --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' --type spdx ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}"
-          echo "::notice title=Inspect SBOM::cosign verify-attestation --certificate-identity 'https://github.com/${{ github.workflow_ref }}' --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' --type spdx ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }} | jq '.payload |= @base64d | .payload | fromjson | select(.predicateType == \"https://spdx.dev/Document\") | .predicate | fromjson'"
+          cosign attest --yes --predicate sbom-spdx.json --type spdx "${{ steps.image-ref.outputs.value }}"
+          echo "::notice title=Verify SBOM attestation::cosign verify-attestation --certificate-identity 'https://github.com/${{ github.workflow_ref }}' --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' --type spdx ${{ steps.image-ref.outputs.value }}"
+          echo "::notice title=Inspect SBOM::cosign verify-attestation --certificate-identity 'https://github.com/${{ github.workflow_ref }}' --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' --type spdx ${{ steps.image-ref.outputs.value }} | jq '.payload |= @base64d | .payload | fromjson | select(.predicateType == \"https://spdx.dev/Document\") | .predicate | fromjson'"
         if: inputs.publish
 
       - name: Run Trivy vulnerability scanner
