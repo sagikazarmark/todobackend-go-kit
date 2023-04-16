@@ -19,7 +19,7 @@ ARG GOPROXY
 ENV CGO_ENABLED=1
 
 COPY go.mod go.sum ./
-COPY api/go.* ./api/
+COPY api/go.mod api/go.sum ./api/
 RUN go mod download
 
 COPY . .
