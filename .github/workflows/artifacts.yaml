@@ -57,7 +57,7 @@ jobs:
       - name: Set up Syft
         uses: anchore/sbom-action/download-syft@422cb34a0f8b599678c41b21163ea6088edb2624 # v0.14.1
         with:
-          syft-version: v0.76.1
+          syft-version: v0.77.0
 
       - name: Set image name
         id: image-name
