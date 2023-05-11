@@ -30,7 +30,7 @@ jobs:
         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
 
       - name: Fly.io CLI
-        uses: superfly/flyctl-actions/setup-flyctl@adbb124b95f2e47566253d95497432c27f4bdd70 # 1.3
+        uses: superfly/flyctl-actions/setup-flyctl@dfdfedc86b296f5e5384f755a18bf400409a15d0 # 1.4
 
       - name: Deploy
         run: flyctl deploy --image ${{ needs.artifacts.outputs.container-image-ref }}
