@@ -15,6 +15,9 @@ on:
       container-image-digest:
         description: Container image digest
         value: ${{ jobs.container-image.outputs.digest }}
+      container-image-tag:
+        description: Container image tag
+        value: ${{ jobs.container-image.outputs.tag }}
       container-image-ref:
         description: Container image ref
         value: ${{ jobs.container-image.outputs.ref }}
@@ -41,6 +44,7 @@ jobs:
     outputs:
       name: ${{ steps.image-name.outputs.value }}
       digest: ${{ steps.build.outputs.digest }}
+      tag: ${{ steps.meta.outputs.version }}
       ref: ${{ steps.image-ref.outputs.value }}
 
     steps:
@@ -143,7 +147,7 @@ jobs:
 
       # See https://github.com/anchore/syft/issues/1545
       - name: Extract image from multi-arch image
-        run: skopeo --override-os linux --override-arch amd64 --insecure-policy copy oci:image docker-archive:docker.tar
+        run: skopeo --override-os linux --override-arch amd64 --insecure-policy copy oci:image:${{ steps.meta.outputs.version }} docker-archive:docker.tar
 
       - name: Generate SBOM
         run: syft -o spdx-json=sbom-spdx.json docker-archive:docker.tar
