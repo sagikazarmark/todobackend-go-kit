@@ -146,8 +146,15 @@ jobs:
           tar -xf image.tar -C image
 
       # See https://github.com/anchore/syft/issues/1545
+      - name: Determine source image
+        uses: haya14busa/action-cond@1d6e8a12b20cdb4f1954feef9aa475b9c390cab5 # v1.1.1
+        id: sourceimage
+        with:
+          cond: ${{ inputs.publish }}
+          if_true: oci:image
+          if_false: oci:image:${{ steps.meta.outputs.version }}
       - name: Extract image from multi-arch image
-        run: skopeo --override-os linux --override-arch amd64 --insecure-policy copy oci:image:${{ steps.meta.outputs.version }} docker-archive:docker.tar
+        run: skopeo --override-os linux --override-arch amd64 --insecure-policy copy ${{ steps.sourceimage.outputs.value }} docker-archive:docker.tar
 
       - name: Generate SBOM
         run: syft -o spdx-json=sbom-spdx.json docker-archive:docker.tar
