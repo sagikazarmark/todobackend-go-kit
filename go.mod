@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	emperror.dev/errors v0.8.1
-	github.com/99designs/gqlgen v0.17.30
+	github.com/99designs/gqlgen v0.17.32
 	github.com/go-bdd/gobdd v1.1.3
 	github.com/go-chi/chi/v5 v5.0.8
 	github.com/go-chi/cors v1.2.1
@@ -17,7 +17,7 @@ require (
 	github.com/sagikazarmark/todobackend-go-kit/api v0.7.0
 	github.com/spf13/pflag v1.0.5
 	github.com/stretchr/testify v1.8.4
-	github.com/vektah/gqlparser/v2 v2.5.1
+	github.com/vektah/gqlparser/v2 v2.5.2-0.20230422221642-25e09f9d292d
 	google.golang.org/grpc v1.55.0
 )
 
