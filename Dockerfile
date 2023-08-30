@@ -28,7 +28,7 @@ RUN make build
 RUN xx-verify build/todobackend-go-kit
 
 
-FROM gcr.io/distroless/base-debian11:latest@sha256:73deaaf6a207c1a33850257ba74e0f196bc418636cada9943a03d7abea980d6d AS distroless
+FROM gcr.io/distroless/base-debian11:latest@sha256:46c5b9bd3e3efff512e28350766b54355fce6337a0b44ba3f822ab918eca4520 AS distroless
 
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
