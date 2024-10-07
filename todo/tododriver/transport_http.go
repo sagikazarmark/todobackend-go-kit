@@ -183,7 +183,7 @@ func marshalItemHTTP(ctx context.Context, item todo.Item) api.TodoItem {
 		Id:        item.ID,
 		Title:     item.Title,
 		Completed: item.Completed,
-		Order:     int32(item.Order),
+		Order:     int32(item.Order), //nolint
 		Url:       fmt.Sprintf("%s/%s", baseURL, item.ID),
 	}
 }

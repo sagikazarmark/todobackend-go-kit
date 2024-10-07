@@ -15,5 +15,5 @@ message TodoItem {
   string id = 1;
   string title = 2;
   bool completed = 3;
-  int32 order = 4;
+  int64 order = 4;
 }
