@@ -87,7 +87,7 @@ func givenAnEmptyTodoListGRPC(t gobdd.StepTest, ctx gobdd.Context) {
 
 	ctx.Set("server", server)
 
-	conn, err := grpc.Dial(l.Addr().String(), grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(l.Addr().String(), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		server.Stop()
 

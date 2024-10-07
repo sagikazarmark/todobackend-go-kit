@@ -173,6 +173,6 @@ func marshalItemGRPC(item todo.Item) *api.TodoItem {
 		Id:        item.ID,
 		Title:     item.Title,
 		Completed: item.Completed,
-		Order:     int32(item.Order),
+		Order:     int64(item.Order),
 	}
 }

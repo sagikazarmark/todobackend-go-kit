@@ -1,21 +1,19 @@
-run:
-    skip-dirs:
+issues:
+    exclude-dirs:
         - internal/generated
 
-    skip-files:
+    exclude-files:
         - ".*_gen\\.go$"
         - "^zz_generated\\..*\\.go$"
 
 linters-settings:
     gci:
         sections:
-          - standard
-          - default
-          - prefix(github.com/sagikazarmark/todobackend-go-kit)
+            - standard
+            - default
+            - prefix(github.com/sagikazarmark/todobackend-go-kit)
     goimports:
         local-prefixes: github.com/sagikazarmark/todobackend-go-kit
-    golint:
-        min-confidence: 0
 
 linters:
     disable-all: true
@@ -26,7 +24,6 @@ linters:
         - errcheck
         - errorlint
         - exhaustive
-        - exportloopref
         - gci
         - gochecknoglobals
         - gochecknoinits

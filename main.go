@@ -62,7 +62,7 @@ func main() {
 
 		body := []byte(r.Replace(string(index)))
 
-		router.Get("/", func(w http.ResponseWriter, r *http.Request) {
+		router.Get("/", func(w http.ResponseWriter, _ *http.Request) {
 			w.Header().Set("Content-Type", "text/html")
 			w.WriteHeader(http.StatusOK)
 
@@ -77,7 +77,7 @@ func main() {
 
 		router.Mount("/todos", tododriver.MakeHTTPHandler(
 			endpoints,
-			kithttp.ServerBefore(func(ctx context.Context, request *http.Request) context.Context {
+			kithttp.ServerBefore(func(ctx context.Context, _ *http.Request) context.Context {
 				return context.WithValue(ctx, tododriver.ContextKeyBaseURL, todoURL)
 			}),
 		))
@@ -114,13 +114,13 @@ func main() {
 
 	group.Add(
 		func() error { return httpServer.Serve(httpLn) },
-		func(err error) { _ = httpServer.Shutdown(context.Background()) },
+		func(_ error) { _ = httpServer.Shutdown(context.Background()) },
 	)
 	defer httpServer.Close()
 
 	group.Add(
 		func() error { return grpcServer.Serve(grpcLn) },
-		func(err error) { grpcServer.GracefulStop() },
+		func(_ error) { grpcServer.GracefulStop() },
 	)
 	defer grpcServer.Stop()
 
