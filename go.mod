@@ -18,7 +18,7 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/stretchr/testify v1.8.4
 	github.com/vektah/gqlparser/v2 v2.5.2-0.20230422221642-25e09f9d292d
-	google.golang.org/grpc v1.67.1
+	google.golang.org/grpc v1.68.1
 )
 
 require (
