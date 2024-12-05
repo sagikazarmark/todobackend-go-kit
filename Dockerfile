@@ -50,7 +50,7 @@ COPY --from=builder /usr/local/src/todobackend-go-kit/api/go.* /usr/local/src/to
 EXPOSE 8000 8001
 CMD todobackend-go-kit --http-addr :${PORT:-8000} --public-url ${PUBLIC_URL}
 
-FROM alpine:3.20.3@sha256:beefdbd8a1da6d2915566fde36db9db0b524eb737fc57cd1367effd16dc0d06d AS alpine
+FROM alpine:3.21.0@sha256:e323a465c03a31ad04374fc7239144d0fd4e2b92da6e3e0655580476d3a84621 AS alpine
 
 RUN apk add --update --no-cache ca-certificates tzdata bash
 
