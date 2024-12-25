@@ -16,13 +16,13 @@ require (
 	github.com/sagikazarmark/kitx v0.19.0
 	github.com/sagikazarmark/todobackend-go-kit/api v0.7.0
 	github.com/spf13/pflag v1.0.5
-	github.com/stretchr/testify v1.8.4
-	github.com/vektah/gqlparser/v2 v2.5.2-0.20230422221642-25e09f9d292d
+	github.com/stretchr/testify v1.10.0
+	github.com/vektah/gqlparser/v2 v2.5.21
 	google.golang.org/grpc v1.67.1
 )
 
 require (
-	github.com/agnivade/levenshtein v1.1.1 // indirect
+	github.com/agnivade/levenshtein v1.2.0 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
 	github.com/cucumber/gherkin-go/v13 v13.0.0 // indirect
 	github.com/cucumber/messages-go/v12 v12.0.0 // indirect
