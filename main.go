@@ -83,7 +83,7 @@ func main() {
 		))
 		todov1.RegisterTodoListServiceServer(grpcServer, tododriver.MakeGRPCServer(endpoints))
 		router.Handle("/graphql/playground", playground.Handler("GraphQL playground", "/graphql/query"))
-		router.Handle("/graphql/query", handler.NewDefaultServer(
+		router.Handle("/graphql/query", handler.NewDefaultServer( //nolint
 			graphql.NewExecutableSchema(graphql.Config{
 				Resolvers: tododriver.MakeGraphQLResolver(endpoints),
 			}),
