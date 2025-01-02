@@ -51,15 +51,15 @@ func NewTodoListAPIController(s TodoListAPIServicer, opts ...TodoListAPIOption) 
 // Routes returns all the api routes for the TodoListAPIController
 func (c *TodoListAPIController) Routes() Routes {
 	return Routes{
+		"ListItems": Route{
+			strings.ToUpper("Get"),
+			"/todos/todos",
+			c.ListItems,
+		},
 		"AddItem": Route{
 			strings.ToUpper("Post"),
 			"/todos/todos",
 			c.AddItem,
-		},
-		"DeleteItem": Route{
-			strings.ToUpper("Delete"),
-			"/todos/todos/{id}",
-			c.DeleteItem,
 		},
 		"DeleteItems": Route{
 			strings.ToUpper("Delete"),
@@ -71,10 +71,10 @@ func (c *TodoListAPIController) Routes() Routes {
 			"/todos/todos/{id}",
 			c.GetItem,
 		},
-		"ListItems": Route{
-			strings.ToUpper("Get"),
-			"/todos/todos",
-			c.ListItems,
+		"DeleteItem": Route{
+			strings.ToUpper("Delete"),
+			"/todos/todos/{id}",
+			c.DeleteItem,
 		},
 		"UpdateItem": Route{
 			strings.ToUpper("Patch"),
@@ -82,6 +82,18 @@ func (c *TodoListAPIController) Routes() Routes {
 			c.UpdateItem,
 		},
 	}
+}
+
+// ListItems - List items
+func (c *TodoListAPIController) ListItems(w http.ResponseWriter, r *http.Request) {
+	result, err := c.service.ListItems(r.Context())
+	// If an error occurred, encode the error with the status code
+	if err != nil {
+		c.errorHandler(w, r, err, &result)
+		return
+	}
+	// If no error, encode the body and the result code
+	_ = EncodeJSONResponse(result.Body, &result.Code, w)
 }
 
 // AddItem - Add a new item to the list
@@ -102,23 +114,6 @@ func (c *TodoListAPIController) AddItem(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 	result, err := c.service.AddItem(r.Context(), addTodoItemRequestParam)
-	// If an error occurred, encode the error with the status code
-	if err != nil {
-		c.errorHandler(w, r, err, &result)
-		return
-	}
-	// If no error, encode the body and the result code
-	_ = EncodeJSONResponse(result.Body, &result.Code, w)
-}
-
-// DeleteItem - Delete an item
-func (c *TodoListAPIController) DeleteItem(w http.ResponseWriter, r *http.Request) {
-	idParam := chi.URLParam(r, "id")
-	if idParam == "" {
-		c.errorHandler(w, r, &RequiredError{"id"}, nil)
-		return
-	}
-	result, err := c.service.DeleteItem(r.Context(), idParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
 		c.errorHandler(w, r, err, &result)
@@ -157,9 +152,14 @@ func (c *TodoListAPIController) GetItem(w http.ResponseWriter, r *http.Request) 
 	_ = EncodeJSONResponse(result.Body, &result.Code, w)
 }
 
-// ListItems - List items
-func (c *TodoListAPIController) ListItems(w http.ResponseWriter, r *http.Request) {
-	result, err := c.service.ListItems(r.Context())
+// DeleteItem - Delete an item
+func (c *TodoListAPIController) DeleteItem(w http.ResponseWriter, r *http.Request) {
+	idParam := chi.URLParam(r, "id")
+	if idParam == "" {
+		c.errorHandler(w, r, &RequiredError{"id"}, nil)
+		return
+	}
+	result, err := c.service.DeleteItem(r.Context(), idParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
 		c.errorHandler(w, r, err, &result)

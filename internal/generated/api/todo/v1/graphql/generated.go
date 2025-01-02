@@ -2,6 +2,12 @@
 
 package graphql
 
+type Mutation struct {
+}
+
+type Query struct {
+}
+
 type TodoItemUpdate struct {
 	ID        string  `json:"id"`
 	Title     *string `json:"title,omitempty"`

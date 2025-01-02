@@ -21,11 +21,11 @@ import (
 // The TodoListAPIRouter implementation should parse necessary information from the http request,
 // pass the data to a TodoListAPIServicer to perform the required actions, then write the service results to the http response.
 type TodoListAPIRouter interface { 
+	ListItems(http.ResponseWriter, *http.Request)
 	AddItem(http.ResponseWriter, *http.Request)
-	DeleteItem(http.ResponseWriter, *http.Request)
 	DeleteItems(http.ResponseWriter, *http.Request)
 	GetItem(http.ResponseWriter, *http.Request)
-	ListItems(http.ResponseWriter, *http.Request)
+	DeleteItem(http.ResponseWriter, *http.Request)
 	UpdateItem(http.ResponseWriter, *http.Request)
 }
 
@@ -35,10 +35,10 @@ type TodoListAPIRouter interface {
 // while the service implementation can be ignored with the .openapi-generator-ignore file
 // and updated with the logic required for the API.
 type TodoListAPIServicer interface { 
+	ListItems(context.Context) (ImplResponse, error)
 	AddItem(context.Context, AddTodoItemRequest) (ImplResponse, error)
-	DeleteItem(context.Context, string) (ImplResponse, error)
 	DeleteItems(context.Context) (ImplResponse, error)
 	GetItem(context.Context, string) (ImplResponse, error)
-	ListItems(context.Context) (ImplResponse, error)
+	DeleteItem(context.Context, string) (ImplResponse, error)
 	UpdateItem(context.Context, string, UpdateTodoItemRequest) (ImplResponse, error)
 }
