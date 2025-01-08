@@ -4,7 +4,7 @@ go 1.23.1
 
 require (
 	emperror.dev/errors v0.8.1
-	github.com/99designs/gqlgen v0.17.62
+	github.com/99designs/gqlgen v0.17.63
 	github.com/go-bdd/gobdd v1.1.3
 	github.com/go-chi/chi/v5 v5.2.0
 	github.com/go-chi/cors v1.2.1
