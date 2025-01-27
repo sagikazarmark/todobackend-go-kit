@@ -3,7 +3,7 @@ module github.com/sagikazarmark/todobackend-go-kit/api
 go 1.23.1
 
 require (
-	golang.org/x/oauth2 v0.24.0
+	golang.org/x/oauth2 v0.25.0
 	google.golang.org/grpc v1.70.0
 	google.golang.org/protobuf v1.36.1
 )
