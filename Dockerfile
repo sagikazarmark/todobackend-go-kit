@@ -39,7 +39,7 @@ COPY --from=builder /usr/local/src/todobackend-go-kit/api/go.* /usr/local/src/to
 EXPOSE 8000 8001
 CMD todobackend-go-kit --http-addr :${PORT:-8000} --public-url ${PUBLIC_URL}
 
-FROM redhat/ubi8-micro:8.10@sha256:22448ec2e9234d99a2cd9adf9e571a367d1e4b0e1546b2b5c36518e5183e1b32 AS ubi8
+FROM redhat/ubi8-micro:8.10@sha256:084c06bf84ceb8ed8f868bd27e7fc6b2c83ae4e16f8e1f979dd7317961c7dd8a AS ubi8
 
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
